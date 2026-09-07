@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dalal Al-Mutairi — Curriculum Vitae</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Sora:wght@300;400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<style>
+:root{
+  --umber:#4a3226; --umber-deep:#2b1c14; --umber-black:#1a100b; --umber-warm:#8a5f3e;
+  --dune:#e3c9a0; --vanilla:#f3e5ab; --vanilla-soft:rgba(243,229,171,.78);
+  --vanilla-mute:rgba(243,229,171,.5);
+  --font-display:'Daisy','Archivo Black','Sora',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0; background:var(--umber); color:var(--vanilla-soft);
+  font-family:'Sora',system-ui,sans-serif; font-weight:300; line-height:1.7;
+  font-size:15px; -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'JetBrains Mono',monospace; letter-spacing:.16em; text-transform:uppercase; font-size:.62rem}
+a{color:var(--dune)}
+.sheet{
+  max-width:860px; margin:0 auto; padding:clamp(2rem,6vw,4.5rem) clamp(1.4rem,5vw,3.5rem) 4rem;
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(138,95,62,.28), transparent 60%),
+    linear-gradient(180deg, rgba(43,28,20,.55), rgba(26,16,11,.35));
+  min-height:100vh;
+}
+/* name, top and centred — as on every page of the site */
+.top{text-align:center; padding-bottom:2rem; border-bottom:1px solid rgba(243,229,171,.16)}
+.top h1{
+  font-family:var(--font-display); font-weight:900; color:var(--dune);
+  font-size:clamp(1.2rem,4.4vw,2.1rem); letter-spacing:.22em; text-transform:uppercase;
+  margin:0 0 .9rem; line-height:1;
+}
+.top .role{color:var(--vanilla); margin:0 0 1.1rem; font-weight:400; font-size:.98rem}
+.top .contact{display:flex; flex-wrap:wrap; gap:.5rem 1.4rem; justify-content:center; color:var(--vanilla-mute)}
+.back{
+  display:inline-block; margin-bottom:1.6rem; color:var(--vanilla-mute);
+  font-family:'JetBrains Mono',monospace; font-size:.6rem; letter-spacing:.2em; text-transform:uppercase;
+}
+.back:hover{color:var(--dune)}
+section{margin-top:2.6rem}
+h2{
+  font-size:.66rem; font-family:'JetBrains Mono',monospace; letter-spacing:.3em;
+  text-transform:uppercase; color:var(--umber-warm); margin:0 0 1.1rem;
+  padding-bottom:.6rem; border-bottom:1px solid rgba(243,229,171,.12);
+}
+h3{margin:0 0 .25rem; font-size:1rem; font-weight:600; color:var(--dune)}
+.row{margin-bottom:1.5rem}
+.meta{color:var(--vanilla-mute); font-family:'JetBrains Mono',monospace; font-size:.6rem;
+  letter-spacing:.14em; text-transform:uppercase; margin:0 0 .4rem}
+p{margin:0 0 .5rem}
+ul{margin:.3rem 0 0; padding-left:1.1rem}
+li{margin-bottom:.3rem}
+.tags{list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:.4rem}
+.tags li{
+  border:1px solid rgba(243,229,171,.18); padding:.32rem .62rem; margin:0;
+  font-family:'JetBrains Mono',monospace; font-size:.58rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--vanilla-mute);
+}
+.grid2{display:grid; gap:1.4rem 2.4rem; grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.closing{
+  margin-top:3.4rem; padding-top:1.6rem; text-align:center;
+  border-top:1px solid rgba(243,229,171,.14); color:var(--dune);
+  font-size:1.05rem; font-weight:600;
+}
+@media print{
+  body{background:#fff; color:#241811}
+  .sheet{background:none; max-width:none; padding:0}
+  .back{display:none}
+  .top h1,h3,.closing{color:#3b2618}
+  h2{color:#7a5334}
+  .meta,.top .contact,.tags li{color:#5c4536}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <a class="back" href="index.html">← Back to portfolio</a>
+
+  <div class="top">
+    <h1>Dalal Al-Mutairi</h1>
+    <p class="role">Civil Engineering Student · Structural Engineering &amp; AI</p>
+    <div class="contact mono">
+      <span id="cvPhone">94445352</span>
+      <a id="cvEmail" href="#">—</a>
+      <span>Kuwait</span>
+    </div>
+  </div>
+
+  <section>
+    <h2>Profile</h2>
+    <p>
+      Civil Engineering student at Kuwait University with a focus on structural
+      engineering, currently training in AI and AI-assisted coding at Coded.
+      I work at the point where structural judgement meets computation — using
+      analysis software and code to make design decisions faster and better
+      informed. I also write for the Afaq University Newspaper.
+    </p>
+  </section>
+
+  <section>
+    <h2>Education &amp; Training</h2>
+    <div class="row">
+      <h3>Kuwait University</h3>
+      <p class="meta">BSc Civil Engineering · in progress</p>
+      <p>Coursework across structural analysis, reinforced concrete and steel
+         design, materials and construction.</p>
+    </div>
+    <div class="row">
+      <h3>Coded</h3>
+      <p class="meta">AI &amp; software training · current</p>
+      <p>Programming fundamentals, AI-assisted development and building
+         complete projects.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+    <div class="row">
+      <h3>STAAD</h3>
+      <p class="meta">Structural analysis &amp; design</p>
+      <p>Modelling and analysing frames in STAAD.Pro — load cases and
+         combinations, member sizing, deflection and code checks.</p>
+    </div>
+    <div class="row">
+      <h3>Focus Space</h3>
+      <p class="meta">Project · concept &amp; product</p>
+      <p>A project centred on deep work: a calm, structured environment designed
+         both as a physical space and as a product.</p>
+    </div>
+    <div class="row">
+      <h3>Future Engineering &amp; AI</h3>
+      <p class="meta">Ongoing research &amp; development</p>
+      <p>Applying AI and AI-assisted coding to engineering workflows —
+         automating repetitive checks and building small tools that support
+         structural decisions.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+    <div class="row">
+      <h3>Writer — Afaq University Newspaper</h3>
+      <p class="meta">Kuwait University</p>
+      <p>Researching, drafting and editing articles to deadline.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Skills</h2>
+    <div class="grid2">
+      <div>
+        <p class="meta">Engineering</p>
+        <ul class="tags">
+          <li>STAAD.Pro</li><li>Structural Analysis</li><li>RC Design</li>
+          <li>Steel Design</li><li>Technical Drawing</li>
+        </ul>
+      </div>
+      <div>
+        <p class="meta">Technical</p>
+        <ul class="tags">
+          <li>Python</li><li>AI-Assisted Coding</li><li>Version Control</li>
+          <li>Problem Solving</li>
+        </ul>
+      </div>
+      <div>
+        <p class="meta">Professional</p>
+        <ul class="tags">
+          <li>Project Development</li><li>Technical Writing</li>
+          <li>Research</li><li>Teamwork</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Interests</h2>
+    <p>Structural engineering · artificial intelligence · project development ·
+       technology · writing · sport.</p>
+  </section>
+
+  <p class="closing">Every foundation begins its construction here.</p>
+</div>
+
+<script src="js/config.js"></script>
+<script>
+(function(){
+  var C = window.DAL.CONFIG;
+  var e = document.getElementById('cvEmail');
+  e.href = 'mailto:' + C.email + '?subject=' + encodeURIComponent(C.mailSubject);
+  e.textContent = C.email;
+  document.getElementById('cvPhone').textContent = C.phone;
+})();
+</script>
+</body>
+</html>
