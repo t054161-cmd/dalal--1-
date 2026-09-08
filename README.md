@@ -151,4 +151,15 @@ js/scene.js         renderer, camera choreography, object transforms
 js/ui.js            preloader, reveals, nav, contact wiring, terminal
 vendor/           three.js r160 (module build), vendored — no CDN dependency
 assets/favicon.svg
+focus-space/        FOCUS SPACE — the workspace discovery platform (own README)
 ```
+
+---
+
+## FOCUS SPACE
+
+`focus-space/` holds a second, self-contained product: **FOCUS SPACE —
+مرفأ روّاد الإنجاز**, a bilingual workspace discovery platform for offices,
+halls and quiet cafés. It shares the vendored three.js build and nothing else,
+and has its own palette (Sage · Sand · Cloud · Vanilla), its own 3D world and
+its own [README](focus-space/README.md).
