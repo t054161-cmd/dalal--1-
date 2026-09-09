@@ -13,11 +13,35 @@ PostgreSQL 15+ (written for Supabase). Four files, applied in order:
 psql "$DATABASE_URL" -f 001_schema.sql -f 002_functions.sql -f 003_policies.sql -f 004_seed.sql
 ```
 
+Extensions are installed into an `extensions` schema and the two RLS helper
+functions into a `private` schema, so that neither PostGIS's `spatial_ref_sys`
+table nor `is_staff()` is published as an API endpoint.
+
 Everything parses against the real PostgreSQL parser, plpgsql bodies included.
-Applied and verified on Supabase project `focus-space` (`ojixptqwxlxkmkowxkdy`,
-eu-central-1): 21 tables, 37 policies, 21 spaces seeded, availability and
-distance functions checked against known cases, and the Supabase security
-linter clean of errors.
+## Live
+
+Applied to Supabase project **focus-space** — `ojixptqwxlxkmkowxkdy`,
+eu-central-1, free tier.
+
+```
+API   https://ojixptqwxlxkmkowxkdy.supabase.co
+```
+
+21 tables, 37 policies, 21 spaces seeded. The Supabase security linter
+reports **no findings**. Verified after the final rebuild:
+
+| Check | Result |
+|---|---|
+| Row counts | 21 spaces · 3 categories · 12 districts · 18 services · 169 service links · 142 opening-hour rows · 156 busy windows · 12 offers |
+| Availability | Nocturne available at 17:00 and 01:00, busy at 22:00, closed at 03:00 and at noon; a Friday-closed office closed on Friday, busy Wednesday lunchtime |
+| Distance | `spaces_near` from Kuwait City returns The Assembly at 1.16 km, ordered correctly |
+| Ratings | A review set `rating_avg` to 5.0 / 1, deleting the customer reverted it to null / 0 |
+| Cascade | Deleting an `auth.users` row removed the profile, visit and reviews with it |
+| RLS as an anonymous visitor | 21 spaces and the card view readable; a contact message accepted; that same message, and every profile, private row, visit and review, invisible |
+
+Each migration fetched its file from this repository and refused to run
+unless the checksum matched, so what is in the database is byte-for-byte
+what is in these files.
 
 ---
 
