@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="TERRA leaf mark">
+  <rect width="32" height="32" rx="8" fill="#B4654A"/>
+  <path d="M25 7c0 9-5.5 14-14 14H8c0-9 5.5-14 14-14h3Z" fill="#F6F1E7" opacity=".95"/>
+  <path d="M8 25c3.5-7 9-10.5 15-11.5" stroke="#F6F1E7" stroke-width="1.6" fill="none"/>
+</svg>

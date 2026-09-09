@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" width="640" height="420" role="img">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F6F1E7"/>
+      <stop offset="100%" stop-color="#E6DCC8"/>
+    </linearGradient>
+    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3"/><feColorMatrix type="saturate" values="0"/></filter>
+  </defs>
+  <rect width="640" height="420" fill="url(#g)"/>
+  <rect width="640" height="420" filter="url(#n)" opacity="0.05"/>
+  <ellipse cx="320" cy="360" rx="150" ry="18" fill="#3E3229" opacity="0.12"/>
+  <rect x="248" y="120" width="144" height="230" rx="22" fill="#7C8B6B"/>
+  <rect x="248" y="120" width="46" height="230" rx="22" fill="#FFFFFF" opacity="0.16"/>
+  <rect x="238" y="96" width="164" height="30" rx="15" fill="#F0E9DA"/>
+  <rect x="262" y="215" width="116" height="34" rx="8" fill="#F6F1E7" opacity="0.22"/>
+  <text x="40" y="60" font-family="system-ui, sans-serif" font-size="26" font-weight="700" fill="#3E3229">500 ml · Sage</text>
+  <text x="40" y="92" font-family="system-ui, sans-serif" font-size="18" fill="#5A4C3F">Team order, 40 pieces</text>
+  <text x="40" y="392" font-family="system-ui, sans-serif" font-size="13" fill="#817466" opacity="0.9">Placeholder — replace with photography</text>
+</svg>

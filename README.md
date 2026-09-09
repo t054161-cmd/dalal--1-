@@ -152,3 +152,11 @@ js/ui.js            preloader, reveals, nav, contact wiring, terminal
 vendor/           three.js r160 (module build), vendored — no CDN dependency
 assets/favicon.svg
 ```
+
+---
+
+## Also in this repository
+
+`terra/` — **TERRA**, a complete bilingual (Arabic RTL / English LTR)
+Next.js storefront for a customizable insulated mug, with a real-time
+React Three Fiber 3D designer. See [`terra/README.md`](terra/README.md).
