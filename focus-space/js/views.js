@@ -513,6 +513,70 @@
   }
   FS.askLocation = askLocation;
 
+  /* ═══════════════ feedback ═══════════════ */
+
+  function fmtDate(iso) {
+    try {
+      return new Date(iso).toLocaleDateString(FS.I18N.lang === 'ar' ? 'ar-KW' : 'en-GB',
+        { year: 'numeric', month: 'short', day: 'numeric' });
+    } catch (e) { return ''; }
+  }
+
+  function starRow(n) {
+    let out = `<span class="fb-stars" role="img" aria-label="${esc(T('fb.star', { n: N(n) }))}">`;
+    for (let i = 1; i <= 5; i++) out += `<i class="${i <= n ? 'is-on' : ''}">${ICON.star}</i>`;
+    return out + '</span>';
+  }
+
+  function feedbackList(sp) {
+    const rows = S.feedbackFor(sp.id);
+    if (!rows.length) {
+      return `<div class="fb-empty">
+        <p class="empty-title">${esc(T('fb.empty'))}</p>
+        <p class="empty-hint">${esc(T('fb.emptyHint'))}</p>
+      </div>`;
+    }
+    return '<ul class="fb-list">' + rows.map(f => `
+      <li class="fb-item">
+        <div class="fb-head">
+          <b class="fb-who">${esc(f.name || T('fb.anon'))}</b>
+          ${starRow(f.rating)}
+          <time class="fb-when" datetime="${esc(f.at)}">${esc(fmtDate(f.at))}</time>
+          <button type="button" class="fb-del" data-fb-del="${esc(f.id)}"
+            aria-label="${esc(T('fb.delete'))}" title="${esc(T('fb.delete'))}">&times;</button>
+        </div>
+        <p class="fb-text">${esc(f.text)}</p>
+      </li>`).join('') + '</ul>';
+  }
+
+  function feedbackForm(sp) {
+    return `
+    <form class="fb-form" id="feedbackForm" data-space="${esc(sp.id)}" novalidate>
+      <div class="fb-rate">
+        <span class="field-label" id="fbRateLabel">${esc(T('fb.rating'))}</span>
+        <div class="fb-stars-input" role="group" aria-labelledby="fbRateLabel">
+          ${[1, 2, 3, 4, 5].map(i => `<button type="button" class="fb-star" data-star="${i}"
+             aria-pressed="false" aria-label="${esc(T('fb.star', { n: N(i) }))}">${ICON.star}</button>`).join('')}
+        </div>
+        <em class="field-error" data-error="rating"></em>
+      </div>
+      <label class="field">
+        <span class="field-label">${esc(T('fb.name'))}</span>
+        <input type="text" name="name" value="${esc(S.profile.name || '')}"
+               placeholder="${esc(T('fb.namePh'))}" autocomplete="name" />
+      </label>
+      <label class="field">
+        <span class="field-label">${esc(T('fb.message'))}</span>
+        <textarea name="text" rows="4" placeholder="${esc(T('fb.messagePh'))}"></textarea>
+        <em class="field-error" data-error="text"></em>
+      </label>
+      <div class="fb-actions">
+        <button type="submit" class="btn btn-solid btn-sm">${esc(T('fb.submit'))}</button>
+        <span class="field-hint">${esc(T('fb.local'))}</span>
+      </div>
+    </form>`;
+  }
+
   /* ═══════════════ SPACE DETAIL ═══════════════ */
 
   function detail(id) {
@@ -569,6 +633,12 @@
 
             <h2 class="sub" data-reveal>${esc(T('detail.suited'))}</h2>
             <ul class="suited" data-reveal>${L(cat.suited).map(s => `<li>${esc(s)}</li>`).join('')}</ul>
+
+            <h2 class="sub" data-reveal>${esc(T('fb.title'))}</h2>
+            <div class="fb" data-reveal>
+              ${feedbackForm(sp)}
+              <div id="feedbackList">${feedbackList(sp)}</div>
+            </div>
           </div>
 
           <aside class="detail-side" data-reveal data-reveal-delay="0.1">
@@ -591,6 +661,57 @@
       </section>
     </article>`;
   }
+
+
+  detail.mount = function () {
+    const form = document.getElementById('feedbackForm');
+    if (!form) return;
+    const spaceId = form.getAttribute('data-space');
+    const sp = D.space(spaceId);
+    const list = document.getElementById('feedbackList');
+    let rating = 0;
+
+    function paintStars() {
+      form.querySelectorAll('.fb-star').forEach(btn => {
+        const value = parseInt(btn.getAttribute('data-star'), 10);
+        btn.classList.toggle('is-on', value <= rating);
+        btn.setAttribute('aria-pressed', String(value === rating));
+      });
+    }
+
+    form.addEventListener('click', e => {
+      const star = e.target.closest('.fb-star');
+      if (!star) return;
+      rating = parseInt(star.getAttribute('data-star'), 10);
+      paintStars();
+      form.querySelector('[data-error="rating"]').textContent = '';
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const text = form.elements.text.value.trim();
+      form.querySelector('[data-error="rating"]').textContent = rating ? '' : T('fb.errRating');
+      form.querySelector('[data-error="text"]').textContent = text.length >= 3 ? '' : T('fb.errMessage');
+      if (!rating || text.length < 3) {
+        (rating ? form.elements.text : form.querySelector('.fb-star')).focus();
+        return;
+      }
+      S.addFeedback(spaceId, { rating, name: form.elements.name.value.trim(), text });
+      form.reset();
+      rating = 0;
+      paintStars();
+      list.innerHTML = feedbackList(sp);
+      FS.toast(T('fb.thanks'));
+    });
+
+    list.addEventListener('click', e => {
+      const del = e.target.closest('[data-fb-del]');
+      if (!del) return;
+      S.removeFeedback(spaceId, del.getAttribute('data-fb-del'));
+      list.innerHTML = feedbackList(sp);
+      FS.toast(T('fb.deleted'));
+    });
+  };
 
   /* ═══════════════ ABOUT ═══════════════ */
 

@@ -57,7 +57,7 @@ falls back to the render rather than leaving a broken image. See
 | **Home** | Cinematic hero, the idea, the three categories, a rated shortlist, how it works |
 | **Spaces** | All 21 spaces with the full filter set |
 | **Category** | `01 Offices`, `02 Halls`, `03 Cafés` — each with its own header and what it suits |
-| **Space** | Photograph, live status, rating, capacity, hours, services, offers, map link, similar spaces |
+| **Space** | Photograph, live status, rating, capacity, hours, services, offers, map link, feedback, similar spaces |
 | **Profile** | Picture, name, favorites, recently viewed, language settings, account settings |
 | **About** | The story and the three values |
 | **Contact Us** | *Let's Connect* — clickable email and phone, and a validated message form |
@@ -77,8 +77,21 @@ are never written to storage. On a later visit the position is re-read only
 when the browser already reports a granted permission, so nobody is prompted
 on load.
 
-**Favorites, recently viewed and the profile** persist in `localStorage` under
-the `focus-space:v1` namespace, and *Clear saved data* removes all of it.
+**Feedback** sits on every space: a five-star rating, an optional name and a
+few words, listed underneath with the newest first and removable by whoever
+wrote it. With no backend yet it is kept on the device and the form says so,
+and it deliberately does not move the space's headline rating — an average
+should come from a database of real reviews, not from one browser.
+
+**Light and dark** share one set of role tokens, so the dark palette is a
+single override block rather than a second stylesheet and the sage identity
+is unchanged in both. The toggle sits beside the language switch; with no
+choice stored the page follows the device, and a CSS media query matches the
+stamp so a dark device never flashes the light theme before the script runs.
+
+**Favorites, recently viewed, feedback, the profile and both preferences**
+persist in `localStorage` under the `focus-space:v1` namespace, and *Clear
+saved data* removes all of it.
 
 ---
 

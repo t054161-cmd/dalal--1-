@@ -34,6 +34,41 @@
       emit('lang');
     },
 
+    /* ── theme ────────────────────────────────────────────────────── */
+    /* null means "follow the device"; a stored value is an explicit choice. */
+    theme: read('theme', null),
+    resolvedTheme() {
+      if (Store.theme === 'dark' || Store.theme === 'light') return Store.theme;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    },
+    setTheme(theme) {
+      if (theme !== 'dark' && theme !== 'light') return;
+      Store.theme = theme;
+      write('theme', theme);
+      emit('theme');
+    },
+
+    /* ── feedback ─────────────────────────────────────────────────── */
+    /* Kept per space on this device: { spaceId: [ {id, rating, name, text, at} ] } */
+    feedback: read('feedback', {}),
+    feedbackFor(spaceId) { return Store.feedback[spaceId] || []; },
+    addFeedback(spaceId, entry) {
+      const row = Object.assign({
+        id: 'f' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        at: new Date().toISOString()
+      }, entry);
+      Store.feedback[spaceId] = [row].concat(Store.feedbackFor(spaceId));
+      write('feedback', Store.feedback);
+      emit('feedback');
+      return row;
+    },
+    removeFeedback(spaceId, id) {
+      Store.feedback[spaceId] = Store.feedbackFor(spaceId).filter(f => f.id !== id);
+      if (!Store.feedback[spaceId].length) delete Store.feedback[spaceId];
+      write('feedback', Store.feedback);
+      emit('feedback');
+    },
+
     /* ── favorites ────────────────────────────────────────────────── */
     favorites: read('favorites', []),
     isFavorite(id) { return Store.favorites.indexOf(id) !== -1; },
@@ -104,9 +139,10 @@
 
     /* ── housekeeping ─────────────────────────────────────────────── */
     clearAll() {
-      ['favorites', 'recents', 'profile', 'geoAllowed'].forEach(drop);
+      ['favorites', 'recents', 'profile', 'feedback', 'geoAllowed'].forEach(drop);
       Store.favorites = [];
       Store.recents = [];
+      Store.feedback = {};
       Store.profile = { name: '', email: '', district: '', photo: '', notify: false, reduceMotion: false };
       Store.coords = null;
       Store.geoState = 'idle';

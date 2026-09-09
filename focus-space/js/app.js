@@ -38,7 +38,7 @@
     const V = FS.Views;
     switch (route.name) {
       case 'spaces':  return { html: V.spaces(route.cat), mount: V.spaces.mount };
-      case 'detail':  return { html: V.detail(route.id), mount: null };
+      case 'detail':  return { html: V.detail(route.id), mount: V.detail.mount };
       case 'about':   return { html: V.about(), mount: null };
       case 'contact': return { html: V.contact(), mount: V.contact.mount };
       case 'profile': return { html: V.profile(), mount: V.profile.mount };
@@ -119,6 +119,31 @@
     }
   });
 
+  /* ── theme ─────────────────────────────────────────────────────────── */
+
+  const themeBtn = document.getElementById('themeBtn');
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+
+  function applyTheme() {
+    const theme = S.resolvedTheme();
+    document.documentElement.setAttribute('data-theme', theme);
+    const label = T(theme === 'dark' ? 'theme.toLight' : 'theme.toDark');
+    themeBtn.setAttribute('aria-label', label);
+    themeBtn.setAttribute('title', label);
+    themeBtn.setAttribute('aria-pressed', String(theme === 'dark'));
+    if (themeMeta) themeMeta.setAttribute('content', theme === 'dark' ? '#161C17' : '#7C9382');
+  }
+
+  themeBtn.addEventListener('click', () => {
+    S.setTheme(S.resolvedTheme() === 'dark' ? 'light' : 'dark');
+    applyTheme();
+  });
+
+  /* Follow the device until the visitor makes a choice of their own. */
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (!S.theme) applyTheme();
+  });
+
   /* ── language ──────────────────────────────────────────────────────── */
 
   function applyLang() {
@@ -144,6 +169,7 @@
     if (lang === S.lang) return;
     S.setLang(lang);
     applyLang();
+    applyTheme();
     FS.Motion.veil(() => render(true));
   });
 
@@ -235,6 +261,7 @@
   /* ── boot ──────────────────────────────────────────────────────────── */
 
   document.getElementById('year').textContent = String(new Date().getFullYear());
+  applyTheme();
   applyLang();
   measureHeader();
   S.resumeLocation();
