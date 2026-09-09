@@ -201,6 +201,26 @@
   }
   FS.paintAvatar = paintAvatar;
 
+  /* ── photographs that fail to load ─────────────────────────────────── */
+
+  /* A misspelt filename or a dead URL in the photo manifest falls back to the
+     rendered interior instead of leaving a broken image on the card. Load
+     errors do not bubble, so this listens in the capture phase. */
+  document.addEventListener('error', e => {
+    const img = e.target;
+    if (!(img instanceof HTMLImageElement) || !img.dataset.fallback) return;
+    const [kind, seed] = img.dataset.fallback.split('|');
+    delete img.dataset.fallback;
+    if (FS.Studio.supported()) {
+      img.src = FS.Imagery.placeholder(kind, seed);
+      img.className = 'photo-pending';
+      img.setAttribute('data-photo', kind + '|' + seed);
+      FS.Studio.hydrate(img.parentNode || document);
+    } else {
+      img.src = FS.Imagery.scene(kind, seed, 1100, 700);
+    }
+  }, true);
+
   /* ── toast ─────────────────────────────────────────────────────────── */
 
   let toastTimer;

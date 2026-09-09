@@ -40,6 +40,14 @@ Both degrade cleanly. Without WebGL the hero keeps a drawn still and every card
 falls back to the SVG interiors in `js/imagery.js`; with reduced motion the
 camera holds a single frame and every reveal renders finished.
 
+**Real photographs replace the renders wherever they exist.** `js/data.js`
+carries a `PHOTOS` map keyed by space id and a `CATEGORY_PHOTOS` map for the
+three category covers; fill an entry with a path or a URL and that space uses
+the photograph on its card, its detail header and in recently-viewed, while
+every space still waiting for one keeps its render. A photo that fails to load
+falls back to the render rather than leaving a broken image. See
+`assets/photos/README.md` for sizes, naming and permissions.
+
 ---
 
 ## What is in the interface

@@ -33,11 +33,18 @@
     arrow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14.2l-5.1-5.1 1.3-1.3L21.8 12l-7.4 6.4-1.3-1.3 5.1-5.1H4z"/></svg>'
   };
 
-  /* An image element that starts as a soft placeholder and is replaced by a
-     rendered photograph once the studio reaches it. Without WebGL the drawn
-     SVG interior is used directly. */
-  function photoImg(kind, seed, alt, extra) {
-    const a = `alt="${esc(alt || '')}"${alt ? '' : ' aria-hidden="true"'} decoding="async"${extra || ''}`;
+  /* The image for a space or category.
+
+     A real photograph named in the manifest in data.js wins. Where none has
+     been supplied yet, the space keeps its rendered interior: a placeholder
+     the studio replaces once the card scrolls into view, or the drawn SVG
+     interior on a device without WebGL. */
+  function photoImg(kind, seed, alt, photo) {
+    const a = `alt="${esc(alt || '')}"${alt ? '' : ' aria-hidden="true"'} decoding="async"`;
+    if (photo) {
+      return `<img src="${esc(photo)}" class="is-photo" loading="lazy" ` +
+             `data-fallback="${kind}|${seed}" ${a} />`;
+    }
     if (FS.Studio && FS.Studio.supported()) {
       const ready = FS.Studio.cached(kind, seed);
       if (ready) return `<img src="${ready}" class="is-photo" ${a} />`;
@@ -83,7 +90,7 @@
     return `
     <article class="space-card" data-tilt="4" data-reveal data-reveal-delay="${(i % 3) * 0.07}">
       <a class="card-media" href="#/space/${space.id}" data-link aria-label="${esc(L(space.name))}">
-        ${photoImg(space.cat, space.seed, L(space.name) + ' — ' + L(cat.name))}
+        ${photoImg(space.cat, space.seed, L(space.name) + ' — ' + L(cat.name), D.photoFor(space))}
         <span class="card-shade"></span>
         ${statusPill(space)}
         ${space.offer ? `<span class="offer-tag">${esc(T('card.offer'))}</span>` : ''}
@@ -111,7 +118,7 @@
 
     return `
     <a class="cat-tile" href="#/spaces/${cat.id}" data-link data-reveal data-reveal-delay="${i * 0.1}">
-      <span class="cat-media">${photoImg(cat.id, 'cover', L(cat.name))}</span>
+      <span class="cat-media">${photoImg(cat.id, 'cover', L(cat.name), D.categoryPhoto(cat.id))}</span>
       <span class="cat-shade"></span>
       <span class="cat-index">${esc(cat.index)}</span>
       <span class="cat-body">
@@ -371,7 +378,7 @@
 
     return `
     <section class="page-head${cat ? ' page-head-cat' : ''}">
-      ${cat ? `<div class="page-head-media" data-parallax="0.06">${photoImg(cat.id, 'wide', '')}</div>
+      ${cat ? `<div class="page-head-media" data-parallax="0.06">${photoImg(cat.id, 'wide', '', D.categoryPhoto(cat.id))}</div>
                <span class="page-head-shade"></span>` : ''}
       <div class="wrap">
         <p class="eyebrow" data-reveal>${cat ? esc(cat.index) + ' · ' + esc(T('nav.spaces')) : esc(T('nav.spaces'))}</p>
@@ -523,7 +530,7 @@
     return `
     <article class="detail">
       <header class="detail-hero">
-        <div class="detail-hero-media" data-parallax="0.08">${photoImg(sp.cat, sp.seed, L(sp.name))}</div>
+        <div class="detail-hero-media" data-parallax="0.08">${photoImg(sp.cat, sp.seed, L(sp.name), D.photoFor(sp))}</div>
         <span class="detail-hero-shade"></span>
         <div class="wrap detail-hero-body">
           <a class="back-link" href="#/spaces/${sp.cat}" data-link>${ICON.arrow}${esc(T('detail.back'))}</a>
@@ -604,7 +611,7 @@
           <p class="prose">${esc(T('about.body2'))}</p>
           <p class="prose">${esc(T('about.body3'))}</p>
         </div>
-        <div class="about-media" data-reveal data-reveal-delay="0.1" data-parallax="0.05">${photoImg('offices', 'about', '')}</div>
+        <div class="about-media" data-reveal data-reveal-delay="0.1" data-parallax="0.05">${photoImg('offices', 'about', '', D.categoryPhoto('offices'))}</div>
       </div>
     </section>
 
@@ -880,7 +887,7 @@
 
   function recentChip(sp) {
     return `<a class="recent-card" href="#/space/${sp.id}" data-link data-reveal>
-      <span class="recent-media">${photoImg(sp.cat, sp.seed, '')}</span>
+      <span class="recent-media">${photoImg(sp.cat, sp.seed, '', D.photoFor(sp))}</span>
       <span class="recent-body">
         <b>${esc(L(sp.name))}</b>
         <span>${esc(L(sp.district))}</span>

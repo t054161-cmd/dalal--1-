@@ -6,6 +6,47 @@
 (function (FS) {
   'use strict';
 
+  /* ── real photographs ─────────────────────────────────────────────────
+     Drop photos into focus-space/assets/photos/ and name them here. A value
+     may be a local path ('assets/photos/atlas-desk.jpg') or a full URL. Any
+     entry left empty keeps the rendered interior, so the site never breaks
+     while the photography is still being collected.
+     See focus-space/assets/photos/README.md for sizes and conventions. */
+  const PHOTOS = {
+    /* 01 · offices */
+    'atlas-desk':       '',
+    'north-study':      '',
+    'quiet-quarter':    '',
+    'meridian-works':   '',
+    'cedar-room':       '',
+    'harbour-desk':     '',
+    'lumen-suite':      '',
+    /* 02 · halls */
+    'assembly-hall':    '',
+    'workshop-loft':    '',
+    'boardroom-nine':   '',
+    'atrium-stage':     '',
+    'seminar-cube':     '',
+    'olive-hall':       '',
+    'blueprint-room':   '',
+    /* 03 · cafés */
+    'sage-and-salt':    '',
+    'paper-cup':        '',
+    'the-reading-room': '',
+    'dune-coffee':      '',
+    'linen-espresso':   '',
+    'garden-and-grain': '',
+    'nocturne':         ''
+  };
+
+  /* One wide photograph per category, used on the category tiles and the
+     category page header. Empty keeps the rendered interior. */
+  const CATEGORY_PHOTOS = {
+    offices: '',
+    halls:   '',
+    cafes:   ''
+  };
+
   const CATEGORIES = [
     {
       id: 'offices', index: '01',
@@ -299,7 +340,11 @@
   }
 
   FS.Data = {
-    CATEGORIES, SERVICES, SPACES,
+    CATEGORIES, SERVICES, SPACES, PHOTOS, CATEGORY_PHOTOS,
+
+    /* A real photograph for this space, or '' to fall back to a render. */
+    photoFor(space) { return (space && PHOTOS[space.id]) || ''; },
+    categoryPhoto(id) { return CATEGORY_PHOTOS[id] || ''; },
     category: id => CATEGORIES.find(c => c.id === id),
     space:    id => SPACES.find(s => s.id === id),
     byCategory: id => SPACES.filter(s => s.cat === id),
