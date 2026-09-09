@@ -14,8 +14,10 @@ psql "$DATABASE_URL" -f 001_schema.sql -f 002_functions.sql -f 003_policies.sql 
 ```
 
 Everything parses against the real PostgreSQL parser, plpgsql bodies included.
-It has not been executed against a live server — there was none available
-where it was written — so treat the first `psql` run as the real test.
+Applied and verified on Supabase project `focus-space` (`ojixptqwxlxkmkowxkdy`,
+eu-central-1): 21 tables, 37 policies, 21 spaces seeded, availability and
+distance functions checked against known cases, and the Supabase security
+linter clean of errors.
 
 ---
 
@@ -58,7 +60,8 @@ erDiagram
 
 | Table | Holds |
 |---|---|
-| `profiles` | The customer: full name, email, phone, avatar, preferred district, language, theme, notification and motion preferences. One row per `auth.users` row — Supabase keeps the credentials, the product keeps everything else. |
+| `profiles` | A customer's public identity: display name and avatar. Anyone may read it, which is exactly why it holds nothing else — this is the name on a review. |
+| `profile_private` | The same customer's email, phone, preferred district, language, theme and preferences. Readable only by that customer; not even staff. |
 | `staff` | Membership is what "admin" means. Nothing else grants it, and nobody can add themselves. |
 
 ### Places
@@ -124,10 +127,15 @@ and Arabic name, description and address, with a trigram index on the name
 for fuzzy matches.
 
 **Row level security assumes the client is hostile.** Listings are public;
-favorites, visits, views and profiles are readable only by their owner; a
-venue's own rows are writable only by its owners or staff; anyone may write
-a contact message and nobody but staff may read one. `public_profiles`
-exposes a review author's name and avatar and nothing else.
+favorites, visits, views and contact details are readable only by their
+owner; a venue's own rows are writable only by its owners or staff; anyone
+may write a contact message and nobody but staff may read one.
+
+**Contact details live in their own table.** A review needs an author's name,
+so `profiles` is public — and therefore holds only a display name and an
+avatar. Email, phone and preferences sit in `profile_private`, which no
+policy opens to anyone but its owner. Publishing a review can never publish
+a phone number, and no privileged view is needed to make that true.
 
 **The visitor's location is deliberately not stored.** It is asked for on tap,
 used to sort, and forgotten. Storing coordinates turns a permission prompt

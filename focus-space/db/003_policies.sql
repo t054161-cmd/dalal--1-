@@ -7,6 +7,7 @@
 -- ═══════════════════════════════════════════════════════════════════════
 
 alter table profiles               enable row level security;
+alter table profile_private        enable row level security;
 alter table districts              enable row level security;
 alter table categories             enable row level security;
 alter table services               enable row level security;
@@ -72,17 +73,17 @@ create policy space_owners_write on space_owners for all
 
 -- ── a person's own data ────────────────────────────────────────────────
 
-create policy profiles_read_self   on profiles for select using (id = auth.uid() or is_staff());
+-- The display name and avatar on a review are public by design; that is the
+-- whole reason this table holds nothing else.
+create policy profiles_read        on profiles for select using (true);
 create policy profiles_insert_self on profiles for insert with check (id = auth.uid());
 create policy profiles_update_self on profiles for update
   using (id = auth.uid()) with check (id = auth.uid());
 
--- Reviews need an author name, and only the name. This view exposes those
--- two columns and nothing else; it deliberately runs with the owner's
--- rights so the profiles table itself stays private.
-create view public_profiles with (security_invoker = false) as
-  select id, full_name, avatar_url from profiles;
-grant select on public_profiles to anon, authenticated;
+-- Contact details and preferences: the owner, and nobody else. Not staff
+-- either — support can read the message someone sent, not their profile.
+create policy profile_private_own on profile_private for all
+  using (id = auth.uid()) with check (id = auth.uid());
 
 create policy favorites_own on favorites for all
   using (user_id = auth.uid()) with check (user_id = auth.uid());
@@ -127,10 +128,10 @@ create policy staff_read_self on staff for select using (user_id = auth.uid());
 
 -- ── grants ─────────────────────────────────────────────────────────────
 
-grant usage on schema public to anon, authenticated;
+grant usage on schema public to anon, authenticated, service_role;
 grant select on all tables in schema public to anon, authenticated;
 grant insert, update, delete on
-  profiles, favorites, space_views, visits, reviews,
+  profiles, profile_private, favorites, space_views, visits, reviews,
   contact_messages, space_suggestions
   to authenticated;
 grant insert on contact_messages, space_suggestions to anon;

@@ -33,7 +33,7 @@ create type message_status      as enum ('new', 'read', 'answered', 'spam');
 
 -- Keeps updated_at honest without the application having to remember.
 create or replace function touch_updated_at() returns trigger
-language plpgsql as $$
+language plpgsql set search_path = public as $$
 begin
   new.updated_at := now();
   return new;
@@ -44,15 +44,28 @@ $$;
 --  PEOPLE
 -- ═══════════════════════════════════════════════════════════════════════
 
--- One row per signed-in person. Supabase keeps the credentials and the
--- verified email in auth.users; everything the product knows lives here.
+-- A person's public identity: the name and face on a review, and nothing
+-- else. Anyone may read this table, which is why nothing private is in it.
 -- Not using Supabase? Drop the references clause and manage ids yourself.
 create table profiles (
-  id                  uuid primary key references auth.users(id) on delete cascade,
-  full_name           text,
+  id            uuid primary key references auth.users(id) on delete cascade,
+  full_name     text,
+  avatar_url    text,
+  created_at    timestamptz not null default now(),
+  updated_at    timestamptz not null default now()
+);
+create trigger profiles_touch before update on profiles
+  for each row execute function touch_updated_at();
+
+comment on table profiles is 'Public identity of a customer: display name and avatar only.';
+
+-- Everything about a customer that is theirs alone. Split from profiles so
+-- that publishing a review never risks publishing a phone number: no policy
+-- on this table lets anyone but its owner read a row.
+create table profile_private (
+  id                  uuid primary key references profiles(id) on delete cascade,
   email               citext,
   phone               text,
-  avatar_url          text,
   preferred_district  uuid,                       -- fk added after districts
   language            text not null default 'en' check (language in ('en', 'ar')),
   theme               text check (theme in ('light', 'dark')),   -- null = follow device
@@ -61,14 +74,14 @@ create table profiles (
   created_at          timestamptz not null default now(),
   updated_at          timestamptz not null default now(),
 
-  constraint profiles_phone_shape check (phone is null or phone ~ '^\+?[0-9 ()-]{6,20}$'),
-  constraint profiles_email_shape check (email is null or email ~ '^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+$')
+  constraint profile_private_phone_shape check (phone is null or phone ~ '^\+?[0-9 ()-]{6,20}$'),
+  constraint profile_private_email_shape check (email is null or email ~ '^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+$')
 );
-create index profiles_email_idx on profiles (email);
-create trigger profiles_touch before update on profiles
+create index profile_private_email_idx on profile_private (email);
+create trigger profile_private_touch before update on profile_private
   for each row execute function touch_updated_at();
 
-comment on table profiles is 'A customer of the platform. Name, email and phone live here; auth.users holds the credentials.';
+comment on table profile_private is 'A customer''s contact details and preferences. Readable only by that customer.';
 
 -- ═══════════════════════════════════════════════════════════════════════
 --  PLACES
@@ -85,8 +98,8 @@ create table districts (
 );
 create index districts_centre_idx on districts using gist (centre);
 
-alter table profiles
-  add constraint profiles_district_fk
+alter table profile_private
+  add constraint profile_private_district_fk
   foreign key (preferred_district) references districts(id) on delete set null;
 
 -- The three families a space can belong to: offices, halls, cafés.

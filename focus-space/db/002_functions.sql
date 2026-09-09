@@ -30,7 +30,7 @@ $$;
 -- own live override — or the usual rush — apply.
 create or replace function space_availability(p_space uuid, p_at timestamptz default now())
 returns availability_state
-language plpgsql stable as $$
+language plpgsql stable set search_path = public, extensions as $$
 declare
   tz          text;
   local_ts    timestamp;
@@ -112,7 +112,7 @@ comment on function space_availability is
 -- The headline rating is never typed in; it is the average of published
 -- reviews, recomputed whenever one lands.
 create or replace function recompute_space_rating(p_space uuid) returns void
-language sql as $$
+language sql set search_path = public as $$
   update spaces s
      set rating_avg   = agg.avg_rating,
          review_count = agg.n
@@ -126,7 +126,7 @@ language sql as $$
 $$;
 
 create or replace function reviews_refresh_rating() returns trigger
-language plpgsql as $$
+language plpgsql set search_path = public as $$
 begin
   if tg_op in ('INSERT', 'UPDATE') then
     perform recompute_space_rating(new.space_id);
@@ -153,7 +153,7 @@ create or replace function spaces_near(
   p_radius_km  double precision default 25
 )
 returns table (space_id uuid, distance_km double precision)
-language sql stable as $$
+language sql stable set search_path = public, extensions as $$
   select s.id,
          st_distance(s.location, st_setsrid(st_makepoint(p_lng, p_lat), 4326)::geography) / 1000.0
     from spaces s
