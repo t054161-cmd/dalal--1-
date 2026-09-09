@@ -46,7 +46,7 @@ export function Ritual() {
               />
             </div>
             <figcaption className="mt-5 flex items-baseline justify-between gap-4 border-t border-line pt-4">
-              <span className="text-[0.74rem] uppercase tracking-[0.2em] text-ink">
+              <span className="meta-lg text-ink">
                 {t(moment.titleKey)}
               </span>
               <span className="text-sm text-ink-mute">{t(moment.noteKey)}</span>

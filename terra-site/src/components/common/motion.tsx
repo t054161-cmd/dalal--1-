@@ -40,9 +40,17 @@ export function Reveal({
   )
 }
 
+/** Joined scripts must never be split into characters. */
+const JOINED = /[\u0600-\u06FF\u0750-\u077F\uFB50-\uFEFF]/
+
 /**
- * The cinematic title: each glyph rises out of a blur, in sequence, as though
- * the word were being written.
+ * The brush title. Each glyph is uncovered by a mask dragged across it, one
+ * after another and overlapping, so the word arrives as a single written
+ * gesture rather than a row of letters appearing (see globals.css → BRUSH
+ * REVEAL for the stroke itself).
+ *
+ * Arabic — and any other joined script — is never split: cutting a word into
+ * characters destroys its shaping, so the whole word takes one long stroke.
  */
 export function SplitTitle({
   text,
@@ -57,7 +65,19 @@ export function SplitTitle({
   step?: number
   ariaLabel?: string
 }) {
-  const glyphs = React.useMemo(() => [...text], [text])
+  const joined = JOINED.test(text)
+  const glyphs = React.useMemo(() => (joined ? [] : [...text]), [text, joined])
+
+  if (joined) {
+    return (
+      <span className={className} aria-label={ariaLabel ?? text} role="text">
+        <span aria-hidden className="brush-word" style={{ animationDelay: `${delay}ms` }}>
+          {text}
+        </span>
+      </span>
+    )
+  }
+
   return (
     <span className={className} aria-label={ariaLabel ?? text} role="text">
       {glyphs.map((glyph, i) => (
@@ -67,10 +87,47 @@ export function SplitTitle({
           className="glyph"
           style={{ animationDelay: `${delay + i * step}ms` }}
         >
-          {glyph === ' ' ? ' ' : glyph}
+          {glyph === ' ' ? '\u00a0' : glyph}
         </span>
       ))}
     </span>
+  )
+}
+
+/**
+ * The same stroke, but held until the line is actually on screen — for titles
+ * further down the page, which should be written as the reader arrives at them
+ * rather than long before.
+ */
+export function BrushTitle({
+  text,
+  className,
+  step = 74,
+  delay = 0,
+  as: Tag = 'span',
+}: {
+  text: string
+  className?: string
+  step?: number
+  delay?: number
+  as?: 'span' | 'h1' | 'h2' | 'p'
+}) {
+  const [ref, inView] = useInView<HTMLElement>(0.4)
+  const reduced = useReducedMotion()
+
+  return (
+    <Tag ref={ref as never} className={className}>
+      {inView || reduced ? (
+        <SplitTitle text={text} delay={delay} step={step} />
+      ) : (
+        // Held before it is written: in the flow, sized, but no ink yet.
+        <span aria-label={text} role="text">
+          <span aria-hidden style={{ opacity: 0 }}>
+            {text}
+          </span>
+        </span>
+      )}
+    </Tag>
   )
 }
 

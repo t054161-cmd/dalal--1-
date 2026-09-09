@@ -50,7 +50,7 @@ function PartLabel({ id, y, side = 1 }: { id: PartId; y: number; side?: number }
       wrapperClass="pointer-events-none"
     >
       <div className="w-40 select-none whitespace-normal text-center">
-        <p className="text-[0.62rem] uppercase tracking-[0.24em] text-ink">{pick(part.name)}</p>
+        <p className="meta text-ink">{pick(part.name)}</p>
         <p className="mt-1 text-[0.58rem] leading-snug text-ink-mute">{pick(part.note)}</p>
       </div>
     </Html>

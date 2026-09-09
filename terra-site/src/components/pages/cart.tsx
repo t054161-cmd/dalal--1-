@@ -46,7 +46,7 @@ export function Cart() {
     <div className="wrap pb-28 pt-28 lg:pt-36">
       <div className="flex flex-wrap items-baseline justify-between gap-4">
         <h1 className="text-title font-light">{t('cart.heading')}</h1>
-        <p className="text-[0.68rem] uppercase tracking-[0.2em] text-ink-mute">
+        <p className="meta text-ink-mute">
           {t('cart.itemCount', { count: n(cartCount(cart)) })}
         </p>
       </div>
@@ -72,7 +72,7 @@ export function Cart() {
 
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
-                  <h2 className="text-[0.8rem] uppercase tracking-[0.18em] text-ink">
+                  <h2 className="meta-lg text-ink">
                     {line.name ? pick(line.name) : t('cart.yourDesign')}
                   </h2>
                   <p className="text-sm tabular-nums">
@@ -114,7 +114,7 @@ export function Cart() {
                       loadConfig(line.config)
                       router.push('/customize')
                     }}
-                    className="link-draw text-[0.64rem] uppercase tracking-[0.18em] text-ink-soft hover:text-ink"
+                    className="link-draw meta text-ink-soft hover:text-ink"
                   >
                     {t('cart.edit')}
                   </button>
@@ -154,7 +154,7 @@ export function Cart() {
             </div>
           </dl>
 
-          <p className="mt-4 text-[0.66rem] uppercase tracking-[0.16em] text-ink-mute">
+          <p className="mt-4 meta text-ink-mute">
             {totals.freeShipping
               ? t('cart.freeShipReached')
               : t('cart.freeShip', { amount: n(freeShippingOver), currency: pick(product.currency) })}

@@ -30,7 +30,7 @@ export function ProductReveal() {
 
           <ul className="mt-10 grid grid-cols-2 gap-x-8 gap-y-4">
             {specs.map((key) => (
-              <li key={key} className="border-t border-line pt-3 text-[0.72rem] uppercase tracking-[0.16em] text-ink-soft">
+              <li key={key} className="border-t border-line pt-3 meta-lg text-ink-soft">
                 {t(key)}
               </li>
             ))}
@@ -43,7 +43,7 @@ export function ProductReveal() {
               { label: t('common.diameter'), value: `${n(product.diameterMm)} mm` },
             ].map((row) => (
               <div key={row.label}>
-                <dt className="text-[0.62rem] uppercase tracking-[0.22em] text-ink-mute">{row.label}</dt>
+                <dt className="meta text-ink-mute">{row.label}</dt>
                 <dd className="mt-1 tabular-nums text-ink">{row.value}</dd>
               </div>
             ))}
@@ -59,7 +59,7 @@ export function ProductReveal() {
             interactive={false}
             autoTurn={false}
           />
-          <p className="mt-2 text-center text-[0.58rem] uppercase tracking-[0.28em] text-ink-mute">
+          <p className="mt-2 text-center meta text-ink-mute">
             {t('reveal.scrollToTurn')}
           </p>
         </div>
@@ -105,7 +105,7 @@ export function Anatomy() {
             <span>{exploded ? t('anatomy.collapse') : t('anatomy.explode')}</span>
           </button>
 
-          <p className="mt-4 text-[0.62rem] uppercase tracking-[0.2em] text-ink-mute">
+          <p className="mt-4 meta text-ink-mute">
             {exploded ? t('anatomy.hint') : t('anatomy.labelHint')}
           </p>
 
@@ -120,7 +120,7 @@ export function Anatomy() {
                   <span className="w-4 shrink-0 text-[0.6rem] tabular-nums text-ink-mute">
                     {String(index + 1).padStart(2, '0')}
                   </span>
-                  <span className="text-[0.76rem] uppercase tracking-[0.18em] text-ink">
+                  <span className="meta-lg text-ink">
                     {pick(part.name)}
                   </span>
                 </span>

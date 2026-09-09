@@ -185,10 +185,17 @@ function drawSymbol(ctx: CanvasRenderingContext2D, symbol: SymbolId, cx: number,
 export async function ensureFonts(config: CupConfig) {
   if (typeof document === 'undefined' || !('fonts' in document)) return
   const face = markFonts.find((f) => f.id === config.markFont) ?? markFonts[0]
-  const families = [cssVar('var(--font-display)'), cssVar(face.css)]
+  // Each face is asked for at its own weight: a brush hand ships one weight,
+  // and asking for 300 would have the browser synthesise it.
+  const wanted: [string, number][] = [
+    [cssVar('var(--font-display)'), 300],
+    [cssVar(face.css), face.weight],
+  ]
   try {
     await Promise.all(
-      families.map((family) => document.fonts.load(`300 160px ${family}`, `TERRA${config.mark}`)),
+      wanted.map(([family, weight]) =>
+        document.fonts.load(`${weight} 160px ${family}`, `TERRA${config.mark}`),
+      ),
     )
     await document.fonts.ready
   } catch {

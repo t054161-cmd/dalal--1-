@@ -7,13 +7,22 @@ import { Minus, Plus } from 'lucide-react'
 import { useI18n } from '@/i18n/provider'
 import { CupViewer } from '@/components/three/viewer'
 import { Reveal } from '@/components/common/motion'
-import { applyColorway, colorways, components, priceOf, product } from '@/data/product'
+import { Disclosure } from '@/components/common/disclosure'
+import { BotanicalBackdrop } from './botanical-backdrop'
+import { applyColorway, colorways, priceOf, product } from '@/data/product'
 import { useStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
 /**
- * One product, four tones. The 3D viewer leads; everything else is a short
- * column beside it. A sticky bar carries the price and the button on mobile.
+ * One product, four tones.
+ *
+ * The cup is photographed against a botanical set (see BotanicalBackdrop) and
+ * everything else is one short column: name, a line, the price, the four
+ * tones, a quantity and a button. Specifications, care and materials are
+ * folded behind three closed hairlines, because a lifestyle object should not
+ * open with a datasheet.
+ *
+ * A sticky bar carries the price and the button on mobile.
  */
 export function ProductPage() {
   const { t, pick, n, price } = useI18n()
@@ -42,9 +51,18 @@ export function ProductPage() {
   return (
     <>
       <div className="wrap grid gap-10 pt-28 lg:grid-cols-[1.1fr_1fr] lg:gap-20 lg:pt-36">
-        {/* Viewer */}
-        <div className="h-[26rem] sm:h-[34rem] lg:sticky lg:top-28 lg:h-[42rem]">
-          <CupViewer config={config} onSnapshot={setSnapshot} />
+        {/* Viewer, standing in the botanical set. The set is blurred and the
+            cup is not — the canvas paints above it and stays the one sharp
+            object on the page. */}
+        <div className="relative h-[26rem] sm:h-[34rem] lg:sticky lg:top-28 lg:h-[42rem]">
+          <BotanicalBackdrop />
+          <div className="relative h-full">
+            {/* Turn, reset, and that is all — zoom stays on scroll and pinch.
+                The snapshot and zoom buttons belong in the designer, where a
+                customer is making something, not here where they are looking
+                at it. */}
+            <CupViewer config={config} glow={false} toolbar="minimal" onSnapshot={setSnapshot} />
+          </div>
         </div>
 
         {/* Detail column */}
@@ -56,13 +74,11 @@ export function ProductPage() {
 
             <p className="mt-8 flex items-baseline gap-3">
               <span className="text-2xl font-light tabular-nums">{price(unit)}</span>
-              <span className="text-[0.68rem] uppercase tracking-[0.2em] text-ink-mute">
+              <span className="meta text-ink-mute">
                 {pick(product.currency)}
               </span>
             </p>
-            <p className="mt-2 text-[0.68rem] uppercase tracking-[0.18em] text-ink-mute">
-              {t('shop.madeToOrder')}
-            </p>
+            <p className="meta mt-2 text-ink-mute">{t('shop.madeToOrder')}</p>
           </Reveal>
 
           {/* Tones */}
@@ -89,7 +105,7 @@ export function ProductPage() {
                         )}
                         style={{ background: way.body }}
                       />
-                      <span className="text-[0.6rem] uppercase tracking-[0.18em] text-ink-soft">
+                      <span className="meta text-ink-soft">
                         {pick(way.name)}
                       </span>
                     </button>
@@ -131,59 +147,62 @@ export function ProductPage() {
             </button>
           </div>
 
-          <Link href="/customize" className="link-draw mt-6 inline-block text-[0.7rem] uppercase tracking-[0.2em] text-ink-soft hover:text-ink">
+          <Link
+            href="/customize"
+            className="link-draw meta mt-7 inline-block text-ink-soft hover:text-ink"
+          >
             {t('common.designYours')}
           </Link>
 
-          {/* Detail lists — hairlines, no cards */}
-          <div className="mt-14 space-y-10">
-            <section>
-              <p className="eyebrow">{t('shop.included')}</p>
-              <ul className="mt-4">
-                {included.map((key) => (
-                  <li key={key} className="border-t border-line py-3 text-sm text-ink-soft">
-                    {t(key)}
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            <section>
-              <p className="eyebrow">{t('shop.specs')}</p>
-              <dl className="mt-4">
-                {[
-                  { label: t('common.capacity'), value: `${n(product.capacityMl)} ml` },
-                  { label: t('common.height'), value: `${n(product.heightMm)} mm` },
-                  { label: t('common.diameter'), value: `${n(product.diameterMm)} mm` },
-                ].map((row) => (
-                  <div key={row.label} className="flex justify-between border-t border-line py-3 text-sm">
-                    <dt className="text-ink-mute">{row.label}</dt>
-                    <dd className="tabular-nums text-ink">{row.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
-
-            <section>
-              <p className="eyebrow">{t('anatomy.eyebrow')}</p>
-              <ul className="mt-4">
-                {components.map((part) => (
-                  <li key={part.id} className="flex justify-between gap-6 border-t border-line py-3 text-sm">
-                    <span className="text-ink">{pick(part.name)}</span>
-                    <span className="text-end text-ink-mute">{pick(part.note)}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            <section>
-              <p className="eyebrow">{t('shop.care')}</p>
-              <p className="mt-4 text-sm leading-relaxed text-ink-soft">{t('shop.careBody')}</p>
-              <p className="mt-4 text-[0.68rem] uppercase tracking-[0.18em] text-ink-mute">
-                {t('shop.warranty')}
-              </p>
-            </section>
-          </div>
+          {/* Details · Care · Materials — closed until asked for. */}
+          <Disclosure
+            className="mt-14"
+            items={[
+              {
+                id: 'details',
+                label: t('shop.details'),
+                children: (
+                  <>
+                    <ul>
+                      {included.map((key) => (
+                        <li key={key} className="flex items-baseline gap-3">
+                          <span aria-hidden className="mt-2 h-px w-3 shrink-0 bg-ink-mute" />
+                          {t(key)}
+                        </li>
+                      ))}
+                    </ul>
+                    <dl className="mt-6 max-w-xs">
+                      {[
+                        { label: t('common.capacity'), value: `${n(product.capacityMl)} ml` },
+                        { label: t('common.height'), value: `${n(product.heightMm)} mm` },
+                        { label: t('common.diameter'), value: `${n(product.diameterMm)} mm` },
+                      ].map((row) => (
+                        <div key={row.label} className="flex justify-between gap-6 py-1">
+                          <dt className="text-ink-mute">{row.label}</dt>
+                          <dd className="tabular-nums">{row.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </>
+                ),
+              },
+              {
+                id: 'care',
+                label: t('shop.care'),
+                children: (
+                  <>
+                    <p>{t('shop.careBody')}</p>
+                    <p className="meta mt-4 text-ink-mute">{t('shop.warranty')}</p>
+                  </>
+                ),
+              },
+              {
+                id: 'materials',
+                label: t('shop.materials'),
+                children: <p>{t('shop.materialsBody')}</p>,
+              },
+            ]}
+          />
         </div>
       </div>
 

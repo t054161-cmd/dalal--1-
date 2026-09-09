@@ -171,6 +171,8 @@ export const patterns: { id: PatternId; name: Bilingual; note: Bilingual }[] = [
 
 export const markFonts: { id: MarkFont; name: Bilingual; css: string; weight: number; tracking: number }[] = [
   { id: 'wordmark', name: { en: 'Wordmark', ar: 'شعار' }, css: 'var(--font-display)', weight: 300, tracking: 0.4 },
+  // A brush hand needs its letters joined, so this one is never tracked.
+  { id: 'script', name: { en: 'Brush', ar: 'خط اليد' }, css: 'var(--font-script)', weight: 400, tracking: 0 },
   { id: 'editorial', name: { en: 'Editorial', ar: 'تحريري' }, css: 'var(--font-editorial)', weight: 400, tracking: 0.06 },
   { id: 'initials', name: { en: 'Initials', ar: 'أحرف أولى' }, css: 'var(--font-display)', weight: 400, tracking: 0.18 },
 ]

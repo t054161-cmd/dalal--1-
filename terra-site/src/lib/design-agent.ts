@@ -314,7 +314,11 @@ export function parseLocally(promptRaw: string, current?: CupConfig): AgentResul
 
   /* --- letterform -------------------------------------------------------- */
   if (has(scan, ['initials', 'monogram', 'أحرف أولى'])) patch.markFont = 'initials'
-  else if (has(scan, ['serif', 'editorial', 'classic', 'elegant type', 'تحريري', 'سيريف'])) {
+  else if (
+    has(scan, ['brush', 'script', 'handwritten', 'handwriting', 'cursive', 'بالفرشاة', 'خط اليد', 'مكتوب بخط'])
+  ) {
+    patch.markFont = 'script'
+  } else if (has(scan, ['serif', 'editorial', 'classic', 'elegant type', 'تحريري', 'سيريف'])) {
     patch.markFont = 'editorial'
   } else if (has(scan, ['wordmark', 'like the logo', 'wide letters', 'شعار'])) patch.markFont = 'wordmark'
 

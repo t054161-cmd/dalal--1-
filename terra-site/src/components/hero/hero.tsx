@@ -17,8 +17,13 @@ export function Hero() {
       <LeafCanopy />
 
       <div className="wrap relative z-10 flex flex-col items-center text-center">
-        <h1 className="wordmark text-title-xl text-[rgb(246,243,236)] [text-shadow:0_2px_40px_rgb(43_52_44_/_0.35)]">
-          <SplitTitle text="TERRA" delay={420} step={190} />
+        {/* Written, not typeset: the brush lays each letter down in turn and
+            the strokes overlap, so the word arrives as one gesture. */}
+        {/* No text-shadow here: the brush mask is sized to the glyph box, so a
+            glow would be sliced into a rectangle at its edges. The canopy's
+            vignette and scrim carry the contrast instead. */}
+        <h1 className="brush text-title-xl text-[rgb(246,243,236)]">
+          <SplitTitle text={t('common.brand')} delay={420} step={150} />
         </h1>
 
         <p
@@ -45,7 +50,7 @@ export function Hero() {
         className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 animate-fade-in text-center"
         style={{ animationDelay: '3000ms' }}
       >
-        <span className="block text-[0.58rem] uppercase tracking-[0.3em] text-[rgb(246,243,236)]/70">
+        <span className="block meta text-[rgb(246,243,236)]/70">
           {t('common.scroll')}
         </span>
         <span

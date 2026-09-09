@@ -84,7 +84,7 @@ export function Sustainability() {
               </span>
               <span aria-hidden className="h-px flex-1 bg-line" />
             </span>
-            <h3 className="mt-5 text-[0.8rem] uppercase tracking-[0.22em] text-ink">
+            <h3 className="mt-5 meta-lg text-ink">
               {t(stage.titleKey)}
             </h3>
             <p className="mt-4 text-sm leading-relaxed text-ink-soft">{t(stage.bodyKey)}</p>
@@ -124,7 +124,7 @@ export function Sustainability() {
                       onClick={() => setYears(option)}
                       aria-pressed={years === option}
                       className={cn(
-                        'tap flex-1 border px-3 text-[0.68rem] uppercase tracking-[0.16em] transition-colors duration-500 ease-cinema',
+                        'tap flex-1 border px-3 meta transition-colors duration-500 ease-cinema',
                         years === option
                           ? 'border-ink bg-ink text-surface'
                           : 'border-line text-ink-soft hover:border-ink/40',
@@ -142,7 +142,7 @@ export function Sustainability() {
             <p className="font-display text-[clamp(3.4rem,11vw,7rem)] font-extralight leading-none tracking-tight text-ink">
               <Counted value={cups} />
             </p>
-            <p className="mt-5 max-w-measure text-[0.78rem] uppercase tracking-[0.2em] text-ink-soft">
+            <p className="mt-5 max-w-measure meta-lg text-ink-soft">
               {t('sustain.resultUnit')}
             </p>
             {/* The same figure as one sentence, for screen readers. */}

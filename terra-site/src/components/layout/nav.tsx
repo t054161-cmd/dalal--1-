@@ -82,7 +82,7 @@ export function Nav() {
           style={{ background: 'linear-gradient(to bottom, rgb(35 44 36 / 0.42), transparent)' }}
         />
         <div className="wrap relative flex h-[4.5rem] items-center gap-6">
-          <Link href="/" className="wordmark shrink-0 text-[0.95rem] leading-none">
+          <Link href="/" className="wordmark shrink-0 py-3 text-[0.95rem] leading-none">
             TERRA
           </Link>
 
@@ -97,7 +97,7 @@ export function Nav() {
                       data-active={active}
                       aria-current={active ? 'page' : undefined}
                       className={cn(
-                        'link-draw text-[0.7rem] uppercase tracking-[0.22em] transition-colors',
+                        'link-draw meta transition-colors',
                         settled ? 'text-ink-soft hover:text-ink' : 'text-current/85 hover:text-current',
                       )}
                     >
@@ -115,11 +115,13 @@ export function Nav() {
               onClick={() => setLocale(locale === 'ar' ? 'en' : 'ar')}
               aria-label={locale === 'ar' ? t('nav.toEnglish') : t('nav.toArabic')}
               className={cn(
-                'tap px-2 text-[0.7rem] uppercase tracking-[0.18em] transition-colors',
+                'tap px-2 meta transition-colors',
                 settled ? 'text-ink-soft hover:text-ink' : 'text-current/85 hover:text-current',
               )}
             >
-              {locale === 'ar' ? 'EN' : 'ع'}
+              {/* Josefin Sans has no Arabic, so the ع has to ask for the
+                  Arabic face by name or it renders as tofu. */}
+              {locale === 'ar' ? 'EN' : <span className="font-arabic text-[1.1rem] leading-none">ع</span>}
             </button>
 
             <button
@@ -138,7 +140,7 @@ export function Nav() {
               href="/cart"
               aria-label={t('nav.cartCount', { count })}
               className={cn(
-                'tap flex items-center gap-1.5 px-2 text-[0.7rem] uppercase tracking-[0.22em] transition-colors',
+                'tap flex items-center gap-1.5 px-2 meta transition-colors',
                 settled ? 'text-ink-soft hover:text-ink' : 'text-current/85 hover:text-current',
               )}
             >

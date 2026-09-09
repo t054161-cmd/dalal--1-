@@ -36,17 +36,21 @@ const config: Config = {
       fontFamily: {
         // 'Playlist' and 'Audrey' are named first: drop the licensed files in
         // (see src/app/fonts.ts) and the whole site picks them up.
-        display: ['Playlist', 'var(--font-display)', 'ui-sans-serif', 'sans-serif'],
+        script: ['Playlist', 'var(--font-script)', 'cursive'],
+        display: ['Audrey', 'var(--font-display)', 'ui-sans-serif', 'sans-serif'],
         body: ['Audrey', 'var(--font-body)', 'ui-sans-serif', 'sans-serif'],
         editorial: ['var(--font-editorial)', 'Georgia', 'serif'],
-        arabic: ['var(--font-arabic)', 'ui-sans-serif', 'sans-serif'],
+        arabic: ['var(--font-arabic)', 'ui-serif', 'serif'],
       },
       fontSize: {
-        // Cinematic display scale — big, quiet, wide-tracked.
-        'title-xl': ['clamp(3.5rem, 17vw, 15rem)', { lineHeight: '0.94', letterSpacing: '0.16em' }],
-        'title-lg': ['clamp(2.6rem, 8vw, 6rem)', { lineHeight: '1', letterSpacing: '0.06em' }],
-        title: ['clamp(2rem, 5vw, 3.6rem)', { lineHeight: '1.06', letterSpacing: '0.02em' }],
-        'title-sm': ['clamp(1.5rem, 3vw, 2.2rem)', { lineHeight: '1.15', letterSpacing: '0.01em' }],
+        // Cinematic display scale. The three biggest steps are set in the brush
+        // hand, which is never letter-spaced and needs room under the baseline
+        // for its descenders — hence the loose line-heights and zero tracking.
+        'title-xl': ['clamp(4rem, 19vw, 16rem)', { lineHeight: '1.06', letterSpacing: '0' }],
+        'title-lg': ['clamp(2.9rem, 8.6vw, 6.4rem)', { lineHeight: '1.14', letterSpacing: '0' }],
+        title: ['clamp(2.2rem, 5.4vw, 3.9rem)', { lineHeight: '1.2', letterSpacing: '0' }],
+        // 'title-sm' stays in Audrey: it is a subhead, not a statement.
+        'title-sm': ['clamp(1.4rem, 2.9vw, 2rem)', { lineHeight: '1.25', letterSpacing: '0.03em' }],
         label: ['0.7rem', { lineHeight: '1.2', letterSpacing: '0.26em' }],
       },
       letterSpacing: {
@@ -88,6 +92,30 @@ const config: Config = {
         'accordion-down': { from: { height: '0' }, to: { height: 'var(--radix-accordion-content-height)' } },
         'accordion-up': { from: { height: 'var(--radix-accordion-content-height)' }, to: { height: '0' } },
         'pulse-soft': { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.45' } },
+
+        /* Ambient canopy — minutes per cycle, never seconds. Nothing here
+           should ever be caught moving; it should only ever have moved. */
+        'drift-far': {
+          '0%, 100%': { transform: 'translate3d(-1.5%, 0, 0) rotate(-0.6deg) scale(1.02)' },
+          '50%': { transform: 'translate3d(1.5%, -1.2%, 0) rotate(0.6deg) scale(1.05)' },
+        },
+        'drift-near': {
+          '0%, 100%': { transform: 'translate3d(1.2%, 0.6%, 0) rotate(0.5deg) scale(1.04)' },
+          '50%': { transform: 'translate3d(-1.4%, -0.8%, 0) rotate(-0.7deg) scale(1.01)' },
+        },
+        'sun-wash': {
+          '0%, 100%': { transform: 'translate3d(-3%, -2%, 0) scale(1.08)', opacity: '0.5' },
+          '50%': { transform: 'translate3d(3%, 2%, 0) scale(1.18)', opacity: '0.9' },
+        },
+        /* Depth-of-field blobs on the product page: they breathe, out of focus. */
+        'bokeh-a': {
+          '0%, 100%': { transform: 'translate3d(0, 0, 0) scale(1)' },
+          '50%': { transform: 'translate3d(2.2%, -1.8%, 0) scale(1.06)' },
+        },
+        'bokeh-b': {
+          '0%, 100%': { transform: 'translate3d(0, 0, 0) scale(1.04)' },
+          '50%': { transform: 'translate3d(-2.6%, 1.6%, 0) scale(0.99)' },
+        },
       },
       animation: {
         'sway-a': 'sway-a 19s ease-in-out infinite',
@@ -98,6 +126,12 @@ const config: Config = {
         'accordion-down': 'accordion-down 0.3s ease-out',
         'accordion-up': 'accordion-up 0.25s ease-out',
         'pulse-soft': 'pulse-soft 2s ease-in-out infinite',
+        'drift-far': 'drift-far 96s ease-in-out infinite',
+        'drift-mid': 'drift-near 74s ease-in-out infinite',
+        'drift-near': 'drift-near 58s ease-in-out infinite',
+        'sun-wash': 'sun-wash 84s ease-in-out infinite',
+        'bokeh-a': 'bokeh-a 46s ease-in-out infinite',
+        'bokeh-b': 'bokeh-b 62s ease-in-out infinite',
       },
       maxWidth: { prose: '62ch', measure: '46ch' },
     },

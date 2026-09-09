@@ -62,6 +62,17 @@ const en = {
     diameter: 'Diameter',
   },
 
+  /**
+   * The name and the reason for it. `philosophy` is always the line in the
+   * reader's own language and `philosophyEcho` the same thought in the other
+   * — the couplet is bilingual by design, so both locales carry both halves.
+   */
+  brand: {
+    latin: 'Terra — Latin for earth',
+    philosophy: 'From earth, back to earth',
+    philosophyEcho: 'من الأرض وإلى الأرض',
+  },
+
   nav: {
     home: 'Home',
     shop: 'Shop',
@@ -87,12 +98,9 @@ const en = {
   },
 
   manifesto: {
-    eyebrow: 'A cleaner tomorrow',
-    line1: 'One cup,',
-    line2: 'used ten thousand times.',
     body:
       'We made one object and spent our time getting it right. Stainless steel that holds the cold, a lid that does not leak, a straw you keep. Nothing here is designed to be thrown away.',
-    note: 'Small choices make a bigger change.',
+    note: 'One cup, used ten thousand times.',
   },
 
   reveal: {
@@ -254,7 +262,11 @@ const en = {
     madeToOrder: 'Made to order · ships in 2–4 days',
     customize: 'Customize this one',
     orderAsIs: 'Order as it comes',
-    specs: 'Specification',
+    details: 'Details',
+    materials: 'Materials',
+    materialsBody:
+      'Recycled 18/8 stainless steel, double walled. A food-grade silicone seal, and a steel straw. No plastic in the cup, and none in the box.',
+    specs: 'Dimensions',
     included: 'In the box',
     included1: 'The TERRA tumbler',
     included2: 'Leak-resistant lid & silicone ring',
@@ -345,7 +357,6 @@ const en = {
   },
 
   footer: {
-    line: 'Made to be reused. Designed to be lived with.',
     newsletter: 'One letter a month',
     newsletterBody: 'New tones, and what we learned about materials. Nothing else.',
     subscribe: 'Subscribe',
@@ -418,6 +429,12 @@ const ar: Dictionary = {
     diameter: 'القطر',
   },
 
+  brand: {
+    latin: 'تيرّا — الأرض باللاتينية',
+    philosophy: 'من الأرض وإلى الأرض',
+    philosophyEcho: 'From earth, back to earth',
+  },
+
   nav: {
     home: 'الرئيسية',
     shop: 'المتجر',
@@ -443,12 +460,9 @@ const ar: Dictionary = {
   },
 
   manifesto: {
-    eyebrow: 'غدٌ أنظف',
-    line1: 'كوب واحد،',
-    line2: 'يُستخدم عشرة آلاف مرة.',
     body:
       'صنعنا شيئاً واحداً وأمضينا وقتنا في إتقانه. فولاذ يحفظ البرودة، وغطاء لا يسرّب، وماصّة تبقى معك. لا شيء هنا صُمّم ليُرمى.',
-    note: 'الخيارات الصغيرة تصنع فرقاً أكبر.',
+    note: 'كوب واحد، يُستخدم عشرة آلاف مرة.',
   },
 
   reveal: {
@@ -608,7 +622,11 @@ const ar: Dictionary = {
     madeToOrder: 'يُصنع بالطلب · يُشحن خلال ٢–٤ أيام',
     customize: 'خصّص هذا',
     orderAsIs: 'اطلبه كما هو',
-    specs: 'المواصفات',
+    details: 'التفاصيل',
+    materials: 'المواد',
+    materialsBody:
+      'فولاذ مقاوم للصدأ ١٨/٨ معاد تدويره، بجدار مزدوج. وحلقة إحكام من السيليكون الغذائي، وماصّة من الفولاذ. لا بلاستيك في الكوب، ولا في علبته.',
+    specs: 'المقاسات',
     included: 'في الصندوق',
     included1: 'كوب تيرّا',
     included2: 'غطاء مقاوم للتسريب وحلقة إحكام',
@@ -699,7 +717,6 @@ const ar: Dictionary = {
   },
 
   footer: {
-    line: 'صُنع ليُعاد استخدامه. وصُمّم لتعيش معه.',
     newsletter: 'رسالة واحدة في الشهر',
     newsletterBody: 'درجات جديدة، وما تعلّمناه عن المواد. لا شيء غير ذلك.',
     subscribe: 'اشترك',

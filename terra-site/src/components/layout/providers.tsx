@@ -28,9 +28,17 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const toggle = React.useCallback(() => {
+    // `theme-shift` puts a colour transition on everything for the length of
+    // the crossfade and then takes it off again, so the switch is a dissolve
+    // rather than a flip — and nothing carries a global transition the rest of
+    // the time. See globals.css → THEME CROSSFADE.
+    const root = document.documentElement
+    root.classList.add('theme-shift')
+    window.setTimeout(() => root.classList.remove('theme-shift'), 820)
+
     setTheme((current) => {
       const next = current === 'dark' ? 'light' : 'dark'
-      document.documentElement.dataset.theme = next
+      root.dataset.theme = next
       try {
         window.localStorage.setItem(KEY, next)
       } catch {

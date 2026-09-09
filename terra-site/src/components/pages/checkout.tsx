@@ -109,7 +109,7 @@ export function Checkout() {
               {METHODS.map((option) => (
                 <li key={option}>
                   <label
-                    className={`tap flex cursor-pointer items-center gap-3 border px-5 py-3 text-[0.68rem] uppercase tracking-[0.16em] transition-colors duration-500 ${
+                    className={`tap flex cursor-pointer items-center gap-3 border px-5 py-3 meta transition-colors duration-500 ${
                       method === option ? 'border-ink text-ink' : 'border-line text-ink-soft hover:border-ink/40'
                     }`}
                   >
@@ -143,7 +143,7 @@ export function Checkout() {
                   )}
                 </span>
                 <span className="min-w-0 flex-1 text-sm">
-                  <span className="block text-[0.7rem] uppercase tracking-[0.16em] text-ink">
+                  <span className="block meta text-ink">
                     {line.name ? pick(line.name) : t('cart.yourDesign')}
                   </span>
                   <span className="mt-1 block text-ink-mute">×{n(line.quantity)}</span>
@@ -194,7 +194,7 @@ function Field({
 }: { id: string; label: string; type?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div>
-      <label htmlFor={id} className="block text-[0.62rem] uppercase tracking-[0.2em] text-ink-mute">
+      <label htmlFor={id} className="block meta text-ink-mute">
         {label}
       </label>
       <input

@@ -23,7 +23,10 @@
     --sunken: 228 221 209;
     --ink: 47 55 48;
     --ink-soft: 89 98 87;
-    --ink-mute: 132 138 126;
+    /* 4.6:1 on --surface. The eyebrow and every .meta row are set in this
+       tone at 0.68rem, which is normal-size text as far as WCAG is concerned,
+       so it has to clear 4.5:1 — the old value sat at 2.96:1. */
+    --ink-mute: 100 108 97;
     --line: 215 206 192;
     --accent: var(--sandi);
     --accent-ink: 47 55 48;
@@ -31,6 +34,27 @@
     --ring: 94 107 88;
     /* The pool of light behind the product in the 3D viewer. */
     --viewer-glow: rgb(var(--linen) / 0.9);
+
+    /* Ambient canopy: how much of the moving background is allowed through.
+       Light mode reads as sun on paper, so it stays very faint. */
+    --canopy-leaf: 74 90 68;
+    --canopy-ink: 0.052;
+    --canopy-sun: 255 250 234;
+    --canopy-sun-ink: 0.5;
+    --canopy-shade: 43 52 44;
+    --canopy-shade-ink: 0.05;
+
+    /* The out-of-focus set behind the product. Far stronger than the ambient
+       canopy — this one is meant to be seen — but every value is still tuned
+       so the cup stays the brightest, sharpest thing on the page. */
+    --bokeh-leaf: 71 88 66;
+    --bokeh-ink: 0.5;
+    /* The wash is kept near the page tone on purpose. The set has to end
+       somewhere, and a coloured panel would announce exactly where — so the
+       only things that read are the leaves, the light and the shade. */
+    --bokeh-wash: 169 178 159;
+    --bokeh-wash-ink: 0.1;
+    --bokeh-vignette-ink: 0.16;
     color-scheme: light;
   }
 
@@ -49,6 +73,22 @@
     --ring: 216 195 186;
     /* Barely there in the dark: a lit floor, not a grey card. */
     --viewer-glow: rgb(var(--sage) / 0.13);
+
+    /* Dark mode is a night garden, not an inverted page: the leaves go lighter
+       than the ground rather than darker, and the sun becomes moonlight. */
+    --canopy-leaf: 150 168 142;
+    --canopy-ink: 0.062;
+    --canopy-sun: 214 226 205;
+    --canopy-sun-ink: 0.2;
+    --canopy-shade: 12 17 13;
+    --canopy-shade-ink: 0.3;
+
+    --bokeh-leaf: 138 158 128;
+    --bokeh-ink: 0.34;
+    --bokeh-wash: 55 68 54;
+    --bokeh-wash-ink: 0.14;
+    /* A dark vignette on a dark ground only draws a rectangle. */
+    --bokeh-vignette-ink: 0.1;
     color-scheme: dark;
   }
 
@@ -62,6 +102,13 @@
     scroll-padding-top: 6rem;
   }
 
+  /* Ruq'ah has a smaller effective x-height than the Latin faces, so Arabic
+     is served one step larger at the root. A percentage, not a pixel value, so
+     a reader who has enlarged their browser text keeps that enlargement. */
+  html[lang='ar'] {
+    font-size: 109%;
+  }
+
   body {
     background-color: rgb(var(--surface));
     color: rgb(var(--ink));
@@ -73,27 +120,44 @@
     text-rendering: optimizeLegibility;
     /* A whisper of paper grain over everything. */
     background-image: var(--grain);
+    /* Light ⇄ dark is a dissolve, not a switch. */
+    transition:
+      background-color 900ms cubic-bezier(0.4, 0, 0.2, 1),
+      color 900ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Arabic gets its own face and a little more air. */
+  /* Arabic is set in خط الرقعة throughout — headings to checkout — with more
+     air between the lines, because a joined script needs it. */
   html[lang='ar'] body {
-    font-family: var(--font-arabic), ui-sans-serif, sans-serif;
-    line-height: 1.85;
+    font-family: var(--font-arabic), ui-serif, serif;
+    font-weight: 400;
+    line-height: 1.95;
     letter-spacing: 0;
   }
 
+  /* h1 and h2 are statements, and statements are written by hand. */
   h1,
-  h2,
+  h2 {
+    font-family: Playlist, var(--font-script), cursive;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  /* h3 is a subhead: Audrey, light and quiet. */
   h3 {
-    font-family: Playlist, var(--font-display), ui-sans-serif, sans-serif;
+    font-family: Audrey, var(--font-display), ui-sans-serif, sans-serif;
     font-weight: 300;
     text-wrap: balance;
   }
 
+  /* Ruq'ah is already a written hand, so Arabic needs no second face: the
+     same warmth the brush gives English, from one family. */
   html[lang='ar'] h1,
   html[lang='ar'] h2,
   html[lang='ar'] h3 {
-    font-family: var(--font-arabic), sans-serif;
+    font-family: var(--font-arabic), ui-serif, serif;
+    font-weight: 700;
     letter-spacing: 0;
   }
 
@@ -150,12 +214,57 @@
     padding-block: clamp(4.5rem, 12vw, 11rem);
   }
 
-  /* The TERRA wordmark: light, wide, quiet — as on the cup. */
+  /* The TERRA wordmark as it is printed on the cup: Audrey, light, wide and
+     quiet. Silkscreen on steel at 8mm has to stay legible, so this one stays
+     in tracked caps while the site's titles move to the brush hand. */
   .wordmark {
-    font-family: Playlist, var(--font-display), sans-serif;
+    font-family: Audrey, var(--font-display), sans-serif;
     font-weight: 300;
     letter-spacing: 0.42em;
     text-transform: uppercase;
+  }
+
+  /* The brush hand. Never tracked, never uppercase-forced — a brush writes
+     letters joined, and spacing them out breaks the stroke. */
+  .brush {
+    font-family: Playlist, var(--font-script), cursive;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  html[lang='ar'] .brush {
+    font-family: var(--font-arabic), ui-serif, serif;
+    font-weight: 700;
+  }
+
+  /* Small tracked caps: prices, meta rows, quiet links. One class instead of
+     the same three arbitrary utilities repeated everywhere — and the single
+     place Arabic needs a larger size, since Ruq'ah at 0.68rem is unreadable. */
+  .meta {
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    line-height: 1.5;
+  }
+  html[lang='ar'] .meta {
+    font-size: 0.92rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* The same label with a little more presence: counters, section captions. */
+  .meta-lg {
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1.5;
+  }
+  html[lang='ar'] .meta-lg {
+    font-size: 1rem;
+    letter-spacing: 0;
+    text-transform: none;
   }
 
   /* Small caps label used above every section heading. */
@@ -191,7 +300,9 @@
     color: rgb(var(--ink-soft));
   }
   html[lang='ar'] .passage {
-    font-family: var(--font-arabic), sans-serif;
+    font-family: var(--font-arabic), ui-serif, serif;
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    line-height: 1.9;
   }
 
   /* A hairline rule, used instead of borders and cards wherever possible. */
@@ -275,10 +386,13 @@
     border-color: rgb(var(--ink) / 0.28);
   }
 
-  /* Underline that draws in on hover, for text links. */
+  /* Underline that draws in on hover, for text links. The padding is not
+     decoration: it is what takes a 14px line of type past the 24px minimum
+     target size, which matters most on the phone. */
   .link-draw {
     position: relative;
-    padding-block: 0.15rem;
+    display: inline-block;
+    padding-block: 0.45rem;
   }
   .link-draw::after {
     content: '';
@@ -374,26 +488,163 @@
   outline: none;
 }
 
-/* Letter-by-letter title reveal — each glyph rises and fades in. */
-.glyph {
+/* ==========================================================================
+   THE BRUSH REVEAL
+   ==========================================================================
+   A brush does not fade ink in and it does not type: it lays a stroke down,
+   and the letter appears along that stroke, soft at the leading edge where the
+   bristles are still wet.
+
+   So each glyph carries a mask — a steep gradient standing in for the brush
+   tip — that is dragged across it. `mask-size: 300%` puts the opaque half of
+   that gradient outside the glyph to begin with; sliding the mask from 100% to
+   0% walks it through. The 104deg angle is the tilt of a held brush, and the
+   long soft ramp in the middle of the gradient is the wet edge.
+
+   Consecutive glyphs overlap in time (see SplitTitle's `step`, which is much
+   shorter than this duration): a word is written in one continuous gesture,
+   which is exactly what a typewriter effect gets wrong.
+   ========================================================================== */
+.glyph,
+.brush-word {
   display: inline-block;
-  opacity: 0;
-  transform: translateY(0.42em);
-  filter: blur(6px);
-  animation: glyph-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --brush: linear-gradient(
+    104deg,
+    #000 0%,
+    #000 36%,
+    rgb(0 0 0 / 0.55) 52%,
+    rgb(0 0 0 / 0.12) 64%,
+    transparent 74%
+  );
+  -webkit-mask-image: var(--brush);
+  mask-image: var(--brush);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  animation: brush-in 1150ms cubic-bezier(0.3, 0.86, 0.22, 1) forwards;
+  will-change: mask-position, transform;
 }
-@keyframes glyph-in {
+
+/* Right-to-left the gesture runs the other way, so the gradient is mirrored
+   and the mask travels back across it. Arabic is written right to left; the
+   stroke has to agree. */
+html[dir='rtl'] .glyph,
+html[dir='rtl'] .brush-word {
+  --brush: linear-gradient(
+    256deg,
+    #000 0%,
+    #000 36%,
+    rgb(0 0 0 / 0.55) 52%,
+    rgb(0 0 0 / 0.12) 64%,
+    transparent 74%
+  );
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
+  animation-name: brush-in-rtl;
+}
+
+/* A whole word rather than a glyph: one long stroke. Joined scripts must never
+   be split into characters — doing so breaks their shaping — so Arabic titles
+   are written in a single pass. */
+.brush-word {
+  animation-duration: 2100ms;
+}
+
+@keyframes brush-in {
+  from {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+    transform: translateY(0.05em) rotate(0.7deg);
+  }
   to {
-    opacity: 1;
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
     transform: none;
-    filter: blur(0);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .glyph {
-    opacity: 1;
+
+@keyframes brush-in-rtl {
+  from {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+    transform: translateY(0.05em) rotate(-0.7deg);
+  }
+  to {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
     transform: none;
-    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glyph,
+  .brush-word {
+    -webkit-mask-image: none;
+    mask-image: none;
+    transform: none;
     animation: none;
   }
+}
+
+/* ==========================================================================
+   THE AMBIENT CANOPY
+   ==========================================================================
+   The layer that sits behind every page: leaves, light and shade, moving on a
+   scale of minutes. It is fixed, so scrolling moves the content across it
+   rather than moving it, and it is drawn entirely from the --canopy-* tokens,
+   so light and dark are two gardens rather than one inverted image.
+   ========================================================================== */
+.canopy {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  /* Parallax: the scroll handler writes this, and it is the only thing that
+     changes on scroll. */
+  --canopy-shift: 0px;
+}
+
+.canopy-layer {
+  position: absolute;
+  inset: -12% -6%;
+  will-change: transform;
+}
+
+/* ==========================================================================
+   THEME CROSSFADE
+   ==========================================================================
+   Flipping [data-theme] repaints every token at once, which reads as a camera
+   cut. `theme-shift` is added by the toggle for the length of the dissolve and
+   then removed, so the colours travel — and nothing on the page is left
+   carrying a global transition afterwards.
+
+   Guarded by prefers-reduced-motion rather than fighting the base-layer reset
+   with a louder !important: a reader who asked for less motion gets the flip.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-shift,
+  html.theme-shift *,
+  html.theme-shift *::before,
+  html.theme-shift *::after {
+    transition:
+      background-color 760ms cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 760ms cubic-bezier(0.4, 0, 0.2, 1),
+      color 760ms cubic-bezier(0.4, 0, 0.2, 1),
+      fill 760ms cubic-bezier(0.4, 0, 0.2, 1),
+      stroke 760ms cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 760ms cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 760ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+}
+
+/* Disclosure — the expandable Details / Care / Materials rows. */
+.disclosure-panel[data-state='open'] {
+  animation: accordion-down 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.disclosure-panel[data-state='closed'] {
+  animation: accordion-up 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }

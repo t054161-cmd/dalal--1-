@@ -3,6 +3,7 @@ import './globals.css'
 import { fontVariables } from './fonts'
 import { Providers, preHydrationScript } from '@/components/layout/providers'
 import { Nav } from '@/components/layout/nav'
+import { AmbientCanopy } from '@/components/common/ambient-canopy'
 import { Footer } from '@/components/layout/footer'
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://terra.example'
@@ -62,6 +63,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={fontVariables}>
         <Providers>
+          {/* Behind everything: leaves, light and shade, moving very slowly. */}
+          <AmbientCanopy />
           <Nav />
           <main id="main">{children}</main>
           <Footer />

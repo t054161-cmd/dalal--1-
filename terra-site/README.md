@@ -115,20 +115,66 @@ rather than a silent English fallback. No component contains a sentence.
 
 ## Typography
 
-The brief specifies **Playlist** (display) and **Audrey** (everything else).
-Both are commercial licences, so they are not vendored here — but every rule
-names them first:
+Four voices, set in `src/app/fonts.ts`:
+
+| Role | Where it is used | Variable | Stand-in |
+| --- | --- | --- | --- |
+| **Playlist** | `h1`, `h2`, the TERRA title, artistic statements | `--font-script` | Kaushan Script |
+| **Audrey** | navigation, `h3`, body, buttons, labels, the whole UI | `--font-body` / `--font-display` | Josefin Sans |
+| **Ruq'ah** | every word of Arabic, headings to checkout | `--font-arabic` | Aref Ruqaa |
+| Editorial | long passages (`.passage`) | `--font-editorial` | Cormorant Garamond |
+
+Playlist and Audrey are commercial licences, so they are not vendored — but
+every rule names them first:
 
 ```css
-font-family: Playlist, var(--font-display), sans-serif;
+font-family: Playlist, var(--font-script), cursive;
 ```
 
 To switch to the real faces: drop the licensed `woff2` files into
 `public/fonts/`, add one `@font-face` block per family (named exactly `Playlist`
 and `Audrey`) at the top of `src/app/globals.css`, and nothing else changes.
-Until then three faces stand in, chosen against the reference sheet: **Jost**
-(light geometric sans — the wordmark and UI), **Cormorant Garamond** (editorial
-passages) and **IBM Plex Sans Arabic**.
+
+Two rules the system depends on:
+
+- **The brush is never tracked.** `.brush` zeroes letter-spacing, and the three
+  largest `fontSize` steps carry no tracking either — spacing a script apart
+  breaks the stroke. The cup's printed wordmark is the exception and stays in
+  Audrey caps at `0.42em`, because silkscreen at 8mm has to stay legible.
+- **Arabic is one family, not a second identity.** Ruq'ah is already a written
+  hand, so it does the work the brush does in English. Arabic is served one
+  root step larger (`html[lang='ar'] { font-size: 109% }`, a percentage so a
+  reader's own enlargement survives), and `.meta` / `.meta-lg` drop the tracked
+  uppercase treatment, which a joined script cannot take.
+
+### The brush reveal
+
+`globals.css → THE BRUSH REVEAL`. Each glyph carries a steep gradient mask —
+the brush tip — that is dragged across it; consecutive glyphs overlap in time,
+so a word is written in one gesture rather than typed. `SplitTitle` never
+splits a joined script: Arabic takes one long stroke as a whole word, because
+cutting it into characters would destroy its shaping. RTL mirrors both the
+gradient and the direction of travel. Reduced motion gets the finished word.
+
+## Backgrounds
+
+Two layers, built from the same leaf geometry in
+`src/components/common/botanical.tsx`:
+
+- **`AmbientCanopy`** sits behind every page at `z-index: -1`, fixed, with three
+  depths of leaves, a shaft of light and shade pooling at the foot of the
+  screen. It is slow (58–96s a pass), faint (≈5% in light, ≈6% in dark) and
+  held out of the middle of the frame, where the type is. One very shallow
+  scroll parallax separates the depths.
+- **`BotanicalBackdrop`** is the set the product is photographed against, and
+  it is graded the way a lens grades: the foreground framing is blurred hardest
+  (26px) because it is closest, the midground moderately (10px), the background
+  soft and wide (17px), and the subject plane is left empty for the cup. The
+  cup itself is a WebGL canvas painted above all of it and is never blurred.
+
+Both read their colours from `--canopy-*` / `--bokeh-*` tokens, so dark mode is
+the same garden at night — leaves lighter than the ground, sun become moonlight
+— rather than an inverted image.
 
 ## The hero
 

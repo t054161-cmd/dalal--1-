@@ -26,7 +26,7 @@ export function ViewerSkeleton() {
           <div className="mx-auto mt-3 h-6 w-16 rounded-md bg-ink/10" />
           <div className="mx-auto mt-1 h-40 w-14 rounded-b-[1.4rem] rounded-t-sm bg-ink/[0.07]" />
         </div>
-        <p className="text-[0.62rem] uppercase tracking-[0.24em] text-ink-mute">{t('viewer.loading')}</p>
+        <p className="meta text-ink-mute">{t('viewer.loading')}</p>
       </div>
     </div>
   )
@@ -45,6 +45,9 @@ export function CupViewer({
   autoTurn = true,
   interactive = true,
   toolbar = 'full',
+  /** Off where something behind the viewer already lights the object — the
+      product page paints its own pool of light into the botanical set. */
+  glow = true,
   onSnapshot,
 }: {
   config: CupConfig
@@ -55,6 +58,7 @@ export function CupViewer({
   autoTurn?: boolean
   interactive?: boolean
   toolbar?: 'full' | 'minimal' | 'none'
+  glow?: boolean
   onSnapshot?: (dataUrl: string) => void
 }) {
   const { t, pick } = useI18n()
@@ -127,13 +131,15 @@ export function CupViewer({
       <div className="relative isolate flex-1 overflow-hidden">
         {/* A soft pool of light behind the object; the tone comes from the
             theme, so dark mode gets a lit floor rather than a grey card. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10"
-          style={{
-            background: 'radial-gradient(46% 40% at 50% 42%, var(--viewer-glow), transparent 72%)',
-          }}
-        />
+        {glow ? (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -z-10"
+            style={{
+              background: 'radial-gradient(46% 40% at 50% 42%, var(--viewer-glow), transparent 72%)',
+            }}
+          />
+        ) : null}
 
         {webgl === null || (near === false && webgl === true && !reduced) ? (
           <div className="absolute inset-0 grid place-items-center p-4">
@@ -163,7 +169,7 @@ export function CupViewer({
         {use3d && !hintSeen && interactive && toolbar !== 'none' ? (
           <p
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-5 text-center text-[0.6rem] uppercase tracking-[0.26em] text-ink-mute animate-fade-in"
+            className="pointer-events-none absolute inset-x-0 bottom-5 text-center meta text-ink-mute animate-fade-in"
           >
             {t('viewer.drag')}
           </p>
@@ -210,7 +216,7 @@ export function CupViewer({
               >
                 <ChevronLeft className="size-4 flip-rtl" aria-hidden />
               </ViewerButton>
-              <span className="px-2 text-[0.6rem] uppercase tracking-[0.24em] text-ink-mute" aria-live="polite">
+              <span className="px-2 meta text-ink-mute" aria-live="polite">
                 {t('viewer.angle', { current: angle + 1, total: ANGLES.length })}
               </span>
               <ViewerButton label={t('viewer.next')} onClick={() => setAngle((a) => (a + 1) % ANGLES.length)}>
@@ -231,8 +237,8 @@ export function CupViewer({
           {t('viewer.fallback')}
         </p>
       ) : null}
-      {use3d && toolbar === 'full' ? (
-        <p className="mt-2 text-center text-[0.6rem] uppercase tracking-[0.2em] text-ink-mute">
+      {use3d && toolbar !== 'none' ? (
+        <p className="mt-2 text-center meta text-ink-mute">
           {t('viewer.pinch')}
         </p>
       ) : null}

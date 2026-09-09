@@ -131,7 +131,7 @@ export function Designer() {
           </div>
 
           {/* Steps, as a quiet legend of where you are. */}
-          <ol className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-[0.6rem] uppercase tracking-[0.2em] text-ink-mute">
+          <ol className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 meta text-ink-mute">
             {(['generate', 'preview', 'edit', 'save', 'cart'] as const).map((step, i) => (
               <li key={step} className="flex items-center gap-4">
                 {i > 0 ? <span aria-hidden className="h-px w-4 bg-line" /> : null}
@@ -217,7 +217,7 @@ export function Designer() {
               <div className="mt-6 border-t border-line pt-5" aria-live="polite">
                 {result.understood ? (
                   <>
-                    <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[0.66rem] uppercase tracking-[0.2em]">
+                    <p className="flex flex-wrap items-center gap-x-4 gap-y-1 meta">
                       <span className="text-ink">{t('designer.applied')}</span>
                       <span className="text-ink-mute">
                         {result.engine === 'claude' ? t('designer.aiMode') : t('designer.localMode')}
@@ -286,7 +286,7 @@ export function Designer() {
                       aria-pressed={config.colorway === way.id}
                       aria-label={t('colors.choose', { name: pick(way.name) })}
                       className={cn(
-                        'tap flex items-center gap-3 border px-4 py-2 text-[0.66rem] uppercase tracking-[0.16em] transition-colors duration-500',
+                        'tap flex items-center gap-3 border px-4 py-2 meta transition-colors duration-500',
                         config.colorway === way.id
                           ? 'border-ink text-ink'
                           : 'border-line text-ink-soft hover:border-ink/40',
@@ -364,7 +364,7 @@ export function Designer() {
                         ink={config.patternColor}
                         body={config.bodyColor}
                       />
-                      <span className="mt-2 block text-[0.58rem] uppercase tracking-[0.14em] text-ink-soft">
+                      <span className="mt-2 block meta text-ink-soft">
                         {pick(pattern.name)}
                       </span>
                     </button>
@@ -421,7 +421,7 @@ export function Designer() {
                   className="tap w-full border-b border-ink/25 bg-transparent pb-2 text-lg text-ink placeholder:text-ink-mute/70 focus:border-ink focus:outline-none"
                   aria-describedby="mark-count"
                 />
-                <p id="mark-count" className="mt-2 text-[0.62rem] uppercase tracking-[0.18em] text-ink-mute">
+                <p id="mark-count" className="mt-2 meta text-ink-mute">
                   {t('designer.markCounter', { count: n(config.mark.length), max: n(MAX_MARK_LENGTH) })}
                 </p>
               </div>
@@ -450,7 +450,7 @@ export function Designer() {
                       >
                         {config.mark.trim() || 'TERRA'}
                       </span>
-                      <span className="mt-1.5 block text-[0.56rem] uppercase tracking-[0.14em] text-ink-mute">
+                      <span className="mt-1.5 block meta text-ink-mute">
                         {pick(face.name)}
                       </span>
                     </button>
@@ -511,7 +511,7 @@ export function Designer() {
                         onClick={() => setConfig({ symbol: symbol.id as SymbolId })}
                         aria-pressed={config.symbol === symbol.id}
                         className={cn(
-                          'tap border px-4 py-2 text-[0.64rem] uppercase tracking-[0.16em] transition-colors duration-500',
+                          'tap border px-4 py-2 meta transition-colors duration-500',
                           config.symbol === symbol.id
                             ? 'border-ink text-ink'
                             : 'border-line text-ink-soft hover:border-ink/40',
@@ -531,14 +531,14 @@ export function Designer() {
             <div className="flex flex-wrap items-baseline justify-between gap-4">
               <p className="flex items-baseline gap-3">
                 <span className="text-2xl font-light tabular-nums">{price(unit)}</span>
-                <span className="text-[0.66rem] uppercase tracking-[0.2em] text-ink-mute">
+                <span className="meta text-ink-mute">
                   {pick(product.currency)}
                 </span>
               </p>
               <button
                 type="button"
                 onClick={resetConfig}
-                className="link-draw text-[0.66rem] uppercase tracking-[0.18em] text-ink-mute hover:text-ink"
+                className="link-draw meta text-ink-mute hover:text-ink"
               >
                 {t('common.reset')}
               </button>
@@ -580,7 +580,7 @@ export function Designer() {
               {t('designer.disclaimer')}
             </p>
 
-            <Link href="/shop" className="link-draw mt-6 inline-block text-[0.68rem] uppercase tracking-[0.18em] text-ink-soft hover:text-ink">
+            <Link href="/shop" className="link-draw mt-6 inline-block meta text-ink-soft hover:text-ink">
               {t('common.shopTerra')}
             </Link>
           </section>

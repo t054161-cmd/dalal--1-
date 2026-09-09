@@ -3,6 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { useI18n } from '@/i18n/provider'
+import { PhilosophyLine } from '@/components/common/philosophy'
 
 export function Footer() {
   const { t } = useI18n()
@@ -13,7 +14,8 @@ export function Footer() {
       <div className="wrap grid gap-14 py-16 md:grid-cols-[1.4fr_1fr_1fr] md:gap-10">
         <div>
           <p className="wordmark text-[0.9rem]">TERRA</p>
-          <p className="passage mt-5 max-w-measure">{t('footer.line')}</p>
+          {/* The philosophy signs the site off — it is the footer's only line. */}
+          <PhilosophyLine className="mt-6" />
 
           <form
             className="mt-9 max-w-sm"
@@ -39,7 +41,7 @@ export function Footer() {
                   placeholder={t('common.emailPlaceholder')}
                   className="tap w-full bg-transparent text-sm text-ink placeholder:text-ink-mute/70 focus:outline-none"
                 />
-                <button type="submit" className="shrink-0 text-[0.68rem] uppercase tracking-[0.2em] text-ink-soft hover:text-ink">
+                <button type="submit" className="shrink-0 py-2 meta text-ink-soft hover:text-ink">
                   {t('footer.subscribe')}
                 </button>
               </div>
@@ -92,7 +94,7 @@ export function Footer() {
         </nav>
       </div>
 
-      <div className="wrap flex flex-col gap-2 border-t border-line py-6 text-[0.68rem] uppercase tracking-[0.16em] text-ink-mute sm:flex-row sm:items-center sm:justify-between">
+      <div className="wrap flex flex-col gap-2 border-t border-line py-6 meta text-ink-mute sm:flex-row sm:items-center sm:justify-between">
         <p>{t('footer.rights', { year: new Date().getFullYear() })}</p>
         <p>Shuwaikh · Kuwait</p>
       </div>

@@ -4,29 +4,26 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useI18n } from '@/i18n/provider'
 import { Magnetic, Parallax, Reveal } from '@/components/common/motion'
+import { Philosophy } from '@/components/common/philosophy'
 
-/** The quiet type block that follows the hero. */
+/**
+ * The first thing after the hero: why the cup is called what it is called.
+ * The statement is written by hand as the reader reaches it, and the two short
+ * lines beside it are all the argument the object needs.
+ */
 export function Manifesto() {
   const { t } = useI18n()
   return (
     <section className="band wrap">
       <Reveal>
-        <p className="eyebrow">{t('manifesto.eyebrow')}</p>
+        <Philosophy />
       </Reveal>
-      <Reveal delay={120}>
-        <h2 className="mt-8 text-title-lg font-light">
-          <span className="block">{t('manifesto.line1')}</span>
-          <span className="block text-ink-mute">{t('manifesto.line2')}</span>
-        </h2>
-      </Reveal>
-      <div className="mt-12 grid gap-10 md:grid-cols-2">
+      <div className="mt-14 grid gap-10 md:grid-cols-2">
         <Reveal delay={200}>
           <p className="passage max-w-prose">{t('manifesto.body')}</p>
         </Reveal>
         <Reveal delay={280} className="md:pt-2">
-          <p className="text-[0.7rem] uppercase tracking-[0.26em] text-ink-mute">
-            {t('manifesto.note')}
-          </p>
+          <p className="meta text-ink-mute">{t('manifesto.note')}</p>
         </Reveal>
       </div>
     </section>

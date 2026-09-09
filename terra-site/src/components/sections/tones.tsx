@@ -52,7 +52,7 @@ export function Tones() {
                       )}
                       style={{ background: way.body }}
                     />
-                    <span className="text-[0.62rem] uppercase tracking-[0.2em] text-ink-soft">
+                    <span className="meta text-ink-soft">
                       {pick(way.name)}
                     </span>
                   </button>

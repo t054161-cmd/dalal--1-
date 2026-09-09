@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useI18n } from '@/i18n/provider'
 import { Parallax, Reveal } from '@/components/common/motion'
 import { Packaging } from '@/components/sections/story-blocks'
+import { PhilosophyLine } from '@/components/common/philosophy'
 
 /**
  * OUR STORY — the name, the reason, the promise. Long-form, set as an
@@ -26,15 +27,16 @@ export function Story() {
       <section className="wrap mt-16 border-y border-line py-16 lg:py-24">
         <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
           <Reveal>
+            {/* The Latin word, written the way the brand signs it. Held in
+                font-script rather than .brush so it stays a brush stroke in
+                Arabic too — it is a Latin word either way. */}
             <p
-              className="font-display text-[clamp(4rem,13vw,9rem)] font-extralight leading-[0.85] tracking-[0.02em] text-ink"
+              className="font-script text-[clamp(4.5rem,14vw,10rem)] leading-[1.02] text-ink"
               lang="la"
             >
               terra
             </p>
-            <p className="mt-6 text-[0.66rem] uppercase tracking-[0.28em] text-ink-mute">
-              earth · land · soil
-            </p>
+            <PhilosophyLine className="mt-7" />
           </Reveal>
           <Reveal delay={140}>
             <p className="passage max-w-prose text-[clamp(1.25rem,2.4vw,1.7rem)] leading-[1.55]">
@@ -70,7 +72,7 @@ export function Story() {
           <Reveal className="max-w-prose space-y-6">
             <p className="passage">{t('story.p3')}</p>
             <p className="passage">{t('story.p4')}</p>
-            <p className="text-[0.7rem] uppercase tracking-[0.24em] text-ink-mute">
+            <p className="meta text-ink-mute">
               {t('story.signature')}
             </p>
           </Reveal>
@@ -103,7 +105,7 @@ export function Story() {
             { title: 'story.promise3', body: 'story.promise3Body' },
           ].map((item, i) => (
             <Reveal as="li" key={item.title} delay={i * 110}>
-              <h2 className="text-[0.78rem] uppercase tracking-[0.2em] text-ink">{t(item.title)}</h2>
+              <h2 className="meta-lg text-ink">{t(item.title)}</h2>
               <p className="mt-4 text-sm leading-relaxed text-ink-soft">{t(item.body)}</p>
             </Reveal>
           ))}

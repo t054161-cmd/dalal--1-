@@ -49,7 +49,7 @@ export function Community() {
                   <Tumbler2D config={entry.config} className="mx-auto h-48 w-auto" />
                 </span>
                 <span className="mt-4 block border-t border-line pt-3">
-                  <span className="block text-[0.68rem] uppercase tracking-[0.18em] text-ink">
+                  <span className="block meta text-ink">
                     {t('community.by', { name: pick(entry.author) })}
                   </span>
                   <span className="mt-1 block text-sm leading-snug text-ink-mute" dir="auto">
@@ -79,7 +79,7 @@ export function Community() {
                   <p className="passage" dir="auto">
                     “{pick(review.quote)}”
                   </p>
-                  <footer className="mt-5 flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[0.66rem] uppercase tracking-[0.18em] text-ink-mute">
+                  <footer className="mt-5 flex flex-wrap items-baseline gap-x-4 gap-y-1 meta text-ink-mute">
                     <cite className="not-italic text-ink">{pick(review.author)}</cite>
                     <span>{pick(review.tone)}</span>
                     <span>{t('community.monthsIn', { count: n(review.months) })}</span>

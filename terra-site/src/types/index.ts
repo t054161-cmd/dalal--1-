@@ -12,7 +12,7 @@ export type PatternId =
   | 'ridge'
   | 'terrazzo'
 
-export type MarkFont = 'wordmark' | 'editorial' | 'initials'
+export type MarkFont = 'wordmark' | 'script' | 'editorial' | 'initials'
 export type SymbolId = 'none' | 'leaf' | 'sun' | 'ridge' | 'seed' | 'wave'
 
 /** Everything that makes one TERRA yours. */
