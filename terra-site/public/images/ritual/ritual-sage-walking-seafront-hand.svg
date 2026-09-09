@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1125" width="900" height="1125" role="img">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#EDEEE7"/><stop offset="100%" stop-color="#C6CEC0"/>
+    </linearGradient>
+    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3"/><feColorMatrix type="saturate" values="0"/></filter>
+    <radialGradient id="sun"><stop offset="0%" stop-color="#FFF7E8" stop-opacity="0.85"/><stop offset="100%" stop-color="#FFF7E8" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="900" height="1125" fill="url(#bg)"/>
+  <ellipse cx="216" cy="158" rx="306" ry="292" fill="url(#sun)"/>
+  
+  <g opacity="0.30" fill="#2E3A31">
+    <path d="M18 68 q 90 68 180 11 q -81 112 -180 -11 z"/>
+    <path d="M774 1012 q 81 -79 135 -11 q -63 90 -135 11 z"/>
+  </g>
+  <ellipse cx="450" cy="912" rx="176" ry="18" fill="#2E3A31" opacity="0.20"/>
+  
+  <g>
+    <rect x="443.0" y="226.1" width="14.0" height="155.2" rx="7.0" fill="#E7E1D4"/>
+    <rect x="372.4" y="381.4" width="155.2" height="517.5" rx="46.6" fill="#A9B29F"/>
+    <rect x="372.4" y="381.4" width="52.8" height="517.5" rx="46.6" fill="#ffffff" opacity="0.14"/>
+    <rect x="364.6" y="337.4" width="170.8" height="83.6" rx="30.8" fill="#E7E1D4"/>
+    <text x="450.0" y="754.0" font-family="system-ui, sans-serif" font-size="23.3"
+          letter-spacing="8.5" text-anchor="middle" fill="#ffffff" opacity="0.62">TERRA</text>
+  </g>
+  <rect width="900" height="1125" filter="url(#n)" opacity="0.05"/>
+  <text x="45" y="1046" font-family="system-ui, sans-serif" font-size="40"
+        letter-spacing="11" fill="#2E3A31" opacity="0.75">WALKING</text>
+  <text x="45" y="1097" font-family="system-ui, sans-serif" font-size="27"
+        fill="#2E3A31" opacity="0.5">Placeholder — held in hand, seafront, 4:5</text>
+</svg>

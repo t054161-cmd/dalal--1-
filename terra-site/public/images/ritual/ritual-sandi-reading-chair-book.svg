@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#F2EAE4"/><stop offset="100%" stop-color="#E0CFC6"/>
+    </linearGradient>
+    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3"/><feColorMatrix type="saturate" values="0"/></filter>
+    <radialGradient id="sun"><stop offset="0%" stop-color="#FFF7E8" stop-opacity="0.85"/><stop offset="100%" stop-color="#FFF7E8" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1200" height="750" fill="url(#bg)"/>
+  <ellipse cx="288" cy="105" rx="408" ry="195" fill="url(#sun)"/>
+  
+  <g opacity="0.30" fill="#2E3A31">
+    <path d="M24 45 q 120 45 240 8 q -108 75 -240 -8 z"/>
+    <path d="M1032 675 q 108 -53 180 -8 q -84 60 -180 8 z"/>
+  </g>
+  <ellipse cx="600" cy="608" rx="117" ry="12" fill="#2E3A31" opacity="0.20"/>
+  
+  <g>
+    <rect x="595.3" y="150.8" width="9.3" height="103.5" rx="4.7" fill="#5E6B58"/>
+    <rect x="548.2" y="254.2" width="103.5" height="345.0" rx="31.0" fill="#DFC9C0"/>
+    <rect x="548.2" y="254.2" width="35.2" height="345.0" rx="31.0" fill="#ffffff" opacity="0.14"/>
+    <rect x="543.1" y="224.9" width="113.9" height="55.7" rx="20.5" fill="#DFC9C0"/>
+    <text x="600.0" y="502.6" font-family="system-ui, sans-serif" font-size="15.5"
+          letter-spacing="5.7" text-anchor="middle" fill="#ffffff" opacity="0.62">TERRA</text>
+  </g>
+  <rect width="1200" height="750" filter="url(#n)" opacity="0.05"/>
+  <text x="60" y="698" font-family="system-ui, sans-serif" font-size="27"
+        letter-spacing="8" fill="#2E3A31" opacity="0.75">READING</text>
+  <text x="60" y="731" font-family="system-ui, sans-serif" font-size="18"
+        fill="#2E3A31" opacity="0.5">Placeholder — armchair, open book, 16:10</text>
+</svg>

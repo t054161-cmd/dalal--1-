@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1100" width="900" height="1100" role="img">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0%" stop-color="#F1EDE4"/><stop offset="100%" stop-color="#DCD3C3"/></linearGradient>
+    <linearGradient id="box" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#CFC4AE"/><stop offset="42%" stop-color="#C2B69E"/><stop offset="100%" stop-color="#A9997F"/>
+    </linearGradient>
+    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3"/><feColorMatrix type="saturate" values="0"/></filter>
+  </defs>
+  <rect width="900" height="1100" fill="url(#bg)"/>
+  <ellipse cx="450" cy="885" rx="235" ry="24" fill="#2E3A31" opacity="0.16"/>
+  <path d="M300 250 L560 250 L560 880 L300 880 Z" fill="url(#box)"/>
+  <path d="M560 250 L640 210 L640 840 L560 880 Z" fill="#8F8069"/>
+  <path d="M300 250 L380 210 L640 210 L560 250 Z" fill="#D8CDB7"/>
+  <g stroke="#5E6B58" fill="none" stroke-width="3" opacity="0.75">
+    <path d="M430 560 C 430 640 430 700 430 760"/>
+  </g>
+  <g fill="#5E6B58" opacity="0.5">
+    <path d="M430 600 C 470 585 495 600 505 620 C 470 640 440 630 430 615"/>
+    <path d="M430 650 C 390 635 365 650 355 670 C 390 690 420 680 430 665"/>
+    <path d="M430 700 C 470 685 495 700 505 720 C 470 740 440 730 430 715"/>
+  </g>
+  <text x="430" y="420" font-family="system-ui, sans-serif" font-size="34" letter-spacing="14" text-anchor="middle" fill="#4A5546">TERRA</text>
+  <text x="430" y="470" font-family="system-ui, sans-serif" font-size="15" letter-spacing="4" text-anchor="middle" fill="#5E6B58" opacity="0.8">MADE TO BE REUSED</text>
+  <rect width="900" height="1100" filter="url(#n)" opacity="0.05"/>
+  <text x="46" y="1050" font-family="system-ui, sans-serif" font-size="22" fill="#2E3A31" opacity="0.55">Placeholder — packaging still life</text>
+</svg>

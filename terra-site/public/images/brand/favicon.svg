@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="TERRA">
+  <rect width="32" height="32" rx="7" fill="#5E6B58"/>
+  <rect x="11" y="9" width="10" height="16" rx="3.4" fill="#EDE7DC"/>
+  <rect x="9.6" y="7.2" width="12.8" height="3.4" rx="1.7" fill="#EDE7DC"/>
+  <rect x="15.2" y="3" width="1.6" height="5" rx="0.8" fill="#EDE7DC"/>
+</svg>

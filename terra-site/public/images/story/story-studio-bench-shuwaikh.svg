@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" width="1400" height="900" role="img">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0%" stop-color="#EFEBE1"/><stop offset="100%" stop-color="#CFD3C6"/></linearGradient>
+    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3"/><feColorMatrix type="saturate" values="0"/></filter>
+    <radialGradient id="sun"><stop offset="0%" stop-color="#FFF7E8" stop-opacity="0.8"/><stop offset="100%" stop-color="#FFF7E8" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1400" height="900" fill="url(#bg)"/>
+  <ellipse cx="336" cy="126" rx="476" ry="234" fill="url(#sun)"/>
+  <ellipse cx="700" cy="723" rx="420" ry="16" fill="#2E3A31" opacity="0.16"/>
+  
+  <g>
+    <rect x="694.4" y="180.9" width="11.2" height="124.2" rx="5.6" fill="#E7E1D4"/>
+    <rect x="637.9" y="305.1" width="124.2" height="414.0" rx="37.3" fill="#A9B29F"/>
+    <rect x="637.9" y="305.1" width="42.2" height="414.0" rx="37.3" fill="#ffffff" opacity="0.14"/>
+    <rect x="631.7" y="269.9" width="136.6" height="66.9" rx="24.6" fill="#E7E1D4"/>
+    <text x="700.0" y="603.2" font-family="system-ui, sans-serif" font-size="18.6"
+          letter-spacing="6.8" text-anchor="middle" fill="#ffffff" opacity="0.62">TERRA</text>
+  </g>
+  <rect width="1400" height="900" filter="url(#n)" opacity="0.05"/>
+  <text x="70" y="837" font-family="system-ui, sans-serif" font-size="32" letter-spacing="9" fill="#2E3A31" opacity="0.75">THE STUDIO</text>
+  <text x="70" y="878" font-family="system-ui, sans-serif" font-size="22" fill="#2E3A31" opacity="0.5">Placeholder — workbench, Shuwaikh, 14:9</text>
+</svg>

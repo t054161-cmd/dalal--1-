@@ -157,6 +157,13 @@ assets/favicon.svg
 
 ## Also in this repository
 
-`terra/` — **TERRA**, a complete bilingual (Arabic RTL / English LTR)
-Next.js storefront for a customizable insulated mug, with a real-time
-React Three Fiber 3D designer. See [`terra/README.md`](terra/README.md).
+Two TERRA storefronts, both bilingual (Arabic RTL / English LTR) Next.js apps
+with real-time React Three Fiber product viewers:
+
+- **`terra-site/`** — the current build: a cinematic, editorial storefront for
+  the TERRA tumbler (tall slim body, flat lid, straw), with an exploded-view
+  product anatomy and an AI cup designer.
+  See [`terra-site/README.md`](terra-site/README.md).
+- **`terra/`** — the earlier build: a customizable insulated mug with a
+  4-step designer, Cup of the Day and a loyalty programme.
+  See [`terra/README.md`](terra/README.md).

@@ -70,7 +70,7 @@ export function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <nav aria-label={t('nav.menu')} className="mx-auto hidden lg:block">
+          <nav aria-label={t('nav.menu')} className="mx-auto hidden xl:block">
             <ul className="flex items-center gap-1">
               {NAV.map((item) => {
                 const active = pathname === item.href
@@ -79,7 +79,7 @@ export function Header() {
                     <Link
                       href={item.href}
                       className={cn(
-                        'rounded-full px-3 py-2 text-sm font-medium transition-colors hover:bg-surface-sunken',
+                        'whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium transition-colors hover:bg-surface-sunken',
                         active ? 'bg-surface-sunken text-accent' : 'text-ink-soft',
                       )}
                       aria-current={active ? 'page' : undefined}
@@ -92,7 +92,7 @@ export function Header() {
             </ul>
           </nav>
 
-          <div className="ms-auto flex items-center gap-1 lg:ms-0">
+          <div className="ms-auto flex items-center gap-1 xl:ms-0">
             {/* Language */}
             <Button
               variant="ghost"
@@ -164,7 +164,7 @@ export function Header() {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="xl:hidden"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="mobile-nav"
@@ -179,7 +179,7 @@ export function Header() {
         <div
           id="mobile-nav"
           hidden={!open}
-          className="border-t border-line bg-surface-raised lg:hidden"
+          className="border-t border-line bg-surface-raised xl:hidden"
         >
           <nav aria-label={t('nav.menu')} className="container-terra py-3">
             <ul className="grid gap-1">
