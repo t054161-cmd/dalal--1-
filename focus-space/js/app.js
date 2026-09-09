@@ -271,6 +271,10 @@
   FS.Auth.onChange(() => {
     paintAvatar();
     if (current && current.name === 'profile') render(true);
+    if (FS.Auth.notice) {
+      FS.toast(T(FS.Auth.notice));
+      FS.Auth.notice = null;
+    }
   });
   FS.Auth.start();
   measureHeader();

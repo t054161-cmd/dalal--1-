@@ -34,6 +34,7 @@
     user: null,
     profile: null,        // public half + private half, merged
     state: 'loading',     // loading · out · in · unavailable
+    notice: null,         // something to tell the visitor once, on arrival
 
     onChange(fn) { listeners.add(fn); return () => listeners.delete(fn); },
     isIn() { return Auth.state === 'in'; },
@@ -42,6 +43,15 @@
     /* Load the client and restore any session already in this browser. */
     async start() {
       if (!Auth.configured) { Auth.state = 'unavailable'; emit(); return; }
+
+      /* A visitor arriving from a confirmation or reset email lands here
+         with tokens in the fragment. Read it before the client consumes
+         it, so the app knows to say something and to leave them somewhere
+         sensible rather than on whatever the fragment happens to parse as. */
+      const arriving = new URLSearchParams((location.hash || '').replace(/^#/, ''));
+      const arrivedFor = arriving.get('type');
+      const arrivedErr = arriving.get('error_code') || arriving.get('error');
+
       try {
         const mod = await import(CDN);
         Auth.client = mod.createClient(CFG.url, CFG.key, {
@@ -59,6 +69,18 @@
       }
 
       const { data } = await Auth.client.auth.getSession();
+
+      if (arrivedErr) {
+        Auth.notice = /expired|invalid/.test(arrivedErr) ? 'auth.linkExpired' : 'auth.errGeneric';
+      } else if (arrivedFor === 'signup' || arrivedFor === 'email_change') {
+        Auth.notice = 'auth.confirmed';
+      } else if (arrivedFor === 'recovery') {
+        Auth.notice = 'auth.recovered';
+      }
+      if (arrivedFor || arrivedErr) {
+        history.replaceState(null, '', location.pathname + location.search + '#/profile');
+      }
+
       await adopt(data && data.session);
 
       Auth.client.auth.onAuthStateChange((_event, session) => { adopt(session); });
@@ -69,7 +91,12 @@
       const { data, error } = await Auth.client.auth.signUp({
         email: email.trim(),
         password,
-        options: { data: { full_name: (name || '').trim(), language: FS.Store.lang } }
+        options: {
+          data: { full_name: (name || '').trim(), language: FS.Store.lang },
+          /* Come back to wherever this copy of the site is served from,
+             rather than to whatever the project's Site URL happens to be. */
+          emailRedirectTo: location.origin + location.pathname
+        }
       });
       if (error) return { error: messageKey(error) };
       /* With email confirmation on, there is a user but no session yet. */
@@ -92,7 +119,7 @@
     async resetPassword(email) {
       if (!Auth.client) return { error: 'auth.errUnavailable' };
       const { error } = await Auth.client.auth.resetPasswordForEmail(email.trim(), {
-        redirectTo: location.origin + location.pathname + '#/profile'
+        redirectTo: location.origin + location.pathname
       });
       return error ? { error: messageKey(error) } : {};
     },
