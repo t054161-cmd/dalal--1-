@@ -71,6 +71,8 @@ const en = {
     latin: 'Terra — Latin for earth',
     philosophy: 'From earth, back to earth',
     philosophyEcho: 'من الأرض وإلى الأرض',
+    /** The whole idea, said plainly. Nothing on the site explains it twice. */
+    plain: 'Terra means earth. A reusable cup, made with the earth in mind.',
   },
 
   nav: {
@@ -282,13 +284,11 @@ const en = {
   story: {
     metaTitle: 'Our Story',
     eyebrow: 'Our story',
-    heading: 'We began with one object.',
+    heading: 'TERRA means earth.',
     intro:
-      'TERRA is Latin for earth — the ground under your feet, and the root of terrain and terracotta. We took the name because the cup is made of the earth’s materials and built to take less from it.',
-    p1: 'The idea started with a bin. A café bin, at eleven in the morning, already full of cups that had each been used for about thirteen minutes.',
-    p2: 'So we did what everyone does: we bought reusable cups. And then we left them at home, because they were bulky, ugly, or impossible to clean. A cup you do not love is a cup you do not carry.',
-    p3: 'We spent a year on the silhouette instead of the marketing. Tall enough to hold a real drink, slim enough for a car holder, plain enough to belong on any table.',
-    p4: 'It is made in one place, by people we know, in four tones taken from the ground. When a part wears out we send you that part. That is the whole business.',
+      'Terra is the Latin word for earth. We took the name for our connection to the earth, and for what the cup is for: one reusable object, made with the environment in mind.',
+    p1: 'From earth, back to earth means what it says. The cup is made from materials that come from the earth, and it is built to be used again instead of thrown away.',
+    p2: 'It is made from recycled steel, in four tones taken from the ground. When a part wears out we send you that part, not a new cup.',
     signature: '— The TERRA studio, Kuwait',
     promiseHeading: 'Our promise',
     promise1: 'Lifetime warranty',
@@ -433,6 +433,7 @@ const ar: Dictionary = {
     latin: 'تيرّا — الأرض باللاتينية',
     philosophy: 'من الأرض وإلى الأرض',
     philosophyEcho: 'From earth, back to earth',
+    plain: 'تيرّا تعني الأرض. كوب يُعاد استخدامه، مصنوع بوعي بالأرض.',
   },
 
   nav: {
@@ -642,13 +643,11 @@ const ar: Dictionary = {
   story: {
     metaTitle: 'قصتنا',
     eyebrow: 'قصتنا',
-    heading: 'بدأنا بشيء واحد.',
+    heading: 'تيرّا تعني الأرض.',
     intro:
-      '«تيرّا» كلمة لاتينية تعني الأرض — التراب تحت قدميك، وجذر كلمتَي terrain و terracotta. أخذنا الاسم لأن الكوب مصنوع من مواد الأرض ومبنيّ ليأخذ منها أقل.',
-    p1: 'بدأت الفكرة من سلة مهملات. سلة مقهى، في الحادية عشرة صباحاً، ممتلئة أصلاً بأكواب استُخدم كل منها نحو ثلاث عشرة دقيقة.',
-    p2: 'ففعلنا ما يفعله الجميع: اشترينا أكواباً قابلة لإعادة الاستخدام. ثم تركناها في البيت، لأنها كانت ضخمة أو قبيحة أو يصعب تنظيفها. والكوب الذي لا تحبّه كوب لا تحمله.',
-    p3: 'أمضينا سنة على الشكل بدلاً من الدعاية. طويل بما يكفي لشراب حقيقي، ونحيل بما يناسب حاضن السيارة، وبسيط بما يجعله ينتمي إلى أي طاولة.',
-    p4: 'يُصنع في مكان واحد، على أيدي أشخاص نعرفهم، بأربع درجات من الأرض. وحين تتعب قطعة نرسل لك تلك القطعة. هذا هو عملنا كلّه.',
+      '«تيرّا» كلمة لاتينية تعني الأرض. أخذنا الاسم لصلتنا بالأرض، ولما صُنع الكوب من أجله: شيء واحد يُعاد استخدامه، مصنوع بوعي بيئي.',
+    p1: '«من الأرض وإلى الأرض» تعني ما تقوله تماماً. الكوب مصنوع من مواد تأتي من الأرض، ومبنيّ ليُستخدم مرة أخرى بدل أن يُرمى.',
+    p2: 'يُصنع من فولاذ معاد تدويره، بأربع درجات من الأرض. وحين تتعب قطعة نرسل لك تلك القطعة، لا كوباً جديداً.',
     signature: '— استوديو تيرّا، الكويت',
     promiseHeading: 'وعدنا',
     promise1: 'ضمان مدى الحياة',

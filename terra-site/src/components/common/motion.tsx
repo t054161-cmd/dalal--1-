@@ -40,23 +40,26 @@ export function Reveal({
   )
 }
 
-/** Joined scripts must never be split into characters. */
+/** Joined scripts must never be split at all. */
 const JOINED = /[\u0600-\u06FF\u0750-\u077F\uFB50-\uFEFF]/
 
 /**
- * The brush title. Each glyph is uncovered by a mask dragged across it, one
- * after another and overlapping, so the word arrives as a single written
- * gesture rather than a row of letters appearing (see globals.css → BRUSH
- * REVEAL for the stroke itself).
+ * The brush title.
  *
- * Arabic — and any other joined script — is never split: cutting a word into
- * characters destroys its shaping, so the whole word takes one long stroke.
+ * The unit is a word. Playlist is a connected hand: put each letter in its own
+ * inline-block and the joins between them break, which is exactly what made
+ * these titles look like they were coming apart. So each *word* takes one
+ * stroke, the words are staggered, and because a stroke lasts far longer than
+ * the gap between them they overlap into a single gesture.
+ *
+ * Arabic — and any other joined script — is not split even at the spaces: it
+ * is written in one pass, so its shaping is never at risk.
  */
 export function SplitTitle({
   text,
   className,
   delay = 0,
-  step = 90,
+  step = 240,
   ariaLabel,
 }: {
   text: string
@@ -66,30 +69,26 @@ export function SplitTitle({
   ariaLabel?: string
 }) {
   const joined = JOINED.test(text)
-  const glyphs = React.useMemo(() => (joined ? [] : [...text]), [text, joined])
+  // Keep the separators, so the spaces between words survive the join.
+  const parts = React.useMemo(
+    () => (joined ? [text] : text.split(/(\s+)/).filter((p) => p !== '')),
+    [text, joined],
+  )
 
-  if (joined) {
-    return (
-      <span className={className} aria-label={ariaLabel ?? text} role="text">
-        <span aria-hidden className="brush-word" style={{ animationDelay: `${delay}ms` }}>
-          {text}
-        </span>
-      </span>
-    )
-  }
-
+  let written = 0
   return (
     <span className={className} aria-label={ariaLabel ?? text} role="text">
-      {glyphs.map((glyph, i) => (
-        <span
-          key={`${glyph}-${i}`}
-          aria-hidden
-          className="glyph"
-          style={{ animationDelay: `${delay + i * step}ms` }}
-        >
-          {glyph === ' ' ? '\u00a0' : glyph}
-        </span>
-      ))}
+      {parts.map((part, i) => {
+        // Whitespace carries no ink, so it is not a stroke.
+        if (/^\s+$/.test(part)) return <span key={`s-${i}`}> </span>
+        const at = delay + written * step
+        written += 1
+        return (
+          <span key={`${part}-${i}`} aria-hidden className="brush-word" style={{ animationDelay: `${at}ms` }}>
+            {part}
+          </span>
+        )
+      })}
     </span>
   )
 }
@@ -102,7 +101,7 @@ export function SplitTitle({
 export function BrushTitle({
   text,
   className,
-  step = 74,
+  step = 220,
   delay = 0,
   as: Tag = 'span',
 }: {

@@ -2,9 +2,9 @@
  * ============================================================================
  * TYPEFACES
  * ============================================================================
- * The brief names four voices. Two of them are commercial licences we cannot
- * vendor, so each one is paired with the closest free face and named SECOND in
- * every font stack — the licensed name always comes first:
+ * Five voices. Playlist and Audrey are commercial licences we cannot vendor,
+ * so each is paired with the closest free face and named SECOND in every font
+ * stack — the licensed name always comes first:
  *
  *     font-family: Playlist, var(--font-script), cursive;
  *
@@ -12,29 +12,40 @@
  * block per family (family names `Playlist` and `Audrey`) at the top of
  * globals.css. Nothing else in the codebase changes.
  *
- *   PLAYLIST  → --font-script   the expressive brush hand: TERRA, hero title,
- *                               major section titles, artistic statements.
- *                               Stand-in: Kaushan Script — a real brush face
- *                               with the same bounce and dry-brush contrast as
- *                               the `gellato` sample on the reference sheet.
+ *   PLAYLIST  → --font-script      the brush hand: TERRA, the hero title,
+ *                                  major section titles, statements.
+ *                                  Stand-in: Kaushan Script.
  *
- *   AUDREY    → --font-body     the elegant thin editorial voice: navigation,
- *               --font-display  subheads, body, buttons, labels, the whole UI.
- *                               Stand-in: Josefin Sans — geometric, high-waisted
- *                               and very light, closest to the `vanilla` sample.
+ *   AUDREY    → --font-body        navigation, subheads, body, buttons,
+ *               --font-display     labels — the whole interface.
+ *                                  Stand-in: Jost. Chosen over a closer match
+ *                                  to the reference sheet on purpose: the
+ *                                  geometric faces that copy Audrey's shapes
+ *                                  most exactly also copy its very small
+ *                                  x-height, which is what made body copy hard
+ *                                  to read here. Jost keeps the light, wide,
+ *                                  editorial character and has a normal
+ *                                  x-height, so a paragraph stays comfortable.
  *
- *   RUQ'AH    → --font-arabic   every word of Arabic, headings to checkout.
- *                               Aref Ruqaa is a true خط الرقعة face, so Arabic
- *                               carries the same handwritten warmth the brush
- *                               gives English rather than a separate identity.
+ *   RUQ'AH    → --font-arabic      Arabic titles and key phrases ONLY.
+ *                                  Aref Ruqaa is a true خط الرقعة face: it is
+ *                                  calligraphy, and calligraphy is for the
+ *                                  lines that carry weight, not for a checkout
+ *                                  form.
  *
- *   EDITORIAL → --font-editorial  the long-passage serif, unchanged.
+ *   ARABIC UI → --font-arabic-ui   every other word of Arabic: body, nav,
+ *                                  buttons, descriptions, labels, prices.
+ *                                  IBM Plex Sans Arabic — open counters, even
+ *                                  strokes, very legible small.
+ *
+ *   EDITORIAL → --font-editorial   the long-passage serif.
  * ============================================================================
  */
 import {
   Aref_Ruqaa,
   Cormorant_Garamond,
-  Josefin_Sans,
+  IBM_Plex_Sans_Arabic,
+  Jost,
   Kaushan_Script,
 } from 'next/font/google'
 
@@ -46,35 +57,43 @@ export const script = Kaushan_Script({
   display: 'swap',
 })
 
-/** AUDREY — the display cut, used for tracked caps and the cup print. */
-export const display = Josefin_Sans({
+/** AUDREY — the display cut: tracked caps, the wordmark, the cup print. */
+export const display = Jost({
   subsets: ['latin'],
-  weight: ['100', '200', '300', '400'],
+  weight: ['300', '400', '500'],
   variable: '--font-display',
   display: 'swap',
 })
 
-/** AUDREY — the text cut. */
-export const body = Josefin_Sans({
+/** AUDREY — the text cut. 400 is the working weight, not 300. */
+export const body = Jost({
   subsets: ['latin'],
-  weight: ['200', '300', '400', '500'],
+  weight: ['300', '400', '500'],
   variable: '--font-body',
   display: 'swap',
 })
 
 export const editorial = Cormorant_Garamond({
   subsets: ['latin'],
-  weight: ['300', '400'],
+  weight: ['400', '500'],
   style: ['normal', 'italic'],
   variable: '--font-editorial',
   display: 'swap',
 })
 
-/** خط الرقعة */
-export const arabic = Aref_Ruqaa({
+/** خط الرقعة — headlines and key phrases. */
+export const arabicDisplay = Aref_Ruqaa({
   subsets: ['arabic', 'latin'],
   weight: ['400', '700'],
   variable: '--font-arabic',
+  display: 'swap',
+})
+
+/** The Arabic reading face — everything that is not a headline. */
+export const arabicUi = IBM_Plex_Sans_Arabic({
+  subsets: ['arabic', 'latin'],
+  weight: ['300', '400', '500'],
+  variable: '--font-arabic-ui',
   display: 'swap',
 })
 
@@ -83,5 +102,6 @@ export const fontVariables = [
   display.variable,
   body.variable,
   editorial.variable,
-  arabic.variable,
+  arabicDisplay.variable,
+  arabicUi.variable,
 ].join(' ')

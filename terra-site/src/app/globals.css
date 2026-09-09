@@ -102,21 +102,24 @@
     scroll-padding-top: 6rem;
   }
 
-  /* Ruq'ah has a smaller effective x-height than the Latin faces, so Arabic
-     is served one step larger at the root. A percentage, not a pixel value, so
-     a reader who has enlarged their browser text keeps that enlargement. */
+  /* Arabic still runs a touch larger than Latin at the same nominal size.
+     A percentage, not a pixel value, so a reader who has enlarged their
+     browser text keeps that enlargement. */
   html[lang='ar'] {
-    font-size: 109%;
+    font-size: 104%;
   }
 
   body {
     background-color: rgb(var(--surface));
     color: rgb(var(--ink));
     font-family: Audrey, var(--font-body), ui-sans-serif, sans-serif;
-    font-weight: 300;
-    line-height: 1.7;
-    letter-spacing: 0.01em;
-    -webkit-font-smoothing: antialiased;
+    /* 400, not 300. A light geometric sans set at 300 and then thinned again
+       by -webkit-font-smoothing: antialiased is the combination that made this
+       text look fragile, so both are gone. Subpixel rendering is the browser
+       default and it is what keeps thin strokes solid. */
+    font-weight: 400;
+    line-height: 1.72;
+    letter-spacing: 0.005em;
     text-rendering: optimizeLegibility;
     /* A whisper of paper grain over everything. */
     background-image: var(--grain);
@@ -126,12 +129,13 @@
       color 900ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Arabic is set in خط الرقعة throughout — headings to checkout — with more
-     air between the lines, because a joined script needs it. */
+  /* Arabic reads in a clean, open face by default. Ruq'ah is calligraphy —
+     beautiful over a headline, tiring over a checkout form — so it is held
+     back for h1, h2 and .brush, and everything else uses this. */
   html[lang='ar'] body {
-    font-family: var(--font-arabic), ui-serif, serif;
+    font-family: var(--font-arabic-ui), ui-sans-serif, sans-serif;
     font-weight: 400;
-    line-height: 1.95;
+    line-height: 1.88;
     letter-spacing: 0;
   }
 
@@ -147,17 +151,23 @@
   /* h3 is a subhead: Audrey, light and quiet. */
   h3 {
     font-family: Audrey, var(--font-display), ui-sans-serif, sans-serif;
-    font-weight: 300;
+    font-weight: 400;
     text-wrap: balance;
   }
 
-  /* Ruq'ah is already a written hand, so Arabic needs no second face: the
-     same warmth the brush gives English, from one family. */
+  /* The two places Ruq'ah earns its keep: the titles. It is the Arabic
+     counterpart to the brush — a written hand where English has one. */
   html[lang='ar'] h1,
-  html[lang='ar'] h2,
-  html[lang='ar'] h3 {
+  html[lang='ar'] h2 {
     font-family: var(--font-arabic), ui-serif, serif;
     font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  /* h3 is a subhead, which is reading matter: it stays in the clean face. */
+  html[lang='ar'] h3 {
+    font-family: var(--font-arabic-ui), ui-sans-serif, sans-serif;
+    font-weight: 500;
     letter-spacing: 0;
   }
 
@@ -219,13 +229,14 @@
      in tracked caps while the site's titles move to the brush hand. */
   .wordmark {
     font-family: Audrey, var(--font-display), sans-serif;
-    font-weight: 300;
+    font-weight: 400;
     letter-spacing: 0.42em;
     text-transform: uppercase;
   }
 
-  /* The brush hand. Never tracked, never uppercase-forced — a brush writes
-     letters joined, and spacing them out breaks the stroke. */
+  /* The brush hand. Never tracked, never uppercase-forced, and never split
+     into characters — a brush writes letters joined, and both tracking and
+     per-glyph markup break the joins. */
   .brush {
     font-family: Playlist, var(--font-script), cursive;
     font-weight: 400;
@@ -241,28 +252,30 @@
      the same three arbitrary utilities repeated everywhere — and the single
      place Arabic needs a larger size, since Ruq'ah at 0.68rem is unreadable. */
   .meta {
-    font-size: 0.68rem;
-    font-weight: 400;
-    letter-spacing: 0.2em;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     line-height: 1.5;
   }
   html[lang='ar'] .meta {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
+    font-weight: 400;
     letter-spacing: 0;
     text-transform: none;
   }
 
   /* The same label with a little more presence: counters, section captions. */
   .meta-lg {
-    font-size: 0.78rem;
-    font-weight: 400;
-    letter-spacing: 0.18em;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     line-height: 1.5;
   }
   html[lang='ar'] .meta-lg {
-    font-size: 1rem;
+    font-size: 0.98rem;
+    font-weight: 500;
     letter-spacing: 0;
     text-transform: none;
   }
@@ -273,8 +286,9 @@
     align-items: center;
     gap: 0.75rem;
     font-size: 0.7rem;
-    font-weight: 400;
-    letter-spacing: 0.26em;
+    /* Small tracked caps need more weight than running text, not less. */
+    font-weight: 500;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
     color: rgb(var(--ink-mute));
   }
@@ -294,15 +308,17 @@
   /* Editorial serif passage — the "brighter days" voice on the cup sheet. */
   .passage {
     font-family: var(--font-editorial), Georgia, serif;
-    font-weight: 300;
+    font-weight: 400;
     font-size: clamp(1.15rem, 2.2vw, 1.5rem);
     line-height: 1.6;
     color: rgb(var(--ink-soft));
   }
   html[lang='ar'] .passage {
-    font-family: var(--font-arabic), ui-serif, serif;
-    font-size: clamp(1.1rem, 2vw, 1.35rem);
-    line-height: 1.9;
+    /* A passage is reading matter, so it takes the clean face too. */
+    font-family: var(--font-arabic-ui), ui-sans-serif, sans-serif;
+    font-weight: 300;
+    font-size: clamp(1.05rem, 1.9vw, 1.28rem);
+    line-height: 1.95;
   }
 
   /* A hairline rule, used instead of borders and cards wherever possible. */
@@ -495,92 +511,93 @@
    and the letter appears along that stroke, soft at the leading edge where the
    bristles are still wet.
 
-   So each glyph carries a mask — a steep gradient standing in for the brush
-   tip — that is dragged across it. `mask-size: 300%` puts the opaque half of
-   that gradient outside the glyph to begin with; sliding the mask from 100% to
-   0% walks it through. The 104deg angle is the tilt of a held brush, and the
-   long soft ramp in the middle of the gradient is the wet edge.
+   The unit is a WORD, never a letter. Playlist is a connected hand, and a
+   letter in its own inline-block box cannot join the letter beside it — that
+   is what made words look broken. One mask per word keeps every join intact
+   and still reads as writing, because the words are staggered and their
+   strokes overlap. Arabic is likewise never split.
 
-   Consecutive glyphs overlap in time (see SplitTitle's `step`, which is much
-   shorter than this duration): a word is written in one continuous gesture,
-   which is exactly what a typewriter effect gets wrong.
+   The mask is a gradient dragged across the word by animating mask-position.
+   Three numbers keep it from ever clipping the ink itself:
+
+     mask-size: 300% 300%   the image is three times the box in both axes, so
+                            a descender hanging below the line box is still
+                            inside the mask and cannot be sliced off
+     opaque to 40%          at rest the window sits over image 0–33%, so the
+                            finished word is comfortably inside solid ink
+     transparent from 62%   at the start the window sits over image 67–100%,
+                            so nothing shows before the stroke arrives
+
+   The gradient runs straight across rather than on a diagonal, deliberately:
+   a tilted edge projects further on a tall short word than on a long flat one,
+   and past a certain aspect ratio it clips a corner off the glyph.
    ========================================================================== */
-.glyph,
 .brush-word {
   display: inline-block;
   --brush: linear-gradient(
-    104deg,
+    to right,
     #000 0%,
-    #000 36%,
-    rgb(0 0 0 / 0.55) 52%,
-    rgb(0 0 0 / 0.12) 64%,
-    transparent 74%
+    #000 40%,
+    rgb(0 0 0 / 0.6) 50%,
+    rgb(0 0 0 / 0.2) 58%,
+    transparent 62%
   );
   -webkit-mask-image: var(--brush);
   mask-image: var(--brush);
-  -webkit-mask-size: 300% 100%;
-  mask-size: 300% 100%;
+  -webkit-mask-size: 300% 300%;
+  mask-size: 300% 300%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  -webkit-mask-position: 100% 0;
-  mask-position: 100% 0;
-  animation: brush-in 1150ms cubic-bezier(0.3, 0.86, 0.22, 1) forwards;
+  -webkit-mask-position: 100% 50%;
+  mask-position: 100% 50%;
+  animation: brush-in 1500ms cubic-bezier(0.3, 0.86, 0.22, 1) forwards;
   will-change: mask-position, transform;
 }
 
-/* Right-to-left the gesture runs the other way, so the gradient is mirrored
+/* Right to left the gesture runs the other way, so the gradient is mirrored
    and the mask travels back across it. Arabic is written right to left; the
    stroke has to agree. */
-html[dir='rtl'] .glyph,
 html[dir='rtl'] .brush-word {
   --brush: linear-gradient(
-    256deg,
+    to left,
     #000 0%,
-    #000 36%,
-    rgb(0 0 0 / 0.55) 52%,
-    rgb(0 0 0 / 0.12) 64%,
-    transparent 74%
+    #000 40%,
+    rgb(0 0 0 / 0.6) 50%,
+    rgb(0 0 0 / 0.2) 58%,
+    transparent 62%
   );
-  -webkit-mask-position: 0 0;
-  mask-position: 0 0;
+  -webkit-mask-position: 0 50%;
+  mask-position: 0 50%;
   animation-name: brush-in-rtl;
-}
-
-/* A whole word rather than a glyph: one long stroke. Joined scripts must never
-   be split into characters — doing so breaks their shaping — so Arabic titles
-   are written in a single pass. */
-.brush-word {
-  animation-duration: 2100ms;
 }
 
 @keyframes brush-in {
   from {
-    -webkit-mask-position: 100% 0;
-    mask-position: 100% 0;
-    transform: translateY(0.05em) rotate(0.7deg);
+    -webkit-mask-position: 100% 50%;
+    mask-position: 100% 50%;
+    transform: translateY(0.04em) rotate(0.5deg);
   }
   to {
-    -webkit-mask-position: 0 0;
-    mask-position: 0 0;
+    -webkit-mask-position: 0 50%;
+    mask-position: 0 50%;
     transform: none;
   }
 }
 
 @keyframes brush-in-rtl {
   from {
-    -webkit-mask-position: 0 0;
-    mask-position: 0 0;
-    transform: translateY(0.05em) rotate(-0.7deg);
+    -webkit-mask-position: 0 50%;
+    mask-position: 0 50%;
+    transform: translateY(0.04em) rotate(-0.5deg);
   }
   to {
-    -webkit-mask-position: 100% 0;
-    mask-position: 100% 0;
+    -webkit-mask-position: 100% 50%;
+    mask-position: 100% 50%;
     transform: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .glyph,
   .brush-word {
     -webkit-mask-image: none;
     mask-image: none;

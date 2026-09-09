@@ -119,10 +119,16 @@ Four voices, set in `src/app/fonts.ts`:
 
 | Role | Where it is used | Variable | Stand-in |
 | --- | --- | --- | --- |
-| **Playlist** | `h1`, `h2`, the TERRA title, artistic statements | `--font-script` | Kaushan Script |
-| **Audrey** | navigation, `h3`, body, buttons, labels, the whole UI | `--font-body` / `--font-display` | Josefin Sans |
-| **Ruq'ah** | every word of Arabic, headings to checkout | `--font-arabic` | Aref Ruqaa |
+| **Playlist** | `h1`, `h2`, the TERRA title, statements | `--font-script` | Kaushan Script |
+| **Audrey** | navigation, `h3`, body, buttons, labels | `--font-body` / `--font-display` | Jost |
+| **Ruq'ah** | Arabic `h1`, `h2` and `.brush` — titles and key phrases only | `--font-arabic` | Aref Ruqaa |
+| Arabic UI | all other Arabic: body, nav, buttons, prices | `--font-arabic-ui` | IBM Plex Sans Arabic |
 | Editorial | long passages (`.passage`) | `--font-editorial` | Cormorant Garamond |
+
+Jost is a deliberate choice over a closer match to Audrey's shapes: the
+geometric faces that copy them most exactly also copy its very small x-height,
+which is what made body copy hard to read. Jost keeps the light, wide,
+editorial character and has a normal x-height.
 
 Playlist and Audrey are commercial licences, so they are not vendored — but
 every rule names them first:
@@ -141,20 +147,33 @@ Two rules the system depends on:
   largest `fontSize` steps carry no tracking either — spacing a script apart
   breaks the stroke. The cup's printed wordmark is the exception and stays in
   Audrey caps at `0.42em`, because silkscreen at 8mm has to stay legible.
-- **Arabic is one family, not a second identity.** Ruq'ah is already a written
-  hand, so it does the work the brush does in English. Arabic is served one
-  root step larger (`html[lang='ar'] { font-size: 109% }`, a percentage so a
-  reader's own enlargement survives), and `.meta` / `.meta-lg` drop the tracked
-  uppercase treatment, which a joined script cannot take.
+- **Ruq'ah is for headlines, not for forms.** It is calligraphy: it does for
+  Arabic titles what the brush does for English ones, and it is held to `h1`,
+  `h2` and `.brush`. Everything else Arabic — body, navigation, buttons,
+  descriptions, prices — is IBM Plex Sans Arabic. Arabic runs one root step
+  larger (`html[lang='ar'] { font-size: 104% }`, a percentage so a reader's own
+  enlargement survives), and `.meta` / `.meta-lg` drop the tracked uppercase
+  treatment, which a joined script cannot take.
+- **Nothing is set at 300 and then thinned again.** Body copy is 400 and there
+  is no `-webkit-font-smoothing: antialiased`; that pair is what made a light
+  geometric sans look fragile.
 
 ### The brush reveal
 
-`globals.css → THE BRUSH REVEAL`. Each glyph carries a steep gradient mask —
-the brush tip — that is dragged across it; consecutive glyphs overlap in time,
-so a word is written in one gesture rather than typed. `SplitTitle` never
-splits a joined script: Arabic takes one long stroke as a whole word, because
-cutting it into characters would destroy its shaping. RTL mirrors both the
-gradient and the direction of travel. Reduced motion gets the finished word.
+`globals.css → THE BRUSH REVEAL`. **The unit is a word, never a letter** —
+Playlist is a connected hand, and a letter in its own inline-block cannot join
+the letter beside it. Each word carries a gradient mask (the brush tip) dragged
+across it by animating `mask-position`; the words are staggered and their
+strokes overlap, so a line is written in one gesture rather than typed. Arabic
+is not split even at the spaces. RTL mirrors both the gradient and the
+direction of travel, and reduced motion gets the finished line.
+
+Three numbers stop the mask from ever clipping the ink: `mask-size: 300% 300%`
+(a descender hanging below the line box is still inside the mask), opaque to
+40% (the finished word sits inside solid ink) and transparent from 62% (nothing
+shows before the stroke arrives). The gradient runs straight across rather than
+on a diagonal, because a tilted edge projects further on a tall short word than
+on a long flat one and past a certain aspect ratio clips a corner.
 
 ## Backgrounds
 

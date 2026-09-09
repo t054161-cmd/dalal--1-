@@ -46,12 +46,15 @@ export function Story() {
         </div>
       </section>
 
-      {/* Why we started. */}
+      {/* What the name means, in two sentences. The story used to run to four
+          paragraphs of origin narrative; it is the same story now, told in the
+          time it takes to read it. */}
       <section className="wrap mt-20 lg:mt-28">
         <div className="grid gap-14 lg:grid-cols-2 lg:gap-20">
           <Reveal className="max-w-prose space-y-6">
             <p className="passage">{t('story.p1')}</p>
             <p className="passage">{t('story.p2')}</p>
+            <p className="meta text-ink-mute">{t('story.signature')}</p>
           </Reveal>
           <Reveal delay={120}>
             <Parallax amount={30}>
@@ -68,26 +71,17 @@ export function Story() {
           </Reveal>
         </div>
 
-        <div className="mt-20 grid gap-14 lg:grid-cols-2 lg:gap-20">
-          <Reveal className="max-w-prose space-y-6">
-            <p className="passage">{t('story.p3')}</p>
-            <p className="passage">{t('story.p4')}</p>
-            <p className="meta text-ink-mute">
-              {t('story.signature')}
-            </p>
-          </Reveal>
-          <Reveal delay={120}>
-            <Image
-              src="/images/story/story-four-tones-lined-up.svg"
-              alt="The four TERRA tones in a row: Linen, Sage, Sandi and Forest"
-              width={1400}
-              height={700}
-              className="w-full"
-              loading="lazy"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-          </Reveal>
-        </div>
+        <Reveal className="mt-20">
+          <Image
+            src="/images/story/story-four-tones-lined-up.svg"
+            alt="The four TERRA tones in a row: Linen, Sage, Sandi and Forest"
+            width={1400}
+            height={700}
+            className="w-full"
+            loading="lazy"
+            sizes="100vw"
+          />
+        </Reveal>
       </section>
 
       {/* Packaging — the same story, in the same words as the home page. */}

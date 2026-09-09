@@ -40,7 +40,9 @@ const config: Config = {
         display: ['Audrey', 'var(--font-display)', 'ui-sans-serif', 'sans-serif'],
         body: ['Audrey', 'var(--font-body)', 'ui-sans-serif', 'sans-serif'],
         editorial: ['var(--font-editorial)', 'Georgia', 'serif'],
+        // Ruq'ah is the headline hand; 'arabic-ui' is what Arabic reads in.
         arabic: ['var(--font-arabic)', 'ui-serif', 'serif'],
+        'arabic-ui': ['var(--font-arabic-ui)', 'ui-sans-serif', 'sans-serif'],
       },
       fontSize: {
         // Cinematic display scale. The three biggest steps are set in the brush

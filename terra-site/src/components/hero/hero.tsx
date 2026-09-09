@@ -23,7 +23,7 @@ export function Hero() {
             glow would be sliced into a rectangle at its edges. The canopy's
             vignette and scrim carry the contrast instead. */}
         <h1 className="brush text-title-xl text-[rgb(246,243,236)]">
-          <SplitTitle text={t('common.brand')} delay={420} step={150} />
+          <SplitTitle text={t('common.brand')} delay={420} />
         </h1>
 
         <p
