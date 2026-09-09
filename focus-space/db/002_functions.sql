@@ -11,18 +11,28 @@ set search_path = public, extensions;
 
 -- ── who is asking ──────────────────────────────────────────────────────
 
-create or replace function is_staff() returns boolean
+-- These two answer questions the policies ask on every query, so they read
+-- their tables with the definer's rights to avoid recursing through RLS.
+-- That also means they must not be reachable as API endpoints, so they live
+-- outside the schema PostgREST publishes.
+create schema if not exists private;
+grant usage on schema private to anon, authenticated;
+
+create or replace function private.is_staff() returns boolean
 language sql stable security definer set search_path = public as $$
   select exists (select 1 from staff where user_id = auth.uid());
 $$;
 
-create or replace function is_space_owner(p_space uuid) returns boolean
+create or replace function private.is_space_owner(p_space uuid) returns boolean
 language sql stable security definer set search_path = public as $$
   select exists (
     select 1 from space_owners
      where space_id = p_space and user_id = auth.uid()
   );
 $$;
+
+grant execute on function private.is_staff(), private.is_space_owner(uuid)
+  to anon, authenticated;
 
 -- ── availability ───────────────────────────────────────────────────────
 

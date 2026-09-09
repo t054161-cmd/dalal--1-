@@ -35,11 +35,11 @@ create policy categories_read on categories for select using (true);
 create policy services_read   on services   for select using (true);
 
 create policy spaces_read on spaces for select
-  using (status = 'published' or is_space_owner(id) or is_staff());
+  using (status = 'published' or private.is_space_owner(id) or private.is_staff());
 
 create policy spaces_write on spaces for all
-  using (is_space_owner(id) or is_staff())
-  with check (is_space_owner(id) or is_staff());
+  using (private.is_space_owner(id) or private.is_staff())
+  with check (private.is_space_owner(id) or private.is_staff());
 
 -- Everything hanging off a space follows that space: readable when the
 -- listing is published, writable by whoever maintains it.
@@ -55,21 +55,21 @@ begin
         using (exists (
           select 1 from spaces s
            where s.id = %1$I.space_id
-             and (s.status = 'published' or is_space_owner(s.id) or is_staff())
+             and (s.status = 'published' or private.is_space_owner(s.id) or private.is_staff())
         ))
     $f$, t);
     execute format($f$
       create policy %1$s_write on %1$I for all
-        using (is_space_owner(space_id) or is_staff())
-        with check (is_space_owner(space_id) or is_staff())
+        using (private.is_space_owner(space_id) or private.is_staff())
+        with check (private.is_space_owner(space_id) or private.is_staff())
     $f$, t);
   end loop;
 end $$;
 
 create policy space_owners_read on space_owners for select
-  using (user_id = auth.uid() or is_staff());
+  using (user_id = auth.uid() or private.is_staff());
 create policy space_owners_write on space_owners for all
-  using (is_staff()) with check (is_staff());
+  using (private.is_staff()) with check (private.is_staff());
 
 -- ── a person's own data ────────────────────────────────────────────────
 
@@ -92,35 +92,35 @@ create policy space_views_own on space_views for all
   using (user_id = auth.uid()) with check (user_id = auth.uid());
 
 create policy visits_own on visits for all
-  using (user_id = auth.uid() or is_staff())
+  using (user_id = auth.uid() or private.is_staff())
   with check (user_id = auth.uid());
 
 -- ── reviews are public once published ──────────────────────────────────
 
 create policy reviews_read on reviews for select
-  using (status = 'published' or user_id = auth.uid() or is_staff());
+  using (status = 'published' or user_id = auth.uid() or private.is_staff());
 
 create policy reviews_insert_own on reviews for insert
   with check (user_id = auth.uid());
 
 create policy reviews_update_own on reviews for update
-  using (user_id = auth.uid() or is_staff())
-  with check (user_id = auth.uid() or is_staff());
+  using (user_id = auth.uid() or private.is_staff())
+  with check (user_id = auth.uid() or private.is_staff());
 
 create policy reviews_delete_own on reviews for delete
-  using (user_id = auth.uid() or is_staff());
+  using (user_id = auth.uid() or private.is_staff());
 
 -- ── the inbox ──────────────────────────────────────────────────────────
 
 -- Anyone may write to us; nobody but staff may read what others wrote.
 create policy contact_messages_insert on contact_messages for insert with check (true);
-create policy contact_messages_read   on contact_messages for select using (is_staff());
+create policy contact_messages_read   on contact_messages for select using (private.is_staff());
 create policy contact_messages_write  on contact_messages for update
-  using (is_staff()) with check (is_staff());
+  using (private.is_staff()) with check (private.is_staff());
 
 create policy space_suggestions_insert on space_suggestions for insert with check (true);
 create policy space_suggestions_read   on space_suggestions for select
-  using (suggested_by = auth.uid() or is_staff());
+  using (suggested_by = auth.uid() or private.is_staff());
 
 -- Staff membership is granted out of band, with the service role. A person
 -- may see that they are staff; they may not make themselves staff.
