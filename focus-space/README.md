@@ -122,6 +122,14 @@ automatically; until then the stack falls back to Cormorant Garamond, Jost and
 **Aref Ruqaa** — a Ruq'ah-derived Arabic face — from Google Fonts, so the
 character of the brand survives either way.
 
+## The database
+
+`db/` holds a complete PostgreSQL schema for the platform — 20 tables covering
+customers, spaces, opening hours, live availability, visits, reviews, favorites
+and the contact inbox, with PostGIS distance search, derived ratings, and row
+level security throughout. `db/004_seed.sql` is generated from `js/data.js`, so
+the database and the front end cannot drift. See [db/README.md](db/README.md).
+
 ## Files
 
 ```
@@ -139,7 +147,14 @@ focus-space/
     ├── imagery.js      drawn SVG interiors — placeholders and no-WebGL fallback
     ├── motion.js       scroll reveal, parallax, card tilt, count-ups, page veil
     ├── views.js        every screen
-    └── app.js          router, chrome, favorites, language, toasts
+    └── app.js          router, chrome, favorites, language, theme, toasts
+
+db/
+├── 001_schema.sql     tables, types, constraints, indexes
+├── 002_functions.sql  availability, ratings, distance, the card view
+├── 003_policies.sql   row level security
+├── 004_seed.sql       the 21 spaces — generated, do not edit
+└── generate-seed.mjs  regenerates the seed from js/data.js
 ```
 
 The spaces in `js/data.js` are illustrative examples for a launch-ready
