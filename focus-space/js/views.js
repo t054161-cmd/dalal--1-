@@ -897,10 +897,92 @@
     });
   };
 
+  /* ═══════════════ account ═══════════════ */
+
+  const slugify = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+  function accountPanel() {
+    const A = FS.Auth;
+
+    if (!A || !A.configured || A.state === 'unavailable') {
+      return `<div class="panel account-panel" data-reveal>
+        <h2 class="sub">${esc(T('auth.title'))}</h2>
+        <p class="field-hint">${esc(T('auth.unavailable'))}</p>
+      </div>`;
+    }
+
+    if (A.state === 'loading') {
+      return `<div class="panel account-panel" data-reveal>
+        <h2 class="sub">${esc(T('auth.title'))}</h2>
+        <p class="field-hint">${esc(T('auth.working'))}</p>
+      </div>`;
+    }
+
+    if (A.isIn()) {
+      return `<div class="panel account-panel" data-reveal>
+        <h2 class="sub">${esc(T('auth.title'))}</h2>
+        <p class="auth-who">
+          <span>${esc(T('auth.signedInAs'))}</span>
+          <b dir="ltr">${esc(A.email())}</b>
+        </p>
+        <div class="panel-actions">
+          <button type="button" class="btn btn-ghost btn-sm" id="signOutBtn">${esc(T('auth.signOut'))}</button>
+        </div>
+        <p class="field-hint">${esc(T('auth.savedNote'))}</p>
+      </div>`;
+    }
+
+    return `<div class="panel account-panel" data-reveal>
+      <h2 class="sub">${esc(T('auth.title'))}</h2>
+
+      <div class="auth-tabs" role="tablist">
+        <button type="button" class="auth-tab is-on" data-mode="in"  role="tab" aria-selected="true">${esc(T('auth.signIn'))}</button>
+        <button type="button" class="auth-tab"       data-mode="up" role="tab" aria-selected="false">${esc(T('auth.signUp'))}</button>
+      </div>
+
+      <form class="auth-form" id="authForm" data-mode="in" novalidate>
+        <label class="field auth-only-up" hidden>
+          <span class="field-label">${esc(T('auth.name'))}</span>
+          <input type="text" name="name" autocomplete="name" />
+        </label>
+        <label class="field">
+          <span class="field-label">${esc(T('auth.email'))}</span>
+          <input type="email" name="email" dir="ltr" autocomplete="email" required />
+        </label>
+        <label class="field">
+          <span class="field-label">${esc(T('auth.password'))}</span>
+          <input type="password" name="password" dir="ltr" autocomplete="current-password" required />
+          <em class="field-hint auth-only-up" hidden>${esc(T('auth.passwordHint'))}</em>
+        </label>
+        <em class="field-error" data-error="form"></em>
+        <div class="auth-actions">
+          <button type="submit" class="btn btn-solid btn-sm" id="authSubmit">${esc(T('auth.signIn'))}</button>
+          <button type="button" class="btn btn-quiet btn-sm" id="authForgot">${esc(T('auth.forgot'))}</button>
+        </div>
+        <p class="field-hint">${esc(T('auth.guestNote'))}</p>
+      </form>
+
+      <div class="auth-done" id="authDone" hidden>
+        <span class="thanks-mark">✓</span>
+        <p class="auth-done-line" id="authDoneLine"></p>
+      </div>
+    </div>`;
+  }
+
   /* ═══════════════ PROFILE ═══════════════ */
 
   function profile() {
     const p = S.profile;
+    const A = FS.Auth;
+    const acct = (A && A.isIn() && A.profile) ? A.profile : null;
+    const v = {
+      name:     acct ? (acct.full_name || '') : p.name,
+      email:    acct ? (acct.email || '')     : p.email,
+      phone:    acct ? (acct.phone || '')     : (p.phone || ''),
+      district: acct ? (acct.district_slug || '') : p.district,
+      notify:   acct ? !!acct.notify_offers   : p.notify,
+      motion:   acct ? !!acct.reduce_motion   : p.reduceMotion
+    };
     const favs = S.favorites.map(D.space).filter(Boolean);
     const recents = S.recents.map(D.space).filter(Boolean);
     const avatar = p.photo || FS.Imagery.avatar(p.name || 'Focus Space');
@@ -912,7 +994,7 @@
         <span class="profile-photo" data-reveal><img id="profilePhoto" src="${avatar}" alt="" /></span>
         <div data-reveal data-reveal-delay="0.06">
           <p class="eyebrow">${esc(T('profile.title'))}</p>
-          <h1 class="display display-xl" id="profileHeading">${esc(p.name || T('profile.guest'))}</h1>
+          <h1 class="display display-xl" id="profileHeading">${esc(v.name || T('profile.guest'))}</h1>
           <p class="lede">${esc(T('fav.title'))}: ${N(favs.length)} · ${esc(T('profile.recent'))}: ${N(recents.length)}</p>
         </div>
       </div>
@@ -920,6 +1002,8 @@
 
     <section class="section">
       <div class="wrap profile-grid">
+        ${accountPanel()}
+
         <form class="panel" id="profileForm" data-reveal>
           <h2 class="sub">${esc(T('profile.account'))}</h2>
 
@@ -940,26 +1024,31 @@
 
           <label class="field">
             <span class="field-label">${esc(T('profile.editName'))}</span>
-            <input type="text" name="name" value="${esc(p.name)}" autocomplete="name" />
+            <input type="text" name="name" value="${esc(v.name)}" autocomplete="name" />
           </label>
           <label class="field">
             <span class="field-label">${esc(T('profile.email'))}</span>
-            <input type="email" name="email" value="${esc(p.email)}" dir="ltr" autocomplete="email" />
+            <input type="email" name="email" value="${esc(v.email)}" dir="ltr" autocomplete="email"
+                   ${acct ? 'readonly' : ''} />
+          </label>
+          <label class="field">
+            <span class="field-label">${esc(T('profile.phone'))}</span>
+            <input type="tel" name="phone" value="${esc(v.phone)}" dir="ltr" autocomplete="tel" />
           </label>
           <label class="field">
             <span class="field-label">${esc(T('profile.city'))}</span>
             <select name="district">
               <option value="">${esc(T('profile.cityAny'))}</option>
-              ${districts.map(d => `<option value="${esc(d.en)}"${p.district === d.en ? ' selected' : ''}>${esc(L(d))}</option>`).join('')}
+              ${districts.map(d => `<option value="${esc(d.en)}"${v.district === d.en || v.district === slugify(d.en) ? ' selected' : ''}>${esc(L(d))}</option>`).join('')}
             </select>
           </label>
 
           <label class="switch">
-            <input type="checkbox" name="notify"${p.notify ? ' checked' : ''} />
+            <input type="checkbox" name="notify"${v.notify ? ' checked' : ''} />
             <span>${esc(T('profile.notify'))}</span>
           </label>
           <label class="switch">
-            <input type="checkbox" name="reduceMotion"${p.reduceMotion ? ' checked' : ''} />
+            <input type="checkbox" name="reduceMotion"${v.motion ? ' checked' : ''} />
             <span>${esc(T('profile.motion'))}</span>
           </label>
 
@@ -1017,26 +1106,44 @@
   }
 
   profile.mount = function () {
+    mountAccount();
+
     const form = document.getElementById('profileForm');
     if (!form) return;
 
     form.addEventListener('submit', e => {
       e.preventDefault();
-      S.saveProfile({
+      const values = {
         name: form.elements.name.value.trim(),
         email: form.elements.email.value.trim(),
+        phone: form.elements.phone.value.trim(),
         district: form.elements.district.value,
         notify: form.elements.notify.checked,
         reduceMotion: form.elements.reduceMotion.checked
-      });
-      document.getElementById('profileHeading').textContent = S.profile.name || T('profile.guest');
+      };
+      /* Always keep the device copy; when there is an account, that is the
+         record of truth and the write goes to the database too. */
+      S.saveProfile(values);
+      if (FS.Auth && FS.Auth.isIn()) {
+        FS.Auth.saveProfile({
+          full_name: values.name,
+          phone: values.phone,
+          district_slug: values.district ? slugify(values.district) : '',
+          notify_offers: values.notify,
+          reduce_motion: values.reduceMotion,
+          language: S.lang,
+          theme: S.theme
+        }).then(r => FS.toast(T(r && r.error ? r.error : 'profile.saved')));
+      } else {
+        FS.toast(T('profile.saved'));
+      }
+      document.getElementById('profileHeading').textContent = values.name || T('profile.guest');
       if (!S.profile.photo) {
         const src = FS.Imagery.avatar(S.profile.name || 'Focus Space');
         document.getElementById('profilePhoto').src = src;
         document.getElementById('photoThumb').src = src;
       }
       FS.paintAvatar();
-      FS.toast(T('profile.saved'));
     });
 
     const input = document.getElementById('photoInput');
@@ -1065,6 +1172,89 @@
       FS.toast(T('profile.cleared'));
     });
   };
+
+
+  /* Sign in, register, sign out. */
+  function mountAccount() {
+    const A = FS.Auth;
+
+    const out = document.getElementById('signOutBtn');
+    if (out) {
+      out.addEventListener('click', () => {
+        out.disabled = true;
+        A.signOut().then(() => FS.toast(T('auth.signedOut')));
+      });
+      return;
+    }
+
+    const form = document.getElementById('authForm');
+    if (!form) return;
+    const submit = document.getElementById('authSubmit');
+    const slot   = form.querySelector('[data-error="form"]');
+    const done   = document.getElementById('authDone');
+
+    function setMode(mode) {
+      form.setAttribute('data-mode', mode);
+      form.querySelectorAll('.auth-only-up').forEach(el => { el.hidden = mode !== 'up'; });
+      form.elements.password.setAttribute('autocomplete',
+        mode === 'up' ? 'new-password' : 'current-password');
+      submit.textContent = T(mode === 'up' ? 'auth.signUp' : 'auth.signIn');
+      slot.textContent = '';
+      document.querySelectorAll('.auth-tab').forEach(t => {
+        const on = t.getAttribute('data-mode') === mode;
+        t.classList.toggle('is-on', on);
+        t.setAttribute('aria-selected', String(on));
+      });
+    }
+
+    document.querySelectorAll('.auth-tab').forEach(tab => {
+      tab.addEventListener('click', () => setMode(tab.getAttribute('data-mode')));
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const mode = form.getAttribute('data-mode');
+      const email = form.elements.email.value.trim();
+      const password = form.elements.password.value;
+      const name = mode === 'up' ? form.elements.name.value.trim() : '';
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { slot.textContent = T('auth.errEmail'); return; }
+      if (password.length < 8) { slot.textContent = T('auth.errPassword'); return; }
+      if (mode === 'up' && name.length < 2) { slot.textContent = T('auth.errName'); return; }
+
+      slot.textContent = '';
+      submit.disabled = true;
+      submit.textContent = T('auth.working');
+
+      const request = mode === 'up'
+        ? A.signUp({ email, password, name })
+        : A.signIn({ email, password });
+
+      request.then(res => {
+        submit.disabled = false;
+        submit.textContent = T(mode === 'up' ? 'auth.signUp' : 'auth.signIn');
+        if (res && res.error) { slot.textContent = T(res.error); return; }
+        if (res && res.needsConfirmation) {
+          form.hidden = true;
+          document.querySelector('.auth-tabs').hidden = true;
+          document.getElementById('authDoneLine').textContent = T('auth.confirm', { email });
+          done.hidden = false;
+          return;
+        }
+        FS.toast(T(mode === 'up' ? 'auth.welcome' : 'auth.signIn'));
+        /* the auth listener re-renders the screen */
+      });
+    });
+
+    document.getElementById('authForgot').addEventListener('click', () => {
+      const email = form.elements.email.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { slot.textContent = T('auth.errEmail'); return; }
+      A.resetPassword(email).then(res => {
+        slot.textContent = res && res.error ? T(res.error) : '';
+        if (!res || !res.error) FS.toast(T('auth.resetSent'));
+      });
+    });
+  }
 
   /* Keep uploaded photos small enough for localStorage. */
   function downscale(dataUrl, size) {

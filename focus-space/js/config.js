@@ -17,6 +17,15 @@ FS.CONFIG = {
   /* localStorage namespace */
   ns: 'focus-space:v1',
 
+  /* Supabase. The publishable key is meant to be in the browser — every
+     table is behind row level security, so it grants exactly what an
+     anonymous visitor is allowed: reading published spaces and writing a
+     contact message. Leave url empty to run the site with no accounts. */
+  supabase: {
+    url: 'https://ojixptqwxlxkmkowxkdy.supabase.co',
+    key: 'sb_publishable_50EtOSAfQv1lfkqLw6bAFQ_Bgd2HtHd'
+  },
+
   /* Palette — mirrored in css/focus.css. Used by the 3D hero. */
   palette: {
     sage900: '#2E3A31',

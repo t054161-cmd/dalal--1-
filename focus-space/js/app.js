@@ -219,7 +219,9 @@
 
   function paintAvatar() {
     const el = document.getElementById('headerAvatar');
-    const src = S.profile.photo || FS.Imagery.avatar(S.profile.name || 'Focus Space');
+    const acct = FS.Auth && FS.Auth.isIn() && FS.Auth.profile;
+    const name = (acct && acct.full_name) || S.profile.name || 'Focus Space';
+    const src = S.profile.photo || (acct && acct.avatar_url) || FS.Imagery.avatar(name);
     el.style.backgroundImage = `url("${src}")`;
     const count = document.getElementById('headerFavCount');
     count.textContent = I.num(S.favorites.length);
@@ -263,6 +265,14 @@
   document.getElementById('year').textContent = String(new Date().getFullYear());
   applyTheme();
   applyLang();
+
+  /* Accounts load in the background; the profile screen redraws when the
+     session resolves, and the rest of the site never waits for it. */
+  FS.Auth.onChange(() => {
+    paintAvatar();
+    if (current && current.name === 'profile') render(true);
+  });
+  FS.Auth.start();
   measureHeader();
   S.resumeLocation();
   render(false);
