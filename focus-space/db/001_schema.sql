@@ -13,10 +13,20 @@
 --    · money is numeric(8,2); never floating point
 -- ═══════════════════════════════════════════════════════════════════════
 
-create extension if not exists "uuid-ossp";
-create extension if not exists citext;      -- case-insensitive email
-create extension if not exists postgis;     -- distance and "nearest" queries
-create extension if not exists pg_trgm;     -- fuzzy search over names
+-- Extensions live in their own schema, never in public. PostgREST exposes
+-- public, and PostGIS brings a spatial_ref_sys table with it that would
+-- otherwise be published as an API endpoint nobody asked for.
+create schema if not exists extensions;
+create extension if not exists "uuid-ossp" with schema extensions;
+create extension if not exists citext      with schema extensions;  -- case-insensitive email
+create extension if not exists postgis     with schema extensions;  -- distance and "nearest"
+create extension if not exists pg_trgm     with schema extensions;  -- fuzzy search over names
+
+-- Their types, functions and index operator classes are referenced
+-- unqualified below; this is what makes them resolve. Every object created
+-- here stores the resolved reference, so nothing depends on search_path
+-- afterwards.
+set search_path = public, extensions;
 
 -- ── shared types ───────────────────────────────────────────────────────
 

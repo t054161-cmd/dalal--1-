@@ -55,6 +55,8 @@ w(`--`);
 w(`--  ${D.SPACES.length} spaces · ${D.CATEGORIES.length} categories · ${D.activeServices().length} services`);
 w(`-- ═══════════════════════════════════════════════════════════════════════`);
 w('');
+w('set search_path = public, extensions;');
+w('');
 w('begin;');
 w('');
 

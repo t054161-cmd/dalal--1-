@@ -7,6 +7,8 @@
 --  same way.
 -- ═══════════════════════════════════════════════════════════════════════
 
+set search_path = public, extensions;
+
 -- ── who is asking ──────────────────────────────────────────────────────
 
 create or replace function is_staff() returns boolean
