@@ -152,3 +152,17 @@ js/ui.js            preloader, reveals, nav, contact wiring, terminal
 vendor/           three.js r160 (module build), vendored — no CDN dependency
 assets/favicon.svg
 ```
+
+---
+
+## Also in this repository
+
+### [`midad/`](midad/) — مِداد | MIDĀD
+
+A separate project: a bilingual (Arabic-first) personal digital library for the
+books you have finished reading, and for the notes, quotes and ideas each of
+them left behind. An antique library hall rendered as the interface, with the
+archive appearing inside it as holographic panels.
+
+Open `midad/index.html` — static files, no build step. See
+[`midad/README.md`](midad/README.md).

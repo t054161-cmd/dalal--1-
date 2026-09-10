@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="10" fill="#150e09"/>
+  <!-- an open book, brass -->
+  <path d="M9 22c6-2 12-2 15 2 3-4 9-4 15-2v22c-6-2-12-2-15 2-3-4-9-4-15-2z"
+        fill="none" stroke="#c39a55" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M24 24v22" stroke="#e4c690" stroke-width="1.6"/>
+  <!-- the holographic line rising from the page -->
+  <path d="M32 14h16M36 9h12" stroke="#63c9ff" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+  <circle cx="24" cy="35" r="2" fill="#63c9ff"/>
+</svg>

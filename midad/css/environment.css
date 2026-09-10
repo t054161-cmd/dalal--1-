@@ -1,0 +1,192 @@
+/* ═══════════════════════════════════════════════════════════════════
+   THE HALL — the library itself is the interface.
+   A fixed, CSS-built architectural environment: skylight, arcades of
+   shelving in perspective, brass lamps, a polished stone floor.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.hall{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; background:var(--ink) }
+
+/* the drawn architecture fills the viewport, cropping at the sides */
+.hall__svg{ position:absolute; inset:0; width:100%; height:100% }
+
+/* the shafts of light falling down the nave, over the drawing */
+.hall__lightfall{
+  position:absolute; inset:0; z-index:1;
+  background:
+    radial-gradient(30% 22% at 50% 2%,  rgba(255,238,205,.20), transparent 74%),
+    radial-gradient(58% 40% at 50% -6%, rgba(255,206,142,.20), transparent 76%),
+    conic-gradient(from 172deg at 50% -12%,
+      transparent 0deg, rgba(255,214,158,.055) 4deg, transparent 9deg,
+      transparent 12deg, rgba(255,214,158,.04) 15deg, transparent 20deg);
+  mix-blend-mode:screen;
+}
+
+/* the lamps breathe, as gas light does */
+.hall__lamp{ animation:lampBreathe 8s var(--ease) infinite alternate; transform-origin:center }
+@keyframes lampBreathe{ from{ opacity:.55 } to{ opacity:1 } }
+
+.hall__motes{ position:absolute; inset:0; z-index:2; width:100%; height:100% }
+
+.hall__vignette{
+  position:absolute; inset:0; z-index:3;
+  background:
+    /* a pool of shade over the reading plane, so type stays legible
+       over the shelving without erasing the architecture behind it */
+    radial-gradient(68% 44% at 50% 54%, rgba(6,4,3,.46), rgba(6,4,3,.18) 62%, transparent 84%),
+    radial-gradient(126% 96% at 50% 40%, transparent 32%, rgba(4,3,2,.68) 88%),
+    linear-gradient(180deg, rgba(4,3,2,.40), transparent 22%, transparent 60%, rgba(4,3,2,.86));
+}
+
+/* ═══════════════════════ NAVIGATION RAIL ═══════════════════════════ */
+.rail{
+  position:fixed; z-index:60; inset-block:0; inset-inline-start:0;
+  width:var(--rail-w); padding:1.6rem 1rem 1.15rem;
+  display:flex; flex-direction:column; gap:1.1rem;
+  background:linear-gradient(160deg, rgba(24,17,12,.90), rgba(9,7,5,.95));
+  border-inline-end:1px solid var(--line);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  box-shadow:22px 0 60px -34px rgba(0,0,0,.95);
+  overflow-y:auto; overscroll-behavior:contain;
+}
+html[dir="rtl"] .rail{ box-shadow:-22px 0 60px -34px rgba(0,0,0,.95) }
+.rail::-webkit-scrollbar{ width:6px }
+.rail::-webkit-scrollbar-thumb{ background:rgba(196,154,85,.24); border-radius:99px }
+
+.rail__brand{ display:block; text-align:center; padding-bottom:.9rem; border-bottom:1px solid var(--line) }
+.brand__ar{
+  display:block; font-family:var(--f-ruqaa); font-size:2.05rem; line-height:1.15;
+  color:var(--ivory); text-shadow:0 2px 18px rgba(255,200,130,.28);
+}
+.brand__en{
+  display:block; font-family:var(--f-serif); font-size:.66rem;
+  letter-spacing:.52em; text-indent:.52em; color:var(--brass); margin-top:.15rem;
+}
+
+.rail__list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.14rem; flex:1 }
+.rail__link{
+  display:flex; align-items:center; gap:.75rem;
+  padding:.55rem .7rem; border-radius:var(--r-sm);
+  border:1px solid transparent; color:var(--text-2);
+  transition:background .24s var(--ease), color .24s var(--ease), border-color .24s var(--ease);
+}
+.rail__link .ic{ color:var(--brass-dim); transition:color .24s var(--ease) }
+.rail__link:hover{ background:rgba(196,154,85,.09); color:var(--text); border-color:var(--line) }
+.rail__link:hover .ic{ color:var(--brass) }
+.rail__link[aria-current="page"]{
+  background:linear-gradient(100deg, rgba(99,201,255,.16), rgba(196,154,85,.07));
+  border-color:rgba(99,201,255,.32); color:#eaf6ff;
+  box-shadow:0 0 18px -8px var(--holo-glow);
+}
+.rail__link[aria-current="page"] .ic{ color:var(--holo) }
+.rail__link[aria-current="page"]::before{
+  content:''; position:absolute; inset-inline-start:0; width:2px; height:60%;
+  background:var(--holo); box-shadow:0 0 10px var(--holo);
+}
+.rail__link{ position:relative }
+.rail__link .bi{ font-size:.9rem }
+
+.rail__foot{ display:flex; flex-direction:column; gap:.55rem; padding-top:.9rem; border-top:1px solid var(--line) }
+.langbtn{
+  display:flex; align-items:center; justify-content:center; gap:.5rem;
+  padding:.5em 1em; border-radius:var(--r-sm);
+  border:1px solid rgba(99,201,255,.28); background:rgba(99,201,255,.07);
+  color:#bfe6ff; cursor:pointer; font-size:.82rem; letter-spacing:.04em;
+  transition:.24s var(--ease);
+}
+.langbtn:hover{ border-color:rgba(99,201,255,.6); background:rgba(99,201,255,.16); color:#eaf7ff }
+.langbtn .ic{ width:1em;height:1em }
+html[dir="rtl"] .langbtn .ic{ scale:-1 1 }
+
+.rail__scrim{ position:fixed; inset:0; z-index:55; background:rgba(4,3,2,.72); backdrop-filter:blur(3px) }
+
+/* ── mobile top bar ── */
+.topbar{
+  display:none; position:sticky; top:0; z-index:58;
+  align-items:center; justify-content:space-between; gap:.75rem;
+  padding:.55rem clamp(.75rem,3vw,1.25rem);
+  background:linear-gradient(180deg, rgba(14,10,7,.96), rgba(14,10,7,.82));
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+}
+.topbar__brand{ display:flex; flex-direction:column; align-items:center; line-height:1 }
+.topbar__brand .brand__ar{ font-size:1.5rem }
+.topbar__brand .brand__en{ font-size:.52rem; letter-spacing:.42em; text-indent:.42em }
+.topbar__menu{
+  width:2.5rem; height:2.5rem; border:1px solid var(--line); border-radius:var(--r-sm);
+  background:transparent; display:grid; place-content:center; gap:5px; cursor:pointer;
+}
+.topbar__menu span{ display:block; width:19px; height:1.5px; background:var(--gold-soft); transition:.25s var(--ease) }
+.topbar__menu[aria-expanded="true"] span:nth-child(1){ translate:0 6.5px; rotate:45deg }
+.topbar__menu[aria-expanded="true"] span:nth-child(2){ opacity:0 }
+.topbar__menu[aria-expanded="true"] span:nth-child(3){ translate:0 -6.5px; rotate:-45deg }
+.langbtn--bar{ padding:.45em .85em; font-size:.76rem; white-space:nowrap }
+
+/* ── stage offset for the rail ── */
+.stage,.foot{ margin-inline-start:var(--rail-w) }
+
+/* ═══════════════════════ FOOTER ════════════════════════════════════ */
+.foot{
+  position:relative; z-index:2;
+  padding:2.5rem clamp(1rem,3vw,2.5rem) 3rem; text-align:center;
+  border-top:1px solid var(--line);
+  background:linear-gradient(180deg, transparent, rgba(6,4,3,.7));
+}
+.foot__line{ margin:0 auto; max-width:44rem; display:flex; flex-direction:column; gap:.3rem }
+.foot__ar{ font-family:var(--f-amiri); font-size:1.05rem; color:var(--text-2) }
+.foot__en{ font-family:var(--f-serif); font-style:italic; font-size:.86rem; color:var(--text-3) }
+html[lang="en"] .foot__ar{ order:2; font-size:.92rem; color:var(--text-3) }
+html[lang="en"] .foot__en{ order:1; font-size:1.02rem; color:var(--text-2) }
+.foot__mark{ margin:1.4rem 0 0; font-family:var(--f-serif); font-size:.7rem; letter-spacing:.4em; color:var(--brass) }
+
+/* ═══════════════════════ MODAL ═════════════════════════════════════ */
+.modal{ position:fixed; inset:0; z-index:120; display:grid; place-items:center; padding:clamp(.75rem,3vw,2rem) }
+.modal[hidden]{ display:none }   /* the class sets display, so [hidden] must be restated */
+.modal__scrim{ position:absolute; inset:0; background:rgba(4,3,2,.78); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px) }
+.modal__panel{
+  position:relative; width:min(720px,100%); max-height:88vh; display:flex; flex-direction:column;
+  animation:holoIn .4s var(--ease) both;
+}
+.modal__head{
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  padding:1.1rem clamp(1rem,2.4vw,1.6rem); border-bottom:1px solid rgba(99,201,255,.2);
+}
+.modal__title{ font-family:var(--f-ruqaa); font-size:1.4rem; color:var(--ivory) }
+html[lang="en"] .modal__title{ font-family:var(--f-serif) }
+.modal__body{ padding:clamp(1rem,2.4vw,1.6rem); overflow-y:auto }
+
+@keyframes holoIn{
+  from{ opacity:0; translate:0 14px; scale:.985; filter:blur(4px) }
+  to{ opacity:1; translate:0 0; scale:1; filter:blur(0) }
+}
+
+/* ═══════════════════════ TOAST ═════════════════════════════════════ */
+.toast{
+  position:fixed; z-index:200; inset-inline:0; bottom:1.5rem; margin-inline:auto;
+  width:fit-content; max-width:min(90vw,30rem);
+  padding:.7rem 1.3rem; border-radius:999px;
+  border:1px solid rgba(99,201,255,.4); background:rgba(10,20,28,.92);
+  color:#dff1ff; font-size:.86rem; box-shadow:0 0 24px -8px var(--holo-glow);
+  opacity:0; translate:0 14px; pointer-events:none;
+  transition:opacity .3s var(--ease), translate .3s var(--ease);
+}
+.toast.is-on{ opacity:1; translate:0 0 }
+
+/* ═══════════════════════ RESPONSIVE ════════════════════════════════ */
+@media (max-width:1040px){
+  :root{ --rail-w:0px }
+  .topbar{ display:flex }
+  .stage,.foot{ margin-inline-start:0 }
+  .rail{
+    width:min(19rem,86vw); transform:translateX(-102%);
+    transition:transform .34s var(--ease); padding-top:1.25rem;
+  }
+  html[dir="rtl"] .rail{ transform:translateX(102%) }
+  .rail.is-open{ transform:none!important }
+  .rail__brand{ display:none }
+}
+@media (max-width:640px){
+  /* portrait: the nave stays centred, the arcade crops away at the sides */
+  .hall__vignette{ background:
+    radial-gradient(90% 40% at 50% 52%, rgba(6,4,3,.52), rgba(6,4,3,.22) 64%, transparent 86%),
+    linear-gradient(180deg, rgba(4,3,2,.46), transparent 20%, transparent 56%, rgba(4,3,2,.9)); }
+}
