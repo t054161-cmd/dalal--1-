@@ -1,0 +1,14 @@
+{
+  "name": "midad",
+  "version": "1.0.0",
+  "private": true,
+  "description": "مِداد | MIDĀD — a bilingual personal digital library",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "python3 -m http.server 8000"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

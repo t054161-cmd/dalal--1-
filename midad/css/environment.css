@@ -1,7 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════════
    THE HALL — the library itself is the interface.
-   A fixed, CSS-built architectural environment: skylight, arcades of
-   shelving in perspective, brass lamps, a polished stone floor.
+   The architecture itself is drawn in js/hall.js as one SVG; what lives
+   here is the fixed frame around it — the shafts of light falling down
+   the nave, the shade over the reading plane, the navigation rail,
+   the footer, the modal and the toast.
    ═══════════════════════════════════════════════════════════════════ */
 
 .hall{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; background:var(--ink) }
