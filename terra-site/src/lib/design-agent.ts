@@ -163,6 +163,9 @@ const TONES: { id: string; words: string[] }[] = [
   { id: 'smoke', words: ['smoked green', 'smoke', 'smoky', 'olive green', 'أخضر مدخن', 'مدخّن', 'زيتي'] },
   { id: 'sage', words: ['sage', 'muted green', 'soft green', 'green', 'مريمية', 'أخضر'] },
   { id: 'sandi', words: ['sandi', 'blush', 'pink', 'rose', 'clay pink', 'ساندي', 'وردي', 'زهري'] },
+  { id: 'terracotta', words: ['terracotta', 'terra cotta', 'brick', 'rust', 'burnt orange', 'copper', 'طين محروق', 'قرميدي', 'نحاسي'] },
+  { id: 'ochre', words: ['ochre', 'ocher', 'mustard', 'wheat', 'honey', 'amber', 'golden', 'gold', 'yellow', 'مغرة', 'خردلي', 'أصفر', 'ذهبي'] },
+  { id: 'bark', words: ['bark', 'dark brown', 'brown', 'walnut', 'لحاء', 'بني'] },
   { id: 'linen', words: ['linen', 'off-white', 'oat', 'ivory', 'cream', 'white', 'كتان', 'كتّان', 'عاجي', 'أبيض', 'كريمي'] },
   { id: 'clay', words: ['putty', 'stone', 'greige', 'taupe', 'sand', 'beige', 'grey', 'gray', 'صلصال', 'حجري', 'رملي', 'بيج', 'رمادي'] },
 ]

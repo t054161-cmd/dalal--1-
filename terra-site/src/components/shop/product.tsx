@@ -14,7 +14,7 @@ import { useStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
 /**
- * One product, four tones.
+ * One product, nine tones.
  *
  * The cup is photographed against a botanical set (see BotanicalBackdrop) and
  * everything else is one short column: name, a line, the price, the four

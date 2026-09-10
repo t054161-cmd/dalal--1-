@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: '%s · TERRA',
   },
   description:
-    'A tall, slim reusable tumbler in recycled stainless steel, with a leak-resistant lid and a straw you keep. Four tones taken from the ground. Design your own in 3D.',
+    'A tall, slim reusable tumbler in recycled stainless steel, with a leak-resistant lid and a straw you keep. Nine tones taken from the ground. Design your own in 3D.',
   applicationName: 'TERRA',
   keywords: [
     'reusable tumbler',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     alternateLocale: ['ar'],
     title: 'TERRA — designed for everyday rituals',
     description:
-      'One cup, used ten thousand times. Recycled steel, four earth tones, and a designer that reads a sentence and builds your cup.',
+      'One cup, used ten thousand times. Recycled steel, nine earth tones, and a designer that reads a sentence and builds your cup.',
   },
   twitter: {
     card: 'summary_large_image',

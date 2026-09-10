@@ -2,7 +2,7 @@
 
 > **Designed for everyday rituals.**
 > A tall, slim reusable tumbler: recycled stainless steel, a leak-resistant lid,
-> a straw you keep. Four tones taken from the ground.
+> a straw you keep. Nine tones taken from the ground.
 
 Next.js (App Router) + TypeScript + Tailwind, with the cup modelled and printed
 in code. Arabic (RTL) and English (LTR) throughout.
@@ -25,7 +25,7 @@ Five destinations, in the order the brief asks for:
 
 | Route | What happens |
 |---|---|
-| `/` | Enter TERRA → the idea → the object (turns as you scroll) → **explore the cup** (exploded view) → the four tones → design yours → material · craft · reuse · impact → the ritual → the box → the community |
+| `/` | Enter TERRA → the idea → the object (turns as you scroll) → **explore the cup** (exploded view) → the range → design yours → material · craft · reuse · impact → the ritual → the box → the community |
 | `/shop` | The product itself: 3D viewer, tones, quantity, add to cart, sticky mobile bar, specification and care |
 | `/customize` | **Design your TERRA** — describe the cup in a sentence, then adjust anything by hand |
 | `/story` | Our story: the name, why we started, the packaging, the promise |

@@ -2,7 +2,7 @@
  * ============================================================================
  * TERRA — THE PRODUCT
  * ============================================================================
- * One object, made in four tones. Everything a non-developer needs to change
+ * One object, made in nine tones. Everything a non-developer needs to change
  * — colours, prices, the words on the anatomy diagram — lives in this file.
  * Ids are permanent: never rename one that has been ordered.
  * ============================================================================
@@ -36,7 +36,7 @@ export const product = {
 }
 
 /* -------------------------------------------------------------------------- */
-/* COLOURWAYS — the four tones on the reference sheet                          */
+/* COLOURWAYS                                                                 */
 /* -------------------------------------------------------------------------- */
 
 export type Colorway = {
@@ -94,6 +94,65 @@ export const colorways: Colorway[] = [
     dark: true,
     note: { en: 'Deep, still, evening green.', ar: 'أخضر عميق ساكن كالمساء.' },
   },
+
+  /* --- the wider range ---------------------------------------------------
+     Appended, never inserted: the four above keep the positions they have
+     always had in the swatch row, and colorways[1] stays Sage, which is what
+     getColorway() and the pickers fall back to.
+
+     Every ink below was chosen against src/lib/contrast.ts and lands between
+     3.2:1 and 8.3:1 on its own body — the same band as the original four — so
+     the printed mark never has to be silently corrected for legibility. */
+  {
+    id: 'smoke',
+    name: { en: 'Smoked green', ar: 'أخضر مدخّن' },
+    body: '#5E6B58',
+    lid: '#5A6654',
+    straw: '#5A6654',
+    ink: '#EDE7DC',
+    dark: true,
+    note: { en: 'Sage, one step into the shade.', ar: 'مريمية، خطوةً داخل الظل.' },
+  },
+  {
+    id: 'clay',
+    name: { en: 'Putty', ar: 'صلصال' },
+    body: '#C8BEAF',
+    lid: '#BFB5A7',
+    straw: '#BFB5A7',
+    ink: '#584F42',
+    dark: false,
+    note: { en: 'Unfired clay, dusted with grey.', ar: 'طين غير مشويّ بغبار رمادي.' },
+  },
+  {
+    id: 'terracotta',
+    name: { en: 'Terracotta', ar: 'طين محروق' },
+    body: '#B0705C',
+    lid: '#A86B58',
+    straw: '#A86B58',
+    ink: '#F2EADF',
+    dark: true,
+    note: { en: 'The same clay, after the kiln.', ar: 'الطين نفسه، بعد الفرن.' },
+  },
+  {
+    id: 'ochre',
+    name: { en: 'Ochre', ar: 'مغرة' },
+    body: '#C4A56A',
+    lid: '#BB9E65',
+    straw: '#BB9E65',
+    ink: '#4E4433',
+    dark: false,
+    note: { en: 'Dry earth at the end of summer.', ar: 'أرض جافة في آخر الصيف.' },
+  },
+  {
+    id: 'bark',
+    name: { en: 'Bark', ar: 'لحاء' },
+    body: '#493A30',
+    lid: '#46372E',
+    straw: '#46372E',
+    ink: '#E8E0D3',
+    dark: true,
+    note: { en: 'Wet bark, almost black.', ar: 'لحاء مبلّل، يكاد يكون أسود.' },
+  },
 ]
 
 export const getColorway = (id: string) => colorways.find((c) => c.id === id) ?? colorways[1]
@@ -106,6 +165,9 @@ export const partTones: { id: string; name: Bilingual; hex: string }[] = [
   { id: 'forest', name: { en: 'Forest', ar: 'غابة' }, hex: '#2E3A31' },
   { id: 'smoke', name: { en: 'Smoked green', ar: 'أخضر مدخّن' }, hex: '#5E6B58' },
   { id: 'clay', name: { en: 'Putty', ar: 'صلصال' }, hex: '#C8BEAF' },
+  { id: 'terracotta', name: { en: 'Terracotta', ar: 'طين محروق' }, hex: '#B0705C' },
+  { id: 'ochre', name: { en: 'Ochre', ar: 'مغرة' }, hex: '#C4A56A' },
+  { id: 'bark', name: { en: 'Bark', ar: 'لحاء' }, hex: '#493A30' },
 ]
 
 export const toneHex = (id: string) => partTones.find((t) => t.id === id)?.hex ?? id

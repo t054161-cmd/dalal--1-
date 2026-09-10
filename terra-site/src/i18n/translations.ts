@@ -129,8 +129,11 @@ const en = {
 
   colors: {
     eyebrow: 'The range',
-    heading: 'Four tones, taken from the ground.',
-    body: 'Undyed linen, an olive leaf in shade, clay before firing, and the green of a late evening.',
+    /* {count} comes from colorways.length, so the headline cannot go stale
+       the next time a tone is added. */
+    heading: '{count} tones, taken from the ground.',
+    body:
+      'Undyed linen, an olive leaf in shade, clay before and after the kiln, dry summer earth, and the green of a late evening.',
     choose: 'Choose {name}',
     selected: '{name} selected',
   },
@@ -258,7 +261,7 @@ const en = {
   shop: {
     metaTitle: 'Shop',
     eyebrow: 'Shop',
-    heading: 'One cup, four tones.',
+    heading: 'One cup, every tone.',
     body: 'Order it as it comes, or open any tone in the designer and make it yours.',
     inStock: 'In stock',
     madeToOrder: 'Made to order · ships in 2–4 days',
@@ -288,7 +291,7 @@ const en = {
     intro:
       'Terra is the Latin word for earth. We took the name for our connection to the earth, and for what the cup is for: one reusable object, made with the environment in mind.',
     p1: 'From earth, back to earth means what it says. The cup is made from materials that come from the earth, and it is built to be used again instead of thrown away.',
-    p2: 'It is made from recycled steel, in four tones taken from the ground. When a part wears out we send you that part, not a new cup.',
+    p2: 'It is made from recycled steel, in tones taken from the ground. When a part wears out we send you that part, not a new cup.',
     signature: '— The TERRA studio, Kuwait',
     promiseHeading: 'Our promise',
     promise1: 'Lifetime warranty',
@@ -303,7 +306,7 @@ const en = {
     metaTitle: 'Cart',
     heading: 'Cart',
     empty: 'Nothing here yet.',
-    emptyBody: 'Design a cup, or take one of the four tones as it comes.',
+    emptyBody: 'Design a cup, or take one of the tones as it comes.',
     itemCount: '{count} items',
     yourDesign: 'Your design',
     freeShip: 'Free shipping over {amount} {currency}',
@@ -490,8 +493,9 @@ const ar: Dictionary = {
 
   colors: {
     eyebrow: 'الألوان',
-    heading: 'أربع درجات، مأخوذة من الأرض.',
-    body: 'كتّان بلا صبغة، وورقة زيتون في الظل، وطين قبل الشيّ، وأخضر أمسية متأخرة.',
+    heading: '{count} درجات، مأخوذة من الأرض.',
+    body:
+      'كتّان بلا صبغة، وورقة زيتون في الظل، وطين قبل الفرن وبعده، وأرض صيف جافة، وأخضر أمسية متأخرة.',
     choose: 'اختر {name}',
     selected: 'تم اختيار {name}',
   },
@@ -617,7 +621,7 @@ const ar: Dictionary = {
   shop: {
     metaTitle: 'المتجر',
     eyebrow: 'المتجر',
-    heading: 'كوب واحد، بأربع درجات.',
+    heading: 'كوب واحد، بكل الدرجات.',
     body: 'اطلبه كما هو، أو افتح أي درجة في المصمّم واجعله لك.',
     inStock: 'متوفّر',
     madeToOrder: 'يُصنع بالطلب · يُشحن خلال ٢–٤ أيام',
@@ -647,7 +651,7 @@ const ar: Dictionary = {
     intro:
       '«تيرّا» كلمة لاتينية تعني الأرض. أخذنا الاسم لصلتنا بالأرض، ولما صُنع الكوب من أجله: شيء واحد يُعاد استخدامه، مصنوع بوعي بيئي.',
     p1: '«من الأرض وإلى الأرض» تعني ما تقوله تماماً. الكوب مصنوع من مواد تأتي من الأرض، ومبنيّ ليُستخدم مرة أخرى بدل أن يُرمى.',
-    p2: 'يُصنع من فولاذ معاد تدويره، بأربع درجات من الأرض. وحين تتعب قطعة نرسل لك تلك القطعة، لا كوباً جديداً.',
+    p2: 'يُصنع من فولاذ معاد تدويره، بدرجات مأخوذة من الأرض. وحين تتعب قطعة نرسل لك تلك القطعة، لا كوباً جديداً.',
     signature: '— استوديو تيرّا، الكويت',
     promiseHeading: 'وعدنا',
     promise1: 'ضمان مدى الحياة',
@@ -662,7 +666,7 @@ const ar: Dictionary = {
     metaTitle: 'السلة',
     heading: 'السلة',
     empty: 'لا شيء هنا بعد.',
-    emptyBody: 'صمّم كوباً، أو خُذ إحدى الدرجات الأربع كما هي.',
+    emptyBody: 'صمّم كوباً، أو خُذ إحدى الدرجات كما هي.',
     itemCount: '{count} قطعة',
     yourDesign: 'تصميمك',
     freeShip: 'توصيل مجاني فوق {amount} {currency}',

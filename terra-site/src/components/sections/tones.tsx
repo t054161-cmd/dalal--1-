@@ -10,11 +10,13 @@ import { useStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
 /**
- * The range. Four circular selectors; the cup changes as you choose, and the
+ * The range. One circular selector per colourway — the row is generated from
+ * `colorways`, so a tone added to that array shows up here, on the product
+ * page and in the designer at once. The cup changes as you choose, and the
  * choice follows you into the designer.
  */
 export function Tones() {
-  const { t, pick } = useI18n()
+  const { t, pick, n } = useI18n()
   const config = useStore((s) => s.config)
   const loadConfig = useStore((s) => s.loadConfig)
 
@@ -25,7 +27,10 @@ export function Tones() {
       <div className="wrap grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <Reveal>
           <p className="eyebrow">{t('colors.eyebrow')}</p>
-          <h2 className="mt-7 text-title font-light">{t('colors.heading')}</h2>
+          {/* n() so the count is an Arabic-Indic numeral in Arabic. */}
+          <h2 className="mt-7 text-title font-light">
+            {t('colors.heading', { count: n(colorways.length) })}
+          </h2>
           <p className="passage mt-7 max-w-prose">{t('colors.body')}</p>
 
           <ul className="mt-11 flex flex-wrap gap-3">
