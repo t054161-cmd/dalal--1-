@@ -38,9 +38,15 @@
   <a class="topbar__brand" href="#/">
     <span class="brand__ar">مِداد</span><span class="brand__en">MIDĀD</span>
   </a>
-  <button class="langbtn langbtn--bar" data-lang-toggle>
-    <span data-i18n="lang.switch">English</span>
-  </button>
+  <div class="topbar__acts">
+    <button class="iconbtn themebtn" data-theme-toggle data-i18n-aria="theme.toDay">
+      <svg viewBox="0 0 24 24" class="ic ic--sun"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M4.4 12H2M22 12h-2.4M6.3 6.3 4.6 4.6M19.4 19.4l-1.7-1.7M17.7 6.3l1.7-1.7M4.6 19.4l1.7-1.7"/></svg>
+      <svg viewBox="0 0 24 24" class="ic ic--moon"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.4 8.4 0 1 0 20 14.2z"/></svg>
+    </button>
+    <button class="langbtn langbtn--bar" data-lang-toggle>
+      <span data-i18n="lang.switch">English</span>
+    </button>
+  </div>
 </header>
 
 <!-- ══════════════════ NAVIGATION RAIL ══════════════════ -->
@@ -53,6 +59,7 @@
   <ul class="rail__list" id="railList"></ul>
 
   <div class="rail__foot">
+    <div id="railReader"></div>
     <button class="btn btn--brass btn--block" id="addBookBtn">
       <svg viewBox="0 0 24 24" class="ic"><path d="M12 5v14M5 12h14"/></svg>
       <span class="bi">
@@ -60,10 +67,17 @@
         <span class="bi__en" data-i18n="nav.addBook.en">Add a Book</span>
       </span>
     </button>
-    <button class="langbtn" data-lang-toggle>
-      <span data-i18n="lang.switch">English</span>
-      <svg viewBox="0 0 24 24" class="ic"><path d="M4 12h16M13 5l7 7-7 7"/></svg>
-    </button>
+    <div class="rail__switches">
+      <button class="langbtn" data-lang-toggle>
+        <span data-i18n="lang.switch">English</span>
+        <svg viewBox="0 0 24 24" class="ic"><path d="M4 12h16M13 5l7 7-7 7"/></svg>
+      </button>
+      <button class="themebtn themebtn--wide" data-theme-toggle>
+        <svg viewBox="0 0 24 24" class="ic ic--sun"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M4.4 12H2M22 12h-2.4M6.3 6.3 4.6 4.6M19.4 19.4l-1.7-1.7M17.7 6.3l1.7-1.7M4.6 19.4l1.7-1.7"/></svg>
+      <svg viewBox="0 0 24 24" class="ic ic--moon"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.4 8.4 0 1 0 20 14.2z"/></svg>
+        <span class="themebtn__lab" data-i18n="theme.day">نهاري</span>
+      </button>
+    </div>
   </div>
 </nav>
 <div class="rail__scrim" id="railScrim" hidden></div>

@@ -2,11 +2,17 @@
 import { t, pick, other, n, dec, isAr } from '../i18n.js';
 import { esc, icon, phead, bi, shead, genre } from '../ui.js';
 import { db } from '../data.js';
+import { currentReader } from '../account.js';
 import { totals, favouriteGenre, achievements, milestones } from '../metrics.js';
 
 export default function card() {
   const s = totals();
-  const p = db().profile;
+  const reader = currentReader();
+  /* a signed-in reader's card carries their registration; the guest shelf
+     carries the archive's own name until someone registers */
+  const p = reader
+    ? { name: reader.name, member: reader.member, since: reader.since }
+    : db().profile;
   const fav = favouriteGenre();
   const acs = achievements();
   const ms = milestones();
@@ -16,8 +22,16 @@ export default function card() {
 
   return `
   <div class="wrap">
-    ${phead('nav.card', 'lc.lede',
-      `<button class="btn btn--sm" data-action="edit-name">${icon('edit')}<span>${esc(t('lc.editName'))}</span></button>`)}
+    ${phead('nav.card', 'lc.lede', `
+      <span class="phead__acts">
+        <button class="btn btn--sm" data-action="edit-name">${icon('edit')}<span>${esc(t('lc.editName'))}</span></button>
+        ${reader ? '' : `
+          <button class="btn btn--sm" data-action="auth-in">${icon('card')}<span>${esc(t('ac.signIn'))}</span></button>
+          <button class="btn btn--sm btn--brass" data-action="auth-up">${icon('plus')}<span>${esc(t('ac.signUp'))}</span></button>`}
+      </span>`)}
+
+    ${reader ? '' : `
+      <p class="guestnote">${icon('eye')}<span>${esc(t('ac.guestNote'))}</span></p>`}
 
     <div class="cardstage">
       <!-- ── the card itself ── -->
@@ -63,7 +77,7 @@ export default function card() {
           <div class="stack" style="gap:.6rem">
             ${ms.map((m) => `
               <div style="display:flex;align-items:center;gap:.75rem;font-size:.88rem;color:${'var(--text-2)'}">
-                <span class="reqrow__dir" style="width:1.9rem;height:1.9rem;${m.done ? 'color:#8fd8a8;border-color:rgba(143,216,168,.4)' : 'opacity:.45'}">
+                <span class="reqrow__dir" style="width:1.9rem;height:1.9rem;${m.done ? 'color:var(--good);border-color:color-mix(in srgb, var(--good) 45%, transparent)' : 'opacity:.45'}">
                   ${icon(m.done ? 'check' : 'lock')}
                 </span>
                 <span style="${m.done ? '' : 'opacity:.55'}">${esc(t(m.key))}</span>

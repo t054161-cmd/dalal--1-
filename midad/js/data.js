@@ -24,7 +24,7 @@ export const cloth = (g) => CLOTH[g] || CLOTH.novel;
 /* ── the finished books ─────────────────────────────────────────────── */
 const BOOKS = [
   {
-    id:'salt', genre:'novel', pages:632, rating:5, finished:'2026-08-14',
+    id:'salt', lang:'ar', genre:'novel', pages:632, rating:5, finished:'2026-08-14',
     titleAr:'مدن الملح', titleEn:'Cities of Salt',
     authorAr:'عبد الرحمن منيف', authorEn:'Abdulrahman Munif',
     review:{
@@ -42,7 +42,7 @@ const BOOKS = [
             en:'That great change is never visible while it happens. It becomes visible years later, in the face of a man standing before a place he no longer recognises.'},
   },
   {
-    id:'migration', genre:'novel', pages:169, rating:5, finished:'2026-06-02',
+    id:'migration', lang:'ar', genre:'novel', pages:169, rating:5, finished:'2026-06-02',
     titleAr:'موسم الهجرة إلى الشمال', titleEn:'Season of Migration to the North',
     authorAr:'الطيب صالح', authorEn:'Tayeb Salih',
     review:{
@@ -59,7 +59,7 @@ const BOOKS = [
             en:'The narrator shouting “Help!” in the middle of the river — not because he wants saving, but because he has decided to live.'},
   },
   {
-    id:'palacewalk', genre:'novel', pages:498, rating:5, finished:'2026-04-19',
+    id:'palacewalk', lang:'ar', genre:'novel', pages:498, rating:5, finished:'2026-04-19',
     titleAr:'بين القصرين', titleEn:'Palace Walk',
     authorAr:'نجيب محفوظ', authorEn:'Naguib Mahfouz',
     review:{
@@ -75,7 +75,7 @@ const BOOKS = [
             en:'Amina climbing to the roof at night to look at a city she is not allowed to enter.'},
   },
   {
-    id:'meninsun', genre:'novel', pages:96, rating:4, finished:'2026-02-27',
+    id:'meninsun', lang:'ar', genre:'novel', pages:96, rating:4, finished:'2026-02-27',
     titleAr:'رجال في الشمس', titleEn:'Men in the Sun',
     authorAr:'غسان كنفاني', authorEn:'Ghassan Kanafani',
     review:{
@@ -90,7 +90,7 @@ const BOOKS = [
             en:'That the cruellest thing in the text is not the death, but that a single sound could have prevented it.'},
   },
   {
-    id:'bamboo', genre:'novel', pages:400, rating:4, finished:'2025-12-11',
+    id:'bamboo', lang:'ar', genre:'novel', pages:400, rating:4, finished:'2025-12-11',
     titleAr:'ساق البامبو', titleEn:'The Bamboo Stalk',
     authorAr:'سعود السنعوسي', authorEn:'Saud Alsanousi',
     review:{
@@ -105,7 +105,7 @@ const BOOKS = [
             en:'That a name can weigh more than the body carrying it.'},
   },
   {
-    id:'prophet', genre:'poetry', pages:107, rating:4, finished:'2025-10-05',
+    id:'prophet', lang:'ar', genre:'poetry', pages:107, rating:4, finished:'2025-10-05',
     titleAr:'النبي', titleEn:'The Prophet',
     authorAr:'جبران خليل جبران', authorEn:'Kahlil Gibran',
     review:{
@@ -121,7 +121,7 @@ const BOOKS = [
             en:'That the finest thing said about love is whatever claims the least ownership.'},
   },
   {
-    id:'muqaddimah', genre:'heritage', pages:640, rating:5, finished:'2025-07-23',
+    id:'muqaddimah', lang:'ar', genre:'heritage', pages:640, rating:5, finished:'2025-07-23',
     titleAr:'المقدمة', titleEn:'The Muqaddimah',
     authorAr:'ابن خلدون', authorEn:'Ibn Khaldun',
     review:{
@@ -137,7 +137,7 @@ const BOOKS = [
             en:'That civilisation is not something we own, but something each generation defends from itself.'},
   },
   {
-    id:'dove', genre:'heritage', pages:224, rating:4, finished:'2025-05-16',
+    id:'dove', lang:'ar', genre:'heritage', pages:224, rating:4, finished:'2025-05-16',
     titleAr:'طوق الحمامة', titleEn:'The Ring of the Dove',
     authorAr:'ابن حزم الأندلسي', authorEn:'Ibn Hazm al‑Andalusi',
     review:{
@@ -152,7 +152,7 @@ const BOOKS = [
             en:'That a severe jurist wrote the tenderest pages on longing, and that this is no contradiction.'},
   },
   {
-    id:'azazeel', genre:'novel', pages:380, rating:4, finished:'2025-03-08',
+    id:'azazeel', lang:'ar', genre:'novel', pages:380, rating:4, finished:'2025-03-08',
     titleAr:'عزازيل', titleEn:'Azazeel',
     authorAr:'يوسف زيدان', authorEn:'Youssef Ziedan',
     review:{
@@ -167,7 +167,7 @@ const BOOKS = [
             en:'That whoever writes a confession is not at peace; he is trying to survive.'},
   },
   {
-    id:'frankenstein', genre:'novel', pages:352, rating:4, finished:'2025-01-19',
+    id:'frankenstein', lang:'ar', genre:'novel', pages:352, rating:4, finished:'2025-01-19',
     titleAr:'فرانكشتاين في بغداد', titleEn:'Frankenstein in Baghdad',
     authorAr:'أحمد سعداوي', authorEn:'Ahmed Saadawi',
     review:{
@@ -182,7 +182,7 @@ const BOOKS = [
             en:'That victim and executioner can inhabit one body, and that this is what war is.'},
   },
   {
-    id:'solitude', genre:'world', pages:417, rating:5, finished:'2024-11-27',
+    id:'solitude', lang:'en', genre:'world', pages:417, rating:5, finished:'2024-11-27',
     titleAr:'مئة عام من العزلة', titleEn:'One Hundred Years of Solitude',
     authorAr:'غابرييل غارسيا ماركيز', authorEn:'Gabriel García Márquez',
     review:{
@@ -197,7 +197,7 @@ const BOOKS = [
             en:'That solitude is inherited the way houses and names are inherited.'},
   },
   {
-    id:'crime', genre:'world', pages:671, rating:5, finished:'2024-09-14',
+    id:'crime', lang:'en', genre:'world', pages:671, rating:5, finished:'2024-09-14',
     titleAr:'الجريمة والعقاب', titleEn:'Crime and Punishment',
     authorAr:'فيودور دوستويفسكي', authorEn:'Fyodor Dostoevsky',
     review:{
@@ -212,7 +212,7 @@ const BOOKS = [
             en:'That the confession was not a collapse but the first moment he got himself back.'},
   },
   {
-    id:'disquiet', genre:'thought', pages:544, rating:4, finished:'2024-06-30',
+    id:'disquiet', lang:'en', genre:'thought', pages:544, rating:4, finished:'2024-06-30',
     titleAr:'كتاب القلق', titleEn:'The Book of Disquiet',
     authorAr:'فرناندو بيسوا', authorEn:'Fernando Pessoa',
     review:{
@@ -227,7 +227,7 @@ const BOOKS = [
             en:'That boredom can be a high literary material if described precisely enough.'},
   },
   {
-    id:'bread', genre:'memoir', pages:192, rating:4, finished:'2024-04-11',
+    id:'bread', lang:'en', genre:'memoir', pages:192, rating:4, finished:'2024-04-11',
     titleAr:'الخبز الحافي', titleEn:'For Bread Alone',
     authorAr:'محمد شكري', authorEn:'Mohamed Choukri',
     review:{
@@ -242,7 +242,7 @@ const BOOKS = [
             en:'That literacy itself can be a material rescue, not a symbolic one.'},
   },
   {
-    id:'memory', genre:'novel', pages:412, rating:3, finished:'2024-02-08',
+    id:'memory', lang:'ar', genre:'novel', pages:412, rating:3, finished:'2024-02-08',
     titleAr:'ذاكرة الجسد', titleEn:'Memory in the Flesh',
     authorAr:'أحلام مستغانمي', authorEn:'Ahlam Mosteghanemi',
     review:{
@@ -256,7 +256,67 @@ const BOOKS = [
             en:'That a very beautiful sentence can become a burden on the novel carrying it.'},
   },
   {
-    id:'prince', genre:'world', pages:96, rating:5, finished:'2023-12-24',
+    id:'ishiguro', lang:'en', genre:'world', pages:258, rating:5, finished:'2026-07-09',
+    titleAr:'بقايا اليوم', titleEn:'The Remains of the Day',
+    authorAr:'كازو إيشيغورو', authorEn:'Kazuo Ishiguro',
+    review:{
+      ar:'كبير خدم إنجليزي يروي حياته وهو يبرّر كل لحظة ضيّعها. أقسى رواية قرأتها عن الكرامة حين تُفهم خطأً.',
+      en:'An English butler narrates his life while justifying every moment of it away. The cruellest novel I have read about dignity misunderstood.'},
+    quotes:[{ar:'ما نفع أن نسترجع ما فات؟ لا شيء يعيده.', en:'What is the point of worrying oneself too much about what one could or could not have done?', page:244}],
+    ideas:[
+      {ar:'الرواية بأكملها مبنية على ما لا يقوله الراوي.', en:'The whole novel is built on what the narrator does not say.'},
+      {ar:'الخدمة المطلقة قد تكون هروبًا من اتخاذ موقف.', en:'Absolute service can be a way of never having to take a position.'}],
+    notes:[{ar:'قرأته بالإنجليزية؛ إيقاع الجمل نفسه جزء من الشخصية.', en:'Read in English; the rhythm of the sentences is itself part of the character.'}],
+    stayed:{ar:'أنّ أشدّ ما يُفقد لا يُفقد في لحظة، بل في آلاف اللحظات الصغيرة التي قلنا فيها «لاحقًا».',
+            en:'That what is most lost is never lost in a moment, but in the thousand small moments when we said “later”.'},
+  },
+  {
+    id:'orwell', lang:'en', genre:'world', pages:328, rating:4, finished:'2026-05-21',
+    titleAr:'١٩٨٤', titleEn:'Nineteen Eighty-Four',
+    authorAr:'جورج أورويل', authorEn:'George Orwell',
+    review:{
+      ar:'قرأته متأخرة، وبعد كل ما قيل عنه. ما فاجأني ليس المراقبة، بل فصل اللغة: كيف يُقتل المعنى بتقليص المفردات.',
+      en:'I came to it late, after everything that has been said about it. What surprised me was not the surveillance but the chapter on language: how meaning is killed by shrinking the vocabulary.'},
+    quotes:[{ar:'الحرية هي حرية القول إنّ اثنين زائد اثنين يساوي أربعة.', en:'Freedom is the freedom to say that two plus two make four.', page:81}],
+    ideas:[
+      {ar:'من يملك اللغة يملك حدود ما يمكن التفكير فيه.', en:'Whoever owns the language owns the limits of what can be thought.'},
+      {ar:'الملحق عن «اللغة الجديدة» هو قلب الكتاب، لا زائدة عليه.', en:'The appendix on Newspeak is the heart of the book, not an addendum to it.'}],
+    notes:[{ar:'الملحق مكتوب بصيغة الماضي — أي أنّ النظام سقط. تفصيل يغيّر قراءة الرواية كلها.', en:'The appendix is written in the past tense — meaning the regime fell. A detail that changes the whole reading.'}],
+    stayed:{ar:'أنّ أخطر رقابة ليست على ما نقول، بل على ما نملك من كلمات لنقوله.',
+            en:'That the most dangerous censorship is not of what we say, but of the words we are left with to say it.'},
+  },
+  {
+    id:'woolf', lang:'en', genre:'thought', pages:172, rating:4, finished:'2026-03-17',
+    titleAr:'غرفة تخص المرء وحده', titleEn:'A Room of One’s Own',
+    authorAr:'فرجينيا وولف', authorEn:'Virginia Woolf',
+    review:{
+      ar:'محاضرتان عن المرأة والكتابة، بحجة بسيطة وقاطعة: الإبداع يحتاج مالًا وبابًا يُغلق. قصير، ولا جملة فيه زائدة.',
+      en:'Two lectures on women and fiction, resting on one plain and unanswerable argument: creation needs money and a door that shuts. Short, with no spare sentence.'},
+    quotes:[{ar:'على المرأة أن تملك مالًا وغرفةً تخصّها وحدها إن أرادت أن تكتب.', en:'A woman must have money and a room of her own if she is to write fiction.', page:6}],
+    ideas:[
+      {ar:'الظروف المادية شرط للإبداع، لا تفصيل جانبي فيه.', en:'Material circumstances are a condition of creative work, not a footnote to it.'},
+      {ar:'فصل «أخت شكسبير» يثبت الغياب بالخيال حين تعجز الوثائق.', en:'The “Shakespeare’s sister” chapter proves an absence by imagination where the records cannot.'}],
+    notes:[{ar:'قرأته في جلستين. سأعود إليه كلما ظننت أنّ الموهبة وحدها تكفي.', en:'Read in two sittings. I will return to it whenever I think talent alone is enough.'}],
+    stayed:{ar:'أنّ الصمت في التاريخ ليس دائمًا غيابًا للموهبة، بل غيابًا للشروط.',
+            en:'That silence in history is not always an absence of talent, but an absence of conditions.'},
+  },
+  {
+    id:'calvino', lang:'en', genre:'world', pages:165, rating:5, finished:'2025-09-02',
+    titleAr:'المدن اللامرئية', titleEn:'Invisible Cities',
+    authorAr:'إيتالو كالفينو', authorEn:'Italo Calvino',
+    review:{
+      ar:'ماركو بولو يصف لقوبلاي خان مدنًا لا وجود لها، وكلها البندقية. كتاب يُقرأ بأي ترتيب، وكل مدينة فيه فكرة.',
+      en:'Marco Polo describes to Kublai Khan cities that do not exist, and all of them are Venice. A book that can be read in any order, each city an idea.'},
+    quotes:[{ar:'جحيم الأحياء ليس شيئًا سيأتي؛ إنه ما هو كائن هنا بالفعل.', en:'The inferno of the living is not something that will be; it is what is already here.', page:165}],
+    ideas:[
+      {ar:'الوصف يمكن أن يكون شكلًا من أشكال التفكير، لا زينة له.', en:'Description can be a form of thinking rather than an ornament on it.'},
+      {ar:'كل مدينة متخيّلة هي سؤال عن المدينة التي نسكنها.', en:'Every imagined city is a question about the one we live in.'}],
+    notes:[{ar:'قرأت مدينة واحدة كل ليلة لمدة شهرين. الطريقة الوحيدة التي احتمله بها.', en:'One city a night for two months. The only way I could hold it.'}],
+    stayed:{ar:'الجملة الأخيرة: أن نبحث في الجحيم عمّا ليس جحيمًا، ونمنحه مكانًا.',
+            en:'The final sentence: to seek and learn to recognise who and what, in the midst of the inferno, are not inferno — and give them space.'},
+  },
+  {
+    id:'prince', lang:'en', genre:'world', pages:96, rating:5, finished:'2023-12-24',
     titleAr:'الأمير الصغير', titleEn:'The Little Prince',
     authorAr:'أنطوان دو سانت إكزوبيري', authorEn:'Antoine de Saint‑Exupéry',
     review:{
@@ -347,13 +407,25 @@ const POOL = [
   { id:'p8', genre:'history',    titleAr:'الحياة اليومية في القاهرة المملوكية', titleEn:'Daily Life in Mamluk Cairo', authorAr:'أحمد عبد الرازق', authorEn:'Ahmad Abd al‑Raziq', pages:288 },
   { id:'p9', genre:'memoir',     titleAr:'أيام', titleEn:'The Days', authorAr:'طه حسين', authorEn:'Taha Hussein', pages:352 },
   { id:'p10', genre:'psychology',titleAr:'التفكير السريع والبطيء', titleEn:'Thinking, Fast and Slow', authorAr:'دانيال كانمان', authorEn:'Daniel Kahneman', pages:512 },
+  { id:'p11', genre:'philosophy', titleAr:'تأملات', titleEn:'Meditations', authorAr:'ماركوس أوريليوس', authorEn:'Marcus Aurelius', pages:176 },
+  { id:'p12', genre:'philosophy', titleAr:'حي بن يقظان', titleEn:'Hayy ibn Yaqzan', authorAr:'ابن طفيل', authorEn:'Ibn Tufayl', pages:160 },
+  { id:'p13', genre:'philosophy', titleAr:'أسطورة سيزيف', titleEn:'The Myth of Sisyphus', authorAr:'ألبير كامو', authorEn:'Albert Camus', pages:212 },
+  { id:'p14', genre:'philosophy', titleAr:'فصل المقال', titleEn:'The Decisive Treatise', authorAr:'ابن رشد', authorEn:'Ibn Rushd', pages:128 },
+  { id:'p15', genre:'science',    titleAr:'تاريخ موجز للزمن', titleEn:'A Brief History of Time', authorAr:'ستيفن هوكينغ', authorEn:'Stephen Hawking', pages:224 },
+  { id:'p16', genre:'science',    titleAr:'الجين: تاريخ حميم', titleEn:'The Gene: An Intimate History', authorAr:'سيدهارتا موكرجي', authorEn:'Siddhartha Mukherjee', pages:592 },
+  { id:'p17', genre:'psychology', titleAr:'الإنسان يبحث عن المعنى', titleEn:'Man’s Search for Meaning', authorAr:'فيكتور فرانكل', authorEn:'Viktor Frankl', pages:184 },
+  { id:'p18', genre:'poetry',     titleAr:'ديوان المتنبي', titleEn:'The Diwan of al-Mutanabbi', authorAr:'أبو الطيب المتنبي', authorEn:'Al-Mutanabbi', pages:400 },
 ];
 
-/* ═══════════════════════════ THE STORE ════════════════════════════ */
-const KEY = 'midad.archive.v1';
+/* ═══════════════════════════ THE STORE ════════════════════════════
+   Each reader has their own archive; signed out, everyone shares the
+   guest shelf. `archiveKey()` decides which drawer is open.
+   ══════════════════════════════════════════════════════════════════ */
+import { archiveKey } from './account.js';
 
 const seed = () => ({
   lang: 'ar',
+  theme: 'night',
   profile: {
     name: { ar: 'قارئ مِداد', en: 'MIDĀD Reader' },
     member: '2024·2834',
@@ -370,19 +442,24 @@ const seed = () => ({
 });
 
 let state = null;
+let openKey = null;
 
 export function load() {
-  if (state) return state;
+  const key = archiveKey();
+  if (state && openKey === key) return state;
+  openKey = key;
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(key);
     state = raw ? { ...seed(), ...JSON.parse(raw) } : seed();
   } catch { state = seed(); }
   return state;
 }
 export function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(state)); }
+  try { localStorage.setItem(openKey || archiveKey(), JSON.stringify(state)); }
   catch { /* private mode: the session still works, it just will not persist */ }
 }
+/** Called when the reader changes: the next load() opens the other drawer. */
+export function closeArchive() { state = null; openKey = null; }
 export const db = () => load();
 export const readers = () => READERS;
 export const pool = () => POOL;

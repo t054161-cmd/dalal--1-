@@ -4,7 +4,7 @@ import { esc, icon, phead, empty, resultCard, genre, bi, shead } from '../ui.js'
 import { db, GENRES } from '../data.js';
 import { years } from '../metrics.js';
 
-export const state = { q: '', drawer: null, minRating: 0, year: 'all' };
+export const state = { q: '', drawer: null, minRating: 0, year: 'all', lang: 'all' };
 
 const DRAWER_IC = {
   novel:'book', poetry:'quill', philosophy:'spark', history:'clock', memoir:'page',
@@ -21,13 +21,14 @@ function matches(b) {
   if (state.drawer && b.genre !== state.drawer) return false;
   if (state.minRating && b.rating < state.minRating) return false;
   if (state.year !== 'all' && new Date(b.finished).getFullYear() !== +state.year) return false;
+  if (state.lang !== 'all' && (b.lang || 'ar') !== state.lang) return false;
   return true;
 }
 
 export default function catalog() {
   const all = db().books;
   const used = GENRES.filter((g) => all.some((b) => b.genre === g));
-  const active = state.q.trim() || state.drawer || state.minRating || state.year !== 'all';
+  const active = state.q.trim() || state.drawer || state.minRating || state.year !== 'all' || state.lang !== 'all';
   const found = active ? all.filter(matches) : [];
 
   return `
@@ -48,6 +49,13 @@ export default function catalog() {
           <option value="0"${!state.minRating ? ' selected' : ''}>${esc(t('w.all'))}</option>
           ${[5, 4, 3].map((r) => `<option value="${r}"${state.minRating === r ? ' selected' : ''}>${r} ${esc(t('w.of5'))}</option>`).join('')}
         </select>
+      </div>
+      <div class="toolbar__group">
+        <span class="toolbar__lab">${esc(t('w.bookLang'))}</span>
+        <div class="seg seg--sm" role="group" aria-label="${esc(t('w.bookLang'))}">
+          ${[['all', t('w.allBooks')], ['ar', t('w.arabic')], ['en', t('w.english')]].map(([v, lab]) => `
+            <button data-action="cat-lang" data-lang="${v}" aria-pressed="${state.lang === v}">${esc(lab)}</button>`).join('')}
+        </div>
       </div>
       <div class="toolbar__group">
         <span class="toolbar__lab">${esc(t('w.year'))}</span>

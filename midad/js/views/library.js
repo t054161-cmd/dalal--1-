@@ -3,7 +3,7 @@ import { t, n, isAr } from '../i18n.js';
 import { esc, icon, bookTile, phead, empty, genre, bAuthor } from '../ui.js';
 import { db, GENRES } from '../data.js';
 
-export const state = { sort: 'recent', genre: 'all' };
+export const state = { sort: 'recent', genre: 'all', lang: 'all' };
 
 const SORTS = [
   ['recent', 'lib.sort.recent'], ['rating', 'lib.sort.rating'], ['year', 'lib.sort.year'],
@@ -61,7 +61,9 @@ function shelves(books) {
 
 export default function library() {
   const all = db().books;
-  const books = state.genre === 'all' ? all : all.filter((b) => b.genre === state.genre);
+  const books = all
+    .filter((b) => state.genre === 'all' || b.genre === state.genre)
+    .filter((b) => state.lang === 'all' || (b.lang || 'ar') === state.lang);
   const used = GENRES.filter((g) => all.some((b) => b.genre === g));
 
   const body = !all.length
@@ -92,6 +94,13 @@ export default function library() {
         <select class="select" data-action="lib-sort" aria-label="${esc(t('lib.sort'))}">
           ${SORTS.map(([v, k]) => `<option value="${v}"${state.sort === v ? ' selected' : ''}>${esc(t(k))}</option>`).join('')}
         </select>
+      </div>
+      <div class="toolbar__group">
+        <span class="toolbar__lab">${esc(t('w.bookLang'))}</span>
+        <div class="seg seg--sm" role="group" aria-label="${esc(t('w.bookLang'))}">
+          ${[['all', t('w.allBooks')], ['ar', t('w.arabic')], ['en', t('w.english')]].map(([v, lab]) => `
+            <button data-action="lib-lang" data-lang="${v}" aria-pressed="${state.lang === v}">${esc(lab)}</button>`).join('')}
+        </div>
       </div>
       <div class="toolbar__group">
         <span class="toolbar__lab">${esc(t('w.genre'))}</span>

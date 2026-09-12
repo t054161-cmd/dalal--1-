@@ -8,8 +8,8 @@ import { n } from './i18n.js';
 const GRAD = `
 <defs>
   <linearGradient id="holoBar" x1="0" y1="1" x2="0" y2="0">
-    <stop offset="0%"  stop-color="#2f8fd0" stop-opacity=".35"/>
-    <stop offset="100%" stop-color="#7fd4ff" stop-opacity=".95"/>
+    <stop offset="0%"  stop-color="var(--holo-2)" stop-opacity=".35"/>
+    <stop offset="100%" stop-color="var(--holo)" stop-opacity=".95"/>
   </linearGradient>
 </defs>`;
 

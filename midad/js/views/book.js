@@ -46,6 +46,7 @@ export default function book(id) {
         <div class="holo archfacts">
           ${fact(t('w.author'), esc(bAuthor(b)) + (bAuthor2(b) ? `<br><span class="muted" style="font-size:.74rem">${esc(bAuthor2(b))}</span>` : ''))}
           ${fact(t('w.genre'), `<span class="chip chip--holo">${esc(genre(b.genre))}</span>`)}
+          ${fact(t('w.readIn'), esc((b.lang || 'ar') === 'ar' ? t('w.arabic') : t('w.english')))}
           ${fact(t('w.pages'), `<span class="num">${n(b.pages)}</span>`)}
           ${fact(t('w.rating'), stars(b.rating))}
           ${fact(t('bk.finishedOn'), esc(dateLong(b.finished)))}
@@ -71,7 +72,7 @@ export default function book(id) {
 
         ${(b.quotes || []).length ? `
         <section>
-          <h2 class="record__label" style="color:#7fc4ee">${esc(t('bk.quotes'))}</h2>
+          <h2 class="record__label" style="color:var(--holo-label)">${esc(t('bk.quotes'))}</h2>
           <div class="quotelist">
             ${b.quotes.map((q) => `
               <figure class="quoteholo holo" style="margin:0">

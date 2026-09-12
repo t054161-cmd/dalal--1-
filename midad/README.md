@@ -44,10 +44,46 @@ seeded on first visit with a real finished reading journey (16 books, 2023–202
 | `#/exchange` | **تبادل الكتب** · Book Exchange | *Give a book a second life.* List a book, discover others', request an exchange, accept or decline, mark it completed |
 | `#/community` | **المجتمع** · Community | Readers, their favourite genres and what they recommend — kept about books, not about people |
 | `#/card` | **بطاقة المكتبة** · Library Card | An aged membership card with engraved detail and a barcode, plus reading milestones and achievements as antique wax seals |
+| `#/researcher` | **باحث مِداد** · MIDĀD Researcher | A research desk that answers from the archive: recommend, find similar, describe an author, compare two books, choose what to read next |
+| `#/about` | **عن مِداد** · About MIDĀD | What the word means, and why the site begins where books end — set on a leaf of the library's own paper |
+
+## باحث مِداد — how the researcher works, and what it will not do
+
+The researcher is **local**. It runs in the browser, with no model API and no
+network call, and it answers only from two sources: your own archive, and the
+MIDĀD catalogue of books not yet read. Ask it for a short book on philosophy
+and it filters the catalogue by genre and length; ask what resembles a book you
+name and it scores the shelf by genre, author and length; ask about an author
+and it reports what *your* archive holds — how many of their books you finished,
+your average rating, an idea you recorded — and says plainly that it adds no
+biography from outside. When a request matches nothing it relaxes one condition
+and tells you which.
+
+It therefore cannot invent a plot, a birth date or a literary judgement, which
+is the point. To put a real model behind the same desk, replace `ask()` in
+`js/researcher.js` with a call to your provider and keep the answer shape
+(`{ text, books, note }`) — the view needs nothing else.
+
+## Accounts are local, and say so
+
+Creating an account opens a separate set of shelves **in that browser**. There
+is no server: readers live in `localStorage`, passwords are salted and hashed
+with SHA-256 rather than stored in the clear, and the registration ledger states
+in both languages that this separates readers on one device and protects nothing
+from anyone who can open the browser. Signing out returns you to the guest shelf
+with your own library kept as you left it.
+
+## Day and night
+
+The switch relights the room rather than inverting the colours. The wood, brass
+and paper are unchanged; what moves is the light source — from the lamps on the
+piers to the clerestory at the end of the nave — along with the shade over the
+reading plane and the holographic layer, which dims to dark-on-pale so it stays
+readable against daylight. Both lightings were audited for WCAG AA.
 
 Recommendations (**اقتراحات لك**) are computed from the archive itself — the
 genres you return to, the authors you rated highly, and the gaps in what you
-have read — and appear on the home page.
+have read.
 
 ## Typography
 
@@ -60,7 +96,10 @@ have read — and appear on the home page.
 
 ## Palette
 
-| Role | Hex |
+Books carry their own language (`lang`), separate from the interface language,
+so an Arabic interface can hold English books and the shelf filters by either.
+
+| Role | Hex (night) |
 |---|---|
 | Ground / walnut / deep wood | `#080605` · `#251710` · `#3a2415` |
 | Antique gold / brass | `#c39a55` · `#e4c690` |
@@ -84,7 +123,9 @@ midad/
     components.css      books, shelves, records, drawers, charts, cards, seals
   js/
     app.js              hash router, language, delegated interaction, forms, dust motes
-    hall.js             the library drawn as one architectural SVG
+    hall.js             the library drawn as one architectural SVG, lit two ways
+    researcher.js       the research desk's reasoning: intent, entities, answers
+    account.js          local reader profiles; salted SHA-256; per-reader archives
     i18n.js             every string in both languages; RTL/LTR; dates and figures
     data.js             the archive, the seed, localStorage persistence
     metrics.js          totals, chronicle, genres, achievements, recommendations

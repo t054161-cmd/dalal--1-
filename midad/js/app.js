@@ -3,12 +3,13 @@
    ═══════════════════════════════════════════════════════════════════ */
 import { t, pair, setLang, getLang, applyLang, isAr, n } from './i18n.js';
 import {
-  db, load, save, uid, GENRES, bookById, listingById,
+  db, load, save, uid, GENRES, bookById, listingById, closeArchive,
   addBook, updateBook, removeBook, addNote, addListing,
   toggleSaved, addRequest, setRequestStatus, setProfileName,
 } from './data.js';
 import { esc, icon, bi, toast, openModal, closeModal, modalOpen, bTitle, genre, solid } from './ui.js';
 import { hallSVG } from './hall.js';
+import { signUp, signIn, signOut, currentReader, renameReader } from './account.js';
 
 import home from './views/home.js';
 import library, { state as libState } from './views/library.js';
@@ -20,8 +21,13 @@ import stats, { state as stState } from './views/stats.js';
 import exchange, { state as exState } from './views/exchange.js';
 import community from './views/community.js';
 import cardView from './views/card.js';
+import about from './views/about.js';
+import researcher, { state as rsState } from './views/researcher.js';
+import { ask } from './researcher.js';
 
 /* ── navigation ───────────────────────────────────────────────────── */
+/* Two groups: the rooms you read in, then the desk and the people.
+   Eleven links is a lot for one list — the rule keeps it scannable. */
 const NAV = [
   ['', 'nav.home', 'home'],
   ['library', 'nav.library', 'shelf'],
@@ -29,9 +35,12 @@ const NAV = [
   ['chronicles', 'nav.chronicles', 'chron'],
   ['marginalia', 'nav.marginalia', 'margin'],
   ['stats', 'nav.stats', 'stats'],
+  ['--'],
+  ['researcher', 'nav.researcher', 'spark'],
   ['exchange', 'nav.exchange', 'swap'],
   ['community', 'nav.community', 'people'],
   ['card', 'nav.card', 'card'],
+  ['about', 'nav.about', 'page'],
 ];
 
 const view = document.getElementById('view');
@@ -40,9 +49,36 @@ const railList = document.getElementById('railList');
 const menuBtn = document.getElementById('menuBtn');
 const scrim = document.getElementById('railScrim');
 
+function renderReader() {
+  const host = document.getElementById('railReader');
+  if (!host) return;
+  const r = currentReader();
+  host.innerHTML = r
+    ? `<div class="whois">
+         <span class="whois__who">
+           <span class="avatar">${esc((isAr() ? r.name.ar : r.name.en).trim().charAt(0))}</span>
+           <span class="whois__name">
+             <b>${esc(isAr() ? r.name.ar : r.name.en)}</b>
+             <span>${esc(t('ac.member'))} · ${esc(r.member)}</span>
+           </span>
+         </span>
+         <button class="iconbtn" data-action="auth-out" aria-label="${esc(t('ac.signOut'))}" title="${esc(t('ac.signOut'))}">
+           ${icon('out')}
+         </button>
+       </div>`
+    : `<div class="whois whois--guest">
+         <span class="whois__name"><b>${esc(t('ac.guest'))}</b></span>
+         <span class="whois__acts">
+           <button class="btn btn--sm btn--ghost" data-action="auth-in">${esc(t('ac.signIn'))}</button>
+           <button class="btn btn--sm" data-action="auth-up">${esc(t('ac.signUp'))}</button>
+         </span>
+       </div>`;
+}
+
 function renderNav(active) {
-  railList.innerHTML = NAV.map(([slug, key, ic]) => `
-    <li>
+  railList.innerHTML = NAV.map(([slug, key, ic]) => slug === '--'
+    ? '<li class="rail__sep" aria-hidden="true"></li>'
+    : `<li>
       <a class="rail__link" href="#/${slug}" ${active === slug ? 'aria-current="page"' : ''}>
         ${icon(ic)}${bi(key)}
       </a>
@@ -69,11 +105,14 @@ function render() {
     case 'exchange':    html = exchange(); break;
     case 'community':   html = community(); break;
     case 'card':        html = cardView(); break;
+    case 'researcher':  html = researcher(); break;
+    case 'about':       html = about(); break;
     case '':            html = home(); break;
     default:            location.hash = '#/'; return;
   }
   view.innerHTML = html;
   renderNav(route === 'book' ? 'library' : route);
+  renderReader();
   closeDrawer();
 }
 
@@ -90,12 +129,35 @@ addEventListener('hashchange', () => {
   view.focus({ preventScroll: true });
 });
 
+/* ── theme: the lighting of the room, not a colour inversion ─────── */
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  const day = theme === 'day';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', day ? '#efe3cd' : '#0a0705');
+  /* the drawn architecture is relit, not recoloured */
+  const hall = document.getElementById('hall');
+  hall.querySelector('.hall__svg')?.remove();
+  hall.insertAdjacentHTML('afterbegin', hallSVG(theme));
+  for (const el of document.querySelectorAll('[data-theme-toggle]')) {
+    el.setAttribute('aria-label', t(day ? 'theme.toNight' : 'theme.toDay'));
+    const lab = el.querySelector('.themebtn__lab');
+    if (lab) lab.textContent = t(day ? 'theme.night' : 'theme.day');
+  }
+}
+function switchTheme(theme) {
+  load().theme = theme;
+  save();
+  applyTheme(theme);
+}
+const currentTheme = () => document.documentElement.dataset.theme || 'night';
+
 /* ── language ─────────────────────────────────────────────────────── */
 function switchLang(l) {
   setLang(l);
   load().lang = l;
   save();
   applyLang();
+  applyTheme(currentTheme());   /* the switch labels are language-bound */
   refresh();
 }
 
@@ -145,6 +207,11 @@ function bookForm(b) {
     <div class="form__row">
       <label class="field"><span>${esc(t('w.genre'))}</span>
         <select class="select" name="genre">${genreOptions(v.genre || 'novel')}</select></label>
+      <label class="field"><span>${esc(t('w.bookLang'))}</span>
+        <select class="select" name="bookLang">
+          <option value="ar"${(v.lang || 'ar') === 'ar' ? ' selected' : ''}>${esc(t('w.arabic'))}</option>
+          <option value="en"${v.lang === 'en' ? ' selected' : ''}>${esc(t('w.english'))}</option>
+        </select></label>
       <label class="field"><span>${esc(t('w.pages'))}</span>
         <input class="input" name="pages" type="number" min="1" max="20000" value="${esc(v.pages || '')}" /></label>
       <label class="field"><span>${esc(t('w.finished'))}</span>
@@ -227,6 +294,36 @@ function offerForm() {
   </form>`;
 }
 
+function deskForm(mode = 'in') {
+  const up = mode === 'up';
+  return `
+  <form class="form ledger__form" data-form="auth" data-mode="${mode}">
+    <p class="ledger__lede">${esc(t('ac.deskSub'))}</p>
+    ${up ? `
+    <div class="form__row">
+      <label class="field"><span>${esc(t('ac.nameAr'))}</span>
+        <input class="input" name="nameAr" dir="rtl" autocomplete="name" /></label>
+      <label class="field"><span>${esc(t('ac.nameEn'))}</span>
+        <input class="input" name="nameEn" dir="ltr" autocomplete="name" /></label>
+    </div>` : ''}
+    <label class="field"><span>${esc(t('ac.email'))}</span>
+      <input class="input" name="email" type="email" dir="ltr" required
+             autocomplete="${up ? 'email' : 'username'}" /></label>
+    <label class="field"><span>${esc(t('ac.password'))}</span>
+      <input class="input" name="password" type="password" dir="ltr" required
+             autocomplete="${up ? 'new-password' : 'current-password'}" /></label>
+
+    <p class="ledger__note">${icon('lock')}<span>${esc(t('ac.local'))}</span></p>
+
+    <div class="form__acts">
+      <button type="button" class="btn btn--ghost" data-action="auth-swap" data-mode="${up ? 'in' : 'up'}">
+        ${esc(up ? t('ac.haveAccount') : t('ac.noAccount'))}
+      </button>
+      <button type="submit" class="btn btn--brass">${icon('card')}<span>${esc(up ? t('ac.signUp') : t('ac.signIn'))}</span></button>
+    </div>
+  </form>`;
+}
+
 function nameForm() {
   const p = db().profile;
   return `
@@ -251,7 +348,7 @@ function bilingual(value) {
   return isAr() ? { ar: value, en: '' } : { ar: '', en: value };
 }
 
-document.addEventListener('submit', (e) => {
+document.addEventListener('submit', async (e) => {
   const form = e.target.closest('[data-form]');
   if (!form) return;
   e.preventDefault();
@@ -264,7 +361,7 @@ document.addEventListener('submit', (e) => {
     const patch = {
       titleAr: f.titleAr.trim(), titleEn: (f.titleEn || '').trim(),
       authorAr: f.authorAr.trim(), authorEn: (f.authorEn || '').trim(),
-      genre: f.genre, pages: +f.pages || 0, rating,
+      genre: f.genre, lang: f.bookLang === 'en' ? 'en' : 'ar', pages: +f.pages || 0, rating,
       finished: f.finished || new Date().toISOString().slice(0, 10),
       review: bilingual((f.review || '').trim()),
       stayed: bilingual((f.stayed || '').trim()),
@@ -316,8 +413,43 @@ document.addEventListener('submit', (e) => {
     return;
   }
 
+  if (kind === 'auth') {
+    const up = form.dataset.mode === 'up';
+    const res = up
+      ? await signUp({ email: f.email, password: f.password, nameAr: f.nameAr, nameEn: f.nameEn })
+      : await signIn({ email: f.email, password: f.password });
+    if (res.error) {
+      const msg = { fields: 'ac.errFields', short: 'ac.errShort', taken: 'ac.errTaken',
+                    nouser: 'ac.errNoUser', wrong: 'ac.errWrong' }[res.error];
+      toast(t(msg));
+      return;
+    }
+    closeArchive();                 /* the other drawer opens */
+    setLang(load().lang || getLang());
+    applyLang();
+    applyTheme(load().theme === 'day' ? 'day' : 'night');
+    toast(t(up ? 'ac.welcome' : 'ac.welcomeBack'));
+    closeModal();
+    location.hash = '#/card';
+    refresh();
+    return;
+  }
+
+  if (kind === 'ask') {
+    const q = (f.q || '').trim();
+    if (!q) return;
+    rsState.thread.push({ role: 'you', text: q });
+    rsState.thread.push({ role: 'desk', ...ask(q) });
+    refresh();
+    const thread = document.getElementById('deskThread');
+    if (thread) thread.scrollTop = thread.scrollHeight;
+    document.getElementById('deskInput')?.focus();
+    return;
+  }
+
   if (kind === 'name') {
     setProfileName((f.ar || '').trim(), (f.en || '').trim());
+    renameReader((f.ar || '').trim(), (f.en || '').trim());
     toast(t('lc.nameSaved'));
     closeModal(); refresh();
   }
@@ -328,6 +460,10 @@ document.addEventListener('click', (e) => {
   /* language */
   if (e.target.closest('[data-lang-toggle]')) {
     switchLang(getLang() === 'ar' ? 'en' : 'ar');
+    return;
+  }
+  if (e.target.closest('[data-theme-toggle]')) {
+    switchTheme(currentTheme() === 'day' ? 'night' : 'day');
     return;
   }
   /* modal dismissal */
@@ -354,6 +490,16 @@ document.addEventListener('click', (e) => {
       openModal(t('mg.add'), marginForm(id)); break;
     case 'edit-name':
       openModal(t('lc.editName'), nameForm()); break;
+    case 'auth-in':  openModal(t('ac.desk'), deskForm('in')); break;
+    case 'auth-up':  openModal(t('ac.desk'), deskForm('up')); break;
+    case 'auth-swap': openModal(t('ac.desk'), deskForm(act.dataset.mode)); break;
+    case 'auth-out':
+      signOut(); closeArchive();
+      setLang(load().lang || getLang()); applyLang();
+      applyTheme(load().theme === 'day' ? 'day' : 'night');
+      toast(t('ac.signedOut'));
+      location.hash = '#/'; refresh();
+      break;
 
     /* ── rating picker ── */
     case 'rate': {
@@ -366,19 +512,34 @@ document.addEventListener('click', (e) => {
     }
 
     /* ── my library ── */
-    case 'lib-reset': libState.genre = 'all'; refresh(); break;
+    case 'lib-reset': libState.genre = 'all'; libState.lang = 'all'; refresh(); break;
+    case 'lib-lang': libState.lang = act.dataset.lang; refresh(); break;
 
     /* ── catalog ── */
     case 'cat-drawer':
       catState.drawer = catState.drawer === act.dataset.genre ? null : act.dataset.genre;
       refresh(); break;
+    case 'cat-lang': catState.lang = act.dataset.lang; refresh(); break;
     case 'cat-clear':
-      catState.q = ''; catState.drawer = null; catState.minRating = 0; catState.year = 'all';
+      catState.q = ''; catState.drawer = null; catState.minRating = 0;
+      catState.year = 'all'; catState.lang = 'all';
       refresh(); break;
 
     /* ── marginalia ── */
     case 'mg-kind': mgState.kind = act.dataset.kind; mgState.shown = 24; refresh(); break;
     case 'mg-more': mgState.shown += 24; refresh(); break;
+
+    /* ── the research desk ── */
+    case 'rs-ask': {
+      const q = act.dataset.q;
+      rsState.thread.push({ role: 'you', text: q });
+      rsState.thread.push({ role: 'desk', ...ask(q) });
+      refresh();
+      const thread = document.getElementById('deskThread');
+      if (thread) thread.scrollTop = thread.scrollHeight;
+      break;
+    }
+    case 'rs-clear': rsState.thread = []; toast(t('rs.cleared')); refresh(); break;
 
     /* ── statistics ── */
     case 'st-scale': stState.scale = act.dataset.scale; refresh(); break;
@@ -474,9 +635,9 @@ function motes() {
 }
 
 /* ═══════════════════════════ BOOT ═════════════════════════════════ */
-document.getElementById('hall').insertAdjacentHTML('afterbegin', hallSVG());
 setLang(load().lang || 'ar');
 applyLang();
+applyTheme(load().theme === 'day' ? 'day' : 'night');
 if (!location.hash) location.hash = '#/';
 render();
 motes();
