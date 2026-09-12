@@ -24,9 +24,10 @@ export default function home() {
         <p class="hero__claim-ar">${esc(t('home.claim.ar'))}</p>
         <p class="hero__claim-en">${esc(t('home.claim.en'))}</p>
       </div>
+      <p class="hero__what">${esc(t('home.what'))}</p>
       <div class="hero__cta">
-        <a class="btn btn--brass" href="#/library">${icon('shelf')}<span>${esc(t('home.enter'))}</span></a>
-        <a class="btn btn--ghost" href="#/catalog">${icon('search')}<span>${esc(t('nav.catalog'))}</span></a>
+        <a class="btn btn--brass btn--lg" href="#/library">${icon('shelf')}<span>${esc(t('home.enter'))}</span></a>
+        <a class="hero__minor" href="#/catalog">${esc(t('home.browse'))}${icon('arrow')}</a>
       </div>
     </div>
   </section>

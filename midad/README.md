@@ -36,7 +36,7 @@ seeded on first visit with a real finished reading journey (16 books, 2023–202
 |---|---|---|
 | `#/` | **الرئيسية** · Home | The grand hall: the calligraphic mark, a floating holographic open book carrying the reading journey, statistics and a quote drawn from the margins |
 | `#/library` | **مكتبتي** · My Library | The finished books as physical volumes on antique boards. Arrange by recently finished, rating, genre, author, reading year or length; hovering lifts a book from the shelf and projects its record |
-| `#/book/:id` | **السجل الأرشيفي** · The Book Archive | One preserved record: review, main ideas, notes and *What Stayed With Me* on parchment; favourite quotes as illuminated holographic slabs |
+| `#/book/:id` | **السجل الأرشيفي** · The Book Archive | One preserved record: review, *why I gave it this rating* beside the stars, main ideas, notes and *ماذا ترك فيّ؟ / What Stayed With Me?* on parchment; favourite quotes as illuminated holographic slabs |
 | `#/catalog` | **الفهرس** · Catalog | Antique card-catalogue drawers in oak; pulling one — or typing — projects holographic results. Search by title, author, genre, rating or year |
 | `#/chronicles` | **سجل الرحلة** · Reading Chronicles | The journey by year and month, as a record preserved in the library |
 | `#/marginalia` | **الهوامش** · Marginalia | Every quote, note, idea and reflection in the archive. Notes and ideas stay on aged paper; quotes and *what stayed* are projected as light |

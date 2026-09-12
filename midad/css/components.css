@@ -49,7 +49,30 @@ html[lang="en"] .hero__title{ font-family:var(--f-ruqaa) } /* the mark stays cal
 html[lang="en"] .hero__claim-ar{ order:2; font-size:1rem; color:var(--text-3) }
 html[lang="en"] .hero__claim-en{ order:1; font-size:1.1rem; color:var(--text) }
 
-.hero__cta{ display:flex; gap:.7rem; flex-wrap:wrap; justify-content:center; animation:titleRise 1.3s .36s var(--ease) both }
+/* one clear way in; everything else is a quiet line of text */
+.hero__what{
+  margin:0; max-width:32rem; font-size:.92rem; line-height:1.9; color:var(--text-3);
+  animation:titleRise 1.3s .3s var(--ease) both;
+}
+.hero__cta{
+  display:flex; gap:1.1rem; flex-wrap:wrap; align-items:center; justify-content:center;
+  margin-top:.4rem; animation:titleRise 1.3s .36s var(--ease) both;
+}
+.btn--lg{ padding:.85em 1.8em; font-size:1rem }
+.hero__minor{
+  display:inline-flex; align-items:center; gap:.4rem; font-size:.86rem;
+  color:var(--text-3); border-bottom:1px solid transparent; transition:.24s var(--ease);
+}
+.hero__minor:hover{ color:var(--gold-soft); border-bottom-color:currentColor }
+.hero__minor .ic{ width:.9em; height:.9em }
+html[dir="rtl"] .hero__minor .ic{ scale:-1 1 }
+
+.archive__acts{ display:flex; gap:.5rem; flex-wrap:wrap }
+.form__danger{ color:#c98a7a; border-color:rgba(201,138,122,.35) }
+.form__danger:hover{ color:#e8a898; border-color:rgba(201,138,122,.6); background:rgba(201,138,122,.1) }
+:root[data-theme="day"] .form__danger{ color:#8e3826; border-color:rgba(142,56,38,.35) }
+:root[data-theme="day"] .form__danger:hover{ color:#6f2716; background:rgba(142,56,38,.1); border-color:rgba(142,56,38,.55) }
+.ledger__form .form__danger{ color:#8e3826; border-color:rgba(142,56,38,.4) }
 
 /* ── four figures, cut into the room rather than floating over it ──── */
 .figures{ border-block:1px solid var(--line); background:linear-gradient(180deg, var(--paper-fade), transparent) }
@@ -249,6 +272,16 @@ html[lang="en"] .empty__t{ font-family:var(--f-serif) }
 .record__label::after{ content:''; height:1px; flex:1; background:rgba(120,88,48,.3) }
 .record__body{ font-family:var(--f-amiri); font-size:1.06rem; line-height:2; color:#3a2a18 }
 html[lang="en"] .record__body{ font-family:var(--f-serif); font-size:1.08rem; line-height:1.85 }
+/* the score and its reasoning, set together */
+.record--why .record__body{ font-size:1.02rem }
+.why{ display:flex; gap:1.1rem; align-items:flex-start; flex-wrap:wrap }
+.why__score{ flex:none; padding-top:.2rem }
+.why__score .stars{ color:#8a6524 }
+.why__score .stars__n{ color:rgba(48,34,16,.7) }
+.why__body{ flex:1 1 16rem; min-width:0 }
+.why__body .record__body{ margin:0 }
+.why__body .record__body + .record__body{ margin-top:.7rem }
+
 .record--stayed{ background:radial-gradient(120% 90% at 20% 10%, rgba(255,252,240,.95), transparent 55%), linear-gradient(168deg,#f7eddb,#e9dabb 60%,#dcc9a4) }
 .record--stayed .record__body{ font-size:1.15rem }
 

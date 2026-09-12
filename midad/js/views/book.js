@@ -52,10 +52,9 @@ export default function book(id) {
           ${fact(t('bk.finishedOn'), esc(dateLong(b.finished)))}
         </div>
 
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <div class="archive__acts">
           <button class="btn btn--sm" data-action="edit-book" data-id="${esc(b.id)}">${icon('edit')}<span>${esc(t('w.edit'))}</span></button>
           <button class="btn btn--sm" data-action="add-margin" data-id="${esc(b.id)}">${icon('quill')}<span>${esc(t('mg.add'))}</span></button>
-          <button class="btn btn--sm btn--ghost" data-action="delete-book" data-id="${esc(b.id)}">${icon('trash')}<span>${esc(t('w.delete'))}</span></button>
         </div>
       </aside>
 
@@ -67,6 +66,15 @@ export default function book(id) {
           <div class="rule" style="margin-block:1rem"><span class="rule__dot"></span></div>
           ${bodyOf(b.review)}
         </header>
+
+        ${b.whyRating && (b.whyRating.ar || b.whyRating.en) ? `
+          <section class="record parchment record--why">
+            <h2 class="record__label">${esc(t('bk.why'))}</h2>
+            <div class="why">
+              <span class="why__score">${stars(b.rating)}</span>
+              <div class="why__body">${bodyOf(b.whyRating)}</div>
+            </div>
+          </section>` : ''}
 
         ${record('bk.stayed', bodyOf(b.stayed), 'record--stayed')}
 

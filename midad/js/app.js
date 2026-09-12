@@ -218,6 +218,8 @@ function bookForm(b) {
         <input class="input" name="finished" type="date" value="${esc(v.finished || new Date().toISOString().slice(0, 10))}" /></label>
     </div>
     <div class="field"><span>${esc(t('w.rating'))}</span>${ratePicker(v.rating ?? 4)}</div>
+    <label class="field"><span>${esc(t('fm.why'))}</span>
+      <textarea class="textarea" name="why" style="min-height:4rem">${esc(v.whyRating ? (isAr() ? v.whyRating.ar : v.whyRating.en) || '' : '')}</textarea></label>
     <label class="field"><span>${esc(t('fm.review'))}</span>
       <textarea class="textarea" name="review">${esc(v.review ? (isAr() ? v.review.ar : v.review.en) || '' : '')}</textarea></label>
     <label class="field"><span>${esc(t('fm.stayed'))}</span>
@@ -226,6 +228,9 @@ function bookForm(b) {
     <label class="field"><span>${esc(t('fm.quote'))} <span class="muted">(${esc(t('w.optional'))})</span></span>
       <textarea class="textarea" name="quote" style="min-height:4rem"></textarea></label>`}
     <div class="form__acts">
+      ${b ? `<button type="button" class="btn btn--sm btn--ghost form__danger"
+               data-action="delete-book" data-id="${esc(b.id)}">${icon('trash')}<span>${esc(t('w.delete'))}</span></button>` : ''}
+      <span style="flex:1"></span>
       <button type="button" class="btn btn--ghost" data-close>${esc(t('w.cancel'))}</button>
       <button type="submit" class="btn btn--brass">${icon('check')}<span>${esc(t('w.save'))}</span></button>
     </div>
@@ -364,6 +369,7 @@ document.addEventListener('submit', async (e) => {
       genre: f.genre, lang: f.bookLang === 'en' ? 'en' : 'ar', pages: +f.pages || 0, rating,
       finished: f.finished || new Date().toISOString().slice(0, 10),
       review: bilingual((f.review || '').trim()),
+      whyRating: bilingual((f.why || '').trim()),
       stayed: bilingual((f.stayed || '').trim()),
     };
     const id = form.dataset.id;
@@ -484,7 +490,9 @@ document.addEventListener('click', (e) => {
     case 'edit-book':
       openModal(t('fm.editTitle'), bookForm(bookById(id))); break;
     case 'delete-book':
-      if (confirm(t('bk.confirmDel'))) { removeBook(id); toast(t('bk.deleted')); location.hash = '#/library'; }
+      if (confirm(t('bk.confirmDel'))) {
+        removeBook(id); closeModal(); toast(t('bk.deleted')); location.hash = '#/library';
+      }
       break;
     case 'add-margin':
       openModal(t('mg.add'), marginForm(id)); break;
