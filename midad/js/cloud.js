@@ -99,6 +99,27 @@ export async function cloudSignIn({ email, password }) {
   return out;
 }
 
+/** Ask the server to email a one-time recovery link back to this site. */
+export async function cloudSendReset(email, redirectTo) {
+  await call(`/auth/v1/recover?redirect_to=${encodeURIComponent(redirectTo)}`, {
+    method: 'POST', body: { email },
+  });
+}
+
+/** Set a new password using the recovery token the email link carried. */
+export async function cloudSetPassword(recoveryToken, password) {
+  const user = await call('/auth/v1/user', {
+    method: 'PUT', body: { password }, token: recoveryToken,
+  });
+  /* the recovery link carries a token but no reader; adopt the one the
+     server just returned, or the reader lands back as a guest */
+  keepSession({ ...(session() || {}), access_token: recoveryToken, user });
+  return user;
+}
+
+/** Adopt the session the recovery link arrived with. */
+export function adoptSession(s) { keepSession(s); }
+
 export async function cloudSignOut() {
   const s = session();
   keepSession(null);          /* forget first: anything that re-renders now sees a guest */

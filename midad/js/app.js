@@ -11,7 +11,7 @@ import { esc, icon, bi, toast, openModal, closeModal, modalOpen, bTitle, genre, 
 import { hallSVG } from './hall.js';
 import { signUp, signIn, signOut, currentReader, renameReader, rememberCloudProfile } from './account.js';
 import { hydrate, reportTroubleTo } from './sync.js';
-import { online, pullProfile } from './cloud.js';
+import { online, pullProfile, cloudSendReset, cloudSetPassword, adoptSession } from './cloud.js';
 import * as store from './data.js';
 
 import home from './views/home.js';
@@ -304,6 +304,37 @@ function offerForm() {
 
 function deskForm(mode = 'in') {
   const up = mode === 'up';
+
+  /* ask for a recovery link */
+  if (mode === 'forgot') {
+    return `
+    <form class="form ledger__form" data-form="auth" data-mode="forgot">
+      <p class="ledger__lede">${esc(t('ac.resetLede'))}</p>
+      <label class="field"><span>${esc(t('ac.email'))}</span>
+        <input class="input" name="email" type="email" dir="ltr" required autocomplete="username" /></label>
+      <div class="form__acts">
+        <button type="button" class="btn btn--ghost" data-action="auth-swap" data-mode="in">
+          ${esc(t('ac.signIn'))}
+        </button>
+        <button type="submit" class="btn btn--brass">${icon('card')}<span>${esc(t('ac.resetSend'))}</span></button>
+      </div>
+    </form>`;
+  }
+
+  /* arrived back from the emailed link: choose a new password */
+  if (mode === 'renew') {
+    return `
+    <form class="form ledger__form" data-form="auth" data-mode="renew">
+      <p class="ledger__lede">${esc(t('ac.newLede'))}</p>
+      <label class="field"><span>${esc(t('ac.newPassword'))}</span>
+        <input class="input" name="password" type="password" dir="ltr" required
+               minlength="8" autocomplete="new-password" /></label>
+      <div class="form__acts">
+        <button type="submit" class="btn btn--brass">${icon('check')}<span>${esc(t('ac.newSave'))}</span></button>
+      </div>
+    </form>`;
+  }
+
   return `
   <form class="form ledger__form" data-form="auth" data-mode="${mode}">
     <p class="ledger__lede">${esc(t('ac.deskSub'))}</p>
@@ -327,6 +358,9 @@ function deskForm(mode = 'in') {
       <button type="button" class="btn btn--ghost" data-action="auth-swap" data-mode="${up ? 'in' : 'up'}">
         ${esc(up ? t('ac.haveAccount') : t('ac.noAccount'))}
       </button>
+      ${up ? '' : `<button type="button" class="btn btn--ghost" data-action="auth-swap" data-mode="forgot">
+        ${esc(t('ac.forgot'))}
+      </button>`}
       <button type="submit" class="btn btn--brass">${icon('card')}<span>${esc(up ? t('ac.signUp') : t('ac.signIn'))}</span></button>
     </div>
   </form>`;
@@ -422,6 +456,34 @@ document.addEventListener('submit', async (e) => {
     return;
   }
 
+  if (kind === 'auth' && form.dataset.mode === 'forgot') {
+    try {
+      await cloudSendReset(f.email, `${location.origin}${location.pathname}`);
+    } catch { /* the reply is identical either way, on purpose */ }
+    closeModal();
+    toast(t('ac.resetSent'));     /* never reveals whether the address is registered */
+    return;
+  }
+
+  if (kind === 'auth' && form.dataset.mode === 'renew') {
+    try {
+      await cloudSetPassword(recoveryToken, f.password);
+    } catch {
+      toast(t('ac.resetExpired'));
+      return;
+    }
+    recoveryToken = null;
+    closeModal();
+    toast(t('ac.newDone'));
+    location.hash = '#/card';
+    refresh();
+    if (online()) {
+      const how = await hydrate(store);
+      if (how === 'downloaded' || how === 'uploaded') { await rememberMintedCard(); refresh(); }
+    }
+    return;
+  }
+
   if (kind === 'auth') {
     const up = form.dataset.mode === 'up';
     const res = up
@@ -514,7 +576,11 @@ document.addEventListener('click', (e) => {
       openModal(t('lc.editName'), nameForm()); break;
     case 'auth-in':  openModal(t('ac.desk'), deskForm('in')); break;
     case 'auth-up':  openModal(t('ac.desk'), deskForm('up')); break;
-    case 'auth-swap': openModal(t('ac.desk'), deskForm(act.dataset.mode)); break;
+    case 'auth-swap': {
+      const mode = act.dataset.mode;
+      openModal(t(mode === 'forgot' ? 'ac.resetTitle' : 'ac.desk'), deskForm(mode));
+      break;
+    }
     case 'auth-out':
       signOut(); closeArchive();
       setLang(load().lang || getLang()); applyLang();
@@ -670,6 +736,23 @@ async function rememberMintedCard() {
 /* a mirror that fails says so once, and never blocks the reader */
 reportTroubleTo(() => toast(t('ac.offline')));
 
+/* The recovery email returns the reader to the site with a one-time token in
+   the address bar. Read it before the router runs, because the router rewrites
+   the hash and would discard it. */
+let recoveryToken = null;
+(function catchRecoveryLink() {
+  const raw = location.hash.slice(1);
+  if (!raw.includes('access_token=') || !raw.includes('type=recovery')) return;
+  const p = new URLSearchParams(raw);
+  recoveryToken = p.get('access_token');
+  adoptSession({
+    access_token: recoveryToken,
+    refresh_token: p.get('refresh_token'),
+    user: null,
+  });
+  history.replaceState(null, '', location.pathname + location.search);  /* keep it out of history */
+})();
+
 /* ═══════════════════════════ BOOT ═════════════════════════════════ */
 setLang(load().lang || 'ar');
 applyLang();
@@ -677,6 +760,8 @@ applyTheme(load().theme === 'day' ? 'day' : 'night');
 if (!location.hash) location.hash = '#/';
 render();
 motes();
+
+if (recoveryToken) openModal(t('ac.newTitle'), deskForm('renew'));
 
 /* a reader who is still signed in from last time gets their shelves back */
 if (online()) {
