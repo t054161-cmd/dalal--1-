@@ -9,6 +9,9 @@
    name-plate on a drawer, not a lock. Every screen says so.
    ═══════════════════════════════════════════════════════════════════ */
 
+import { cloudConfigured } from './config.js';
+import { cloudSignUp, cloudSignIn, cloudSignOut, cloudUser, online } from './cloud.js';
+
 const KEY = 'midad.readers.v1';
 
 const blank = () => ({ readers: [], current: null });
@@ -21,10 +24,35 @@ function saveReaders(s) {
   try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* private mode */ }
 }
 
+/** The reader at the desk — from the cloud when signed in there, else local. */
 export const currentReader = () => {
+  if (online()) {
+    const u = cloudUser();
+    if (u) {
+      const cached = loadReaders().cloud?.[u.id];
+      return {
+        id: u.id,
+        email: u.email,
+        cloud: true,
+        name: cached?.name || {
+          ar: u.user_metadata?.name_ar || 'قارئ مِداد',
+          en: u.user_metadata?.name_en || 'MIDĀD Reader',
+        },
+        member: cached?.member || '—',
+        since: cached?.since || new Date().getFullYear(),
+      };
+    }
+  }
   const s = loadReaders();
   return s.readers.find((r) => r.id === s.current) || null;
 };
+
+/** Keep the card details the cloud minted, so the rail can draw them offline. */
+export function rememberCloudProfile(id, profile) {
+  const s = loadReaders();
+  s.cloud = { ...(s.cloud || {}), [id]: profile };
+  saveReaders(s);
+}
 
 /** Which archive the app should read: the signed-in reader's, or the guest shelf. */
 export const archiveKey = () => {
@@ -48,6 +76,21 @@ const memberNo = () =>
   `${new Date().getFullYear()}·${String(Math.floor(1000 + Math.random() * 9000))}`;
 
 export async function signUp({ email, password, nameAr, nameEn }) {
+  let fellBack = false;
+  if (cloudConfigured()) {
+    try {
+      const out = await cloudSignUp({ email, password, nameAr, nameEn });
+      if (!out?.access_token) return { error: 'confirm' };   /* e-mail confirmation is on */
+      return { reader: currentReader(), cloud: true };
+    } catch (err) {
+      /* a real answer from the server beats a silent fall back to local */
+      if (/registered|already/i.test(err.message)) return { error: 'taken' };
+      if (/password/i.test(err.message)) return { error: 'short' };
+      if (err.status) return { error: 'server', detail: err.message };
+      /* no network at all: keep the reader moving, locally — and say so */
+      fellBack = true;
+    }
+  }
   const s = loadReaders();
   const mail = normEmail(email);
   if (!mail || !password) return { error: 'fields' };
@@ -68,20 +111,32 @@ export async function signUp({ email, password, nameAr, nameEn }) {
   s.readers.push(reader);
   s.current = reader.id;
   saveReaders(s);
-  return { reader };
+  return { reader, cloud: false, fellBack };
 }
 
 export async function signIn({ email, password }) {
+  let fellBack = false;
+  if (cloudConfigured()) {
+    try {
+      await cloudSignIn({ email, password });
+      return { reader: currentReader(), cloud: true };
+    } catch (err) {
+      if (/credential|invalid|grant/i.test(err.message)) return { error: 'wrong' };
+      if (err.status) return { error: 'server', detail: err.message };
+      fellBack = true;
+    }
+  }
   const s = loadReaders();
   const reader = s.readers.find((r) => r.email === normEmail(email));
   if (!reader) return { error: 'nouser' };
   if (await digest(password, reader.salt) !== reader.hash) return { error: 'wrong' };
   s.current = reader.id;
   saveReaders(s);
-  return { reader };
+  return { reader, cloud: false, fellBack };
 }
 
 export function signOut() {
+  if (online()) cloudSignOut();
   const s = loadReaders();
   s.current = null;
   saveReaders(s);

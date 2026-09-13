@@ -482,6 +482,7 @@ const POOL = [
    guest shelf. `archiveKey()` decides which drawer is open.
    ══════════════════════════════════════════════════════════════════ */
 import { archiveKey } from './account.js';
+import { mirror } from './sync.js';
 
 const seed = () => ({
   lang: 'ar',
@@ -520,6 +521,13 @@ export function save() {
 }
 /** Called when the reader changes: the next load() opens the other drawer. */
 export function closeArchive() { state = null; openKey = null; }
+
+/** Replace the working copy wholesale — used after pulling from the cloud. */
+export function replaceArchive(next) {
+  const s = load();
+  Object.assign(s, next);
+  save();
+}
 export const db = () => load();
 export const readers = () => READERS;
 export const pool = () => POOL;
@@ -528,16 +536,19 @@ export const uid = (p = 'id') => `${p}${Date.now().toString(36)}${Math.random().
 export const bookById = (id) => db().books.find((b) => b.id === id);
 export const listingById = (id) => db().listings.find((l) => l.id === id);
 
-export function addBook(b) { db().books.push(b); save(); }
+export function addBook(b) { db().books.push(b); save(); mirror.book(b); }
 export function updateBook(id, patch) {
   const b = bookById(id); if (!b) return;
-  Object.assign(b, patch); save();
+  Object.assign(b, patch); save(); mirror.book(b);
 }
 export function removeBook(id) {
-  const s = db(); s.books = s.books.filter((b) => b.id !== id); save();
+  const s = db(); s.books = s.books.filter((b) => b.id !== id); save(); mirror.bookRemoved(id);
 }
-export function addNote(note) { db().notes.push(note); save(); }
-export function addListing(l) { db().listings.unshift(l); save(); }
+export function addNote(note) {
+  db().notes.push(note); save();
+  mirror.note({ kind: note.kind, bookId: note.book || null, text: note.text });
+}
+export function addListing(l) { db().listings.unshift(l); save(); mirror.listing(l); }
 export function toggleSaved(id) {
   const s = db();
   s.saved = s.saved.includes(id) ? s.saved.filter((x) => x !== id) : [...s.saved, id];
@@ -550,6 +561,7 @@ export function addRequest(listingId, dir = 'out') {
   s.requests.push({ id: uid('q'), listing: listingId, dir, status: 'pending', at: new Date().toISOString().slice(0, 10) });
   const l = listingById(listingId); if (l) l.status = 'pending';
   save();
+  mirror.request(listingId);
 }
 export function setRequestStatus(reqId, status) {
   const r = db().requests.find((x) => x.id === reqId); if (!r) return;
@@ -557,11 +569,14 @@ export function setRequestStatus(reqId, status) {
   const l = listingById(r.listing);
   if (l) l.status = status === 'completed' ? 'completed' : status === 'declined' ? 'available' : 'pending';
   save();
+  mirror.requestSet(reqId, status);
+  if (l) mirror.listingSet(r.listing, l.status);
 }
 export function setProfileName(ar, en) {
   const p = db().profile;
   p.name = { ar: ar || p.name.ar, en: en || p.name.en };
   save();
+  mirror.profile({ nameAr: p.name.ar, nameEn: p.name.en });
 }
 
 /* ── every marginalia fragment in the archive, book-bound + free ────

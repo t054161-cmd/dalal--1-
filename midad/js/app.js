@@ -9,7 +9,10 @@ import {
 } from './data.js';
 import { esc, icon, bi, toast, openModal, closeModal, modalOpen, bTitle, genre, solid } from './ui.js';
 import { hallSVG } from './hall.js';
-import { signUp, signIn, signOut, currentReader, renameReader } from './account.js';
+import { signUp, signIn, signOut, currentReader, renameReader, rememberCloudProfile } from './account.js';
+import { hydrate, reportTroubleTo } from './sync.js';
+import { online, pullProfile } from './cloud.js';
+import * as store from './data.js';
 
 import home from './views/home.js';
 import library, { state as libState } from './views/library.js';
@@ -59,7 +62,7 @@ function renderReader() {
            <span class="avatar">${esc((isAr() ? r.name.ar : r.name.en).trim().charAt(0))}</span>
            <span class="whois__name">
              <b>${esc(isAr() ? r.name.ar : r.name.en)}</b>
-             <span>${esc(t('ac.member'))} · ${esc(r.member)}</span>
+             <span>${esc(r.cloud ? t('ac.cloud') : t('ac.localOnly'))}</span>
            </span>
          </span>
          <button class="iconbtn" data-action="auth-out" aria-label="${esc(t('ac.signOut'))}" title="${esc(t('ac.signOut'))}">
@@ -426,7 +429,8 @@ document.addEventListener('submit', async (e) => {
       : await signIn({ email: f.email, password: f.password });
     if (res.error) {
       const msg = { fields: 'ac.errFields', short: 'ac.errShort', taken: 'ac.errTaken',
-                    nouser: 'ac.errNoUser', wrong: 'ac.errWrong' }[res.error];
+                    nouser: 'ac.errNoUser', wrong: 'ac.errWrong',
+                    confirm: 'ac.errConfirm', server: 'ac.errServer' }[res.error] || 'ac.errServer';
       toast(t(msg));
       return;
     }
@@ -434,10 +438,20 @@ document.addEventListener('submit', async (e) => {
     setLang(load().lang || getLang());
     applyLang();
     applyTheme(load().theme === 'day' ? 'day' : 'night');
-    toast(t(up ? 'ac.welcome' : 'ac.welcomeBack'));
     closeModal();
+    toast(res.fellBack ? t('ac.fellBack') : t(up ? 'ac.welcome' : 'ac.welcomeBack'));
     location.hash = '#/card';
     refresh();
+
+    /* bring the shelves down from the cloud, or carry this device's up */
+    if (online()) {
+      const how = await hydrate(store);
+      if (how === 'downloaded' || how === 'uploaded') {
+        await rememberMintedCard();
+        toast(t(how === 'uploaded' ? 'ac.uploaded' : 'ac.downloaded'));
+        refresh();
+      }
+    }
     return;
   }
 
@@ -642,6 +656,20 @@ function motes() {
   });
 }
 
+/** The library card is minted by the database; cache it so the rail can
+ *  draw the reader's name and member number without a round trip. */
+async function rememberMintedCard() {
+  const r = currentReader();
+  if (!r?.cloud) return;
+  try {
+    const minted = await pullProfile();
+    if (minted) rememberCloudProfile(r.id, minted);
+  } catch { /* the rail falls back to the name from the session */ }
+}
+
+/* a mirror that fails says so once, and never blocks the reader */
+reportTroubleTo(() => toast(t('ac.offline')));
+
 /* ═══════════════════════════ BOOT ═════════════════════════════════ */
 setLang(load().lang || 'ar');
 applyLang();
@@ -649,3 +677,10 @@ applyTheme(load().theme === 'day' ? 'day' : 'night');
 if (!location.hash) location.hash = '#/';
 render();
 motes();
+
+/* a reader who is still signed in from last time gets their shelves back */
+if (online()) {
+  hydrate(store).then((how) => {
+    if (how === 'downloaded') { rememberMintedCard().then(refresh); }
+  });
+}
